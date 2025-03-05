@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RiddleQuest</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #1a1a1a;
+      color: #f5f5f5;
+      line-height: 1.5;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #444;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .app-title {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .reset-button {
+      margin-left: 15px;
+      opacity: 0.1;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: #f5f5f5;
+    }
+
+    .reset-button:hover {
+      opacity: 0.5;
+    }
+
+    .riddle-container {
+      background-color: #333;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+      margin-bottom: 20px;
+    }
+
+    .riddle-line {
+      margin-bottom: 10px;
+    }
+
+    .input-group {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .guess-input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #666;
+      border-right: none;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      font-size: 16px;
+      background-color: #444;
+      color: #fff;
+    }
+
+    .guess-button {
+      padding: 10px 20px;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .guess-button:hover {
+      background-color: #2563eb;
+    }
+
+    .guess-info {
+      font-size: 14px;
+      color: #aaa;
+      margin-top: 10px;
+    }
+
+    .feedback {
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+
+    .feedback.success {
+      background-color: #065f46;
+      color: #d1fae5;
+    }
+
+    .feedback.close {
+      background-color: #92400e;
+      color: #fef3c7;
+    }
+
+    .feedback.fail {
+      background-color: #b91c1c;
+      color: #fee2e2;
+    }
+
+    .feedback.info {
+      background-color: #1e40af;
+      color: #dbeafe;
+    }
+
+    .share-button {
+      display: block;
+      width: fit-content;
+      margin: 0 auto;
+      background-color: #10b981;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .share-button:hover {
+      background-color: #059669;
+    }
+
+    .history-container {
+      background-color: #333;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+      margin-bottom: 20px;
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .history-table th, .history-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #555;
+    }
+
+    .result-info {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #555;
+    }
+
+    .countdown {
+      font-size: 14px;
+      color: #aaa;
+      margin-top: 5px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 14px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1 class="app-title">RiddleQuest</h1>
+      <button id="resetButton" class="reset-button">↻</button>
+    </div>
+  </header>
+
+  <div id="riddleContainer" class="riddle-container">
+    <!-- Riddle will be displayed here -->
+  </div>
+
+  <div id="feedback" class="feedback hidden"></div>
+
+  <div id="guessForm">
+    <div class="input-group">
+      <input type="text" id="guessInput" class="guess-input" placeholder="Enter your guess...">
+      <button id="guessButton" class="guess-button">Guess</button>
+    </div>
+    <div id="guessInfo" class="guess-info">Line 1 of 4 revealed. Guess 0 of 20.</div>
+  </div>
+
+  <button id="shareButton" class="share-button hidden">Share Result</button>
+
+  <div id="historyContainer" class="history-container hidden">
+    <h3>Guess History</h3>
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>Guess</th>
+          <th>Attempt #</th>
+          <th>Proximity</th>
+        </tr>
+      </thead>
+      <tbody id="historyTable">
+        <!-- Guess history will be displayed here -->
+      </tbody>
+    </table>
+    <div id="resultInfo" class="result-info hidden"></div>
+  </div>
+
+  <div id="countdown" class="countdown hidden"></div>
+
+  <footer>
+    RiddleQuest &copy; 2025 - A daily word puzzle game
+  </footer>
+
+  <script>
+    // DOM Elements
+    const elements = {
+      riddleContainer: document.getElementById('riddleContainer'),
+      guessInput: document.getElementById('guessInput'),
+      guessButton: document.getElementById('guessButton'),
+      guessInfo: document.getElementById('guessInfo'),
+      feedback: document.getElementById('feedback'),
+      historyContainer: document.getElementById('historyContainer'),
+      historyTable: document.getElementById('historyTable'),
+      resultInfo: document.getElementById('resultInfo'),
+      shareButton: document.getElementById('shareButton'),
+      resetButton: document.getElementById('resetButton'),
+      countdown: document.getElementById('countdown'),
+      guessForm: document.getElementById('guessForm')
+    };
+
+    // Game state
+    const state = {
+      currentRiddle: null,
+      revealedLines: 1,
+      gameStatus: 'playing', // 'playing', 'solved', 'failed'
+      score: 0,
+      guessHistory: [],
+      guessCount: 0,
+      MAX_GUESSES: 20
+    };
+
+    // Riddles database
+    const riddles = [
+      {
+        lines: [
+          "I'm light as a feather, yet the strongest person cannot hold me for much more than a minute.",
+          "I can slip through your fingers without a trace.",
+          "People try to save me, but everyone loses me eventually.",
+          "In the end, I always run out."
+        ],
+        answer: "breath"
+      },
+      {
+        lines: [
+          "I have cities, but no houses.",
+          "I have mountains, but no trees.",
+          "I have water, but no fish.",
+          "What am I?"
+        ],
+        answer: "map"
+      },
+      {
+        lines: [
+          "I'm full of holes but still hold water.",
+          "I can be soft or rough against your skin.",
+          "I'm often hung after being used.",
+          "What am I?"
+        ],
+        answer: "sponge"
+      },
+      {
+        lines: [
+          "The more you take, the more you leave behind.",
+          "I can preserve memories or mark a path.",
+          "I follow you everywhere you go.",
+          "What am I?"
+        ],
+        answer: "footprints"
+      },
+      {
+        lines: [
+          "I fly without wings.",
+          "I cry without eyes.",
+          "Wherever I go, darkness follows me.",
+          "What am I?"
+        ],
+        answer: "cloud"
+      },
+      {
+        lines: [
+          "I speak without a mouth and hear without ears.",
+          "I have no body, but I come alive with wind.",
+          "You can't see me, but I can be heard.",
+          "What am I?"
+        ],
+        answer: "echo"
+      },
+      {
+        lines: [
+          "I'm tall when I'm young.",
+          "I'm short when I'm old.",
+          "I glow when used.",
+          "What am I?"
+        ],
+        answer: "candle"
+      },
+      {
+        lines: [
+          "I have keys but no locks.",
+          "I have space but no room.",
+          "You can enter, but you can't go inside.",
+          "What am I?"
+        ],
+        answer: "keyboard"
+      },
+      {
+        lines: [
+          "I have a head and a tail, but no body.",
+          "People flip me to decide things.",
+          "I'm often found in pockets and purses.",
+          "What am I?"
+        ],
+        answer: "coin"
+      },
+      {
+        lines: [
+          "I'm not alive, but I can grow.",
+          "I don't have lungs, but I need air.",
+          "I don't have a mouth, but I can drown.",
+          "What am I?"
+        ],
+        answer: "fire"
+      }
+    ];
+
+    // Get today's riddle
+    function getTodaysRiddle() {
+      // We'll just pick a random riddle since we can't store the daily choice
+      return riddles[Math.floor(Math.random() * riddles.length)];
+    }
+
+    // Display riddle
+    function displayRiddle() {
+      elements.riddleContainer.innerHTML = '';
+      for (let i = 0; i < state.revealedLines; i++) {
+        const line = document.createElement('p');
+        line.className = 'riddle-line';
+        line.textContent = state.currentRiddle.lines[i];
+        elements.riddleContainer.appendChild(line);
+      }
+    }
+
+    // Update guess info
+    function updateGuessInfo() {
+      elements.guessInfo.textContent = `Line ${state.revealedLines} of 4 revealed. Guess ${state.guessCount} of ${state.MAX_GUESSES}.`;
+    }
+
+    // Show feedback
+    function showFeedback(message, type) {
+      elements.feedback.textContent = message;
+      elements.feedback.className = 'feedback';
+      elements.feedback.classList.add(type);
+      elements.feedback.classList.remove('hidden');
+    }
+
+    // Update game status
+    function updateGameStatus() {
+      if (state.gameStatus === 'playing') {
+        elements.guessForm.style.display = 'block';
+        elements.shareButton.classList.add('hidden');
+        elements.countdown.classList.add('hidden');
+      } else {
+        elements.guessForm.style.display = 'none';
+        elements.shareButton.classList.remove('hidden');
+        elements.countdown.classList.remove('hidden');
+        
+        // Start countdown (just for show - we can't store the state anyway)
+        updateCountdown();
+      }
+    }
+
+    // Update countdown
+    function updateCountdown() {
+      const now = new Date();
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+      
+      const diffMs = tomorrow - now;
+      const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      const diffSecs = Math.floor((diffMs % (1000 * 60)) / 1000);
+      
+      elements.countdown.textContent = `Next riddle in: ${String(diffHrs).padStart(2, '0')}:${String(diffMins).padStart(2, '0')}:${String(diffSecs).padStart(2, '0')}`;
+      elements.countdown.classList.remove('hidden');
+    }
+
+    // Get emoji based on guess count
+    function getGuessEmoji(guessNumber) {
+      const emojiMap = {
+        1: '👑', 2: '🎯', 3: '🔥', 4: '💯', 5: '🌟',
+        6: '✨', 7: '👏', 8: '👍', 9: '😊', 10: '🙂',
+        11: '😐', 12: '🤔', 13: '😕', 14: '😬', 15: '😓',
+        16: '😖', 17: '🥴', 18: '🤢', 19: '🤮', 20: '💩'
+      };
+      return emojiMap[guessNumber] || '❓';
+    }
+
+    // Calculate proximity
+    function calculateProximity(guess, answer) {
+      const normalizedGuess = guess.toLowerCase().trim();
+      const normalizedAnswer = answer.toLowerCase().trim();
+      
+      if (normalizedGuess === normalizedAnswer) {
+        return 100;
+      }
+      
+      if (normalizedGuess.includes(normalizedAnswer) || normalizedAnswer.includes(normalizedGuess)) {
+        return 75;
+      }
+      
+      const guessWords = normalizedGuess.split(/\s+/);
+      const answerWords = normalizedAnswer.split(/\s+/);
+      
+      const commonWords = guessWords.filter(word => answerWords.includes(word));
+      if (commonWords.length > 0) {
+        return 50;
+      }
+      
+      const guessLetters = new Set(normalizedGuess.replace(/[^a-z]/g, ''));
+      const answerLetters = new Set(normalizedAnswer.replace(/[^a-z]/g, ''));
+      
+      let commonLetters = 0;
+      for (const letter of guessLetters) {
+        if (answerLetters.has(letter)) {
+          commonLetters++;
+        }
+      }
+      
+      const letterSimilarity = commonLetters / Math.max(guessLetters.size, answerLetters.size);
+      if (letterSimilarity > 0.5) {
+        return 25;
+      }
+      
+      return 10;
+    }
+
+    // Update history table
+    function updateHistory() {
+      if (state.guessHistory.length > 0) {
+        elements.historyContainer.classList.remove('hidden');
+        elements.historyTable.innerHTML = '';
+        
+        state.guessHistory.forEach(guess => {
+          const row = document.createElement('tr');
+          
+          const guessCell = document.createElement('td');
+          guessCell.textContent = guess.text;
+          
+          const attemptCell = document.createElement('td');
+          attemptCell.textContent = `${guess.guessNumber} ${guess.proximityScore === 100 ? getGuessEmoji(guess.guessNumber) : ''}`;
+          
+          const proximityCell = document.createElement('td');
+          proximityCell.textContent = guess.proximityScore;
+          
+          row.appendChild(guessCell);
+          row.appendChild(attemptCell);
+          row.appendChild(proximityCell);
+          
+          elements.historyTable.appendChild(row);
+        });
+      }
+
+      if (state.gameStatus === 'solved') {
+        elements.resultInfo.classList.remove('hidden');
+        elements.resultInfo.textContent = `Solved with ${getGuessEmoji(state.score)} on guess #${state.score}`;
+      }
+    }
+
+    // Handle guess
+    function handleGuess() {
+      const guess = elements.guessInput.value.trim();
+      if (guess === '') return;
+      
+      state.guessCount++;
+      const proximityScore = calculateProximity(guess, state.currentRiddle.answer);
+      
+      // Add to history
+      state.guessHistory.push({
+        text: guess,
+        guessNumber: state.guessCount,
+        proximityScore
+      });
+      
+      // Check if correct
+      if (proximityScore === 100) {
+        state.gameStatus = 'solved';
+        state.score = state.guessCount;
+        showFeedback('Perfect! You solved the riddle!', 'success');
+      } else {
+        // Feedback based on proximity
+        if (proximityScore >= 75) {
+          showFeedback('Very close! Try a different word.', 'close');
+        } else if (proximityScore >= 50) {
+          showFeedback('You\'re on the right track.', 'close');
+        } else if (proximityScore >= 25) {
+          showFeedback('Getting warmer, but still quite far.', 'close');
+        } else {
+          showFeedback('Not quite right. Try another approach.', 'fail');
+        }
+        
+        // Check if max guesses reached
+        if (state.guessCount >= state.MAX_GUESSES) {
+          state.gameStatus = 'failed';
+          showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
+        } else {
+          // Reveal next line if available
+          if (state.revealedLines < 4) {
+            state.revealedLines++;
+            displayRiddle();
+          }
+        }
+      }
+      
+      // Reset input and update UI
+      elements.guessInput.value = '';
+      updateGuessInfo();
+      updateHistory();
+      updateGameStatus();
+    }
+
+    // Share results
+    function shareResults() {
+      const successfulGuess = state.guessHistory.find(guess => guess.proximityScore === 100);
+      if (!successfulGuess) return;
+      
+      const emoji = getGuessEmoji(successfulGuess.guessNumber);
+      
+      const shareText = `RiddleQuest ${emoji}\nSolved in ${successfulGuess.guessNumber}/${state.MAX_GUESSES} guesses\n\nVisit riddlequest.com to play!`;
+      
+      try {
+        // Try to copy to clipboard using document.execCommand
+        const textArea = document.createElement('textarea');
+        textArea.value = shareText;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        if (successful) {
+          showFeedback('Results copied to clipboard!', 'info');
+        } else {
+          showFeedback('Could not copy to clipboard. Here\'s your result to share: ' + shareText, 'info');
+        }
+      } catch (err) {
+        showFeedback('Could not copy to clipboard. Here\'s your result to share: ' + shareText, 'info');
+      }
+    }
+
+    // Reset game
+    function resetGame() {
+      state.currentRiddle = getTodaysRiddle();
+      state.revealedLines = 1;
+      state.gameStatus = 'playing';
+      state.score = 0;
+      state.guessHistory = [];
+      state.guessCount = 0;
+      
+      displayRiddle();
+      updateGuessInfo();
+      elements.historyContainer.classList.add('hidden');
+      elements.feedback.classList.add('hidden');
+      updateGameStatus();
+    }
+
+    // Initialize game
+    function initGame() {
+      // Start with a random riddle
+      state.currentRiddle = getTodaysRiddle();
+      
+      // Set up UI
+      displayRiddle();
+      updateGuessInfo();
+      updateGameStatus();
+      
+      // Event listeners
+      elements.guessButton.addEventListener('click', handleGuess);
+      elements.guessInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          handleGuess();
+        }
+      });
+      elements.shareButton.addEventListener('click', shareResults);
+      elements.resetButton.addEventListener('click', resetGame);
+    }
+
+    // Start the game
+    initGame();
+  </script>
+</body>
+</html>
