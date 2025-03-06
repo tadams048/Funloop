@@ -243,38 +243,6 @@
   RiddleQuest &copy; 2025 - A daily word puzzle game
 </footer>
 
-<script>
-  // Listen for DOMContentLoaded to trigger the riddle loading.
-  // Since this script is at the bottom of the page, the DOM is already loaded,
-  // so you can either call the function directly...
-  // loadRiddlesWithDebug();
-  // ...or use the event listener:
-  window.addEventListener('DOMContentLoaded', loadRiddlesWithDebug);
-
-  // DOM Elements
-  const elements = {
-    loading: document.getElementById('loading'),
-    gameContent: document.getElementById('gameContent'),
-    riddleContainer: document.getElementById('riddleContainer'),
-    guessInput: document.getElementById('guessInput'),
-    guessButton: document.getElementById('guessButton'),
-    guessInfo: document.getElementById('guessInfo'),
-    feedback: document.getElementById('feedback'),
-    historyContainer: document.getElementById('historyContainer'),
-    historyTable: document.getElementById('historyTable'),
-    resultInfo: document.getElementById('resultInfo'),
-    shareButton: document.getElementById('shareButton'),
-    resetButton: document.getElementById('resetButton'),
-    countdown: document.getElementById('countdown'),
-    guessForm: document.getElementById('guessForm')
-  };
-
-  // ... rest of your code definitions ...
-
-  // Start the game (this call may be redundant if you use the event listener above)
-   loadRiddlesWithDebug();
-</script>
-
   <script>
     // DOM Elements
     const elements = {
@@ -298,7 +266,7 @@
     const state = {
       riddles: [], // Will be loaded from JSON
       currentRiddle: null,
-      revealedLines: 1,
+      revealedLines: 4,
       gameStatus: 'playing', // 'playing', 'solved', 'failed'
       score: 0,
       guessHistory: [],
