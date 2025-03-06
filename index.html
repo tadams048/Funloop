@@ -315,7 +315,7 @@ function getTodaysRiddle() {
   
   // Format today's date as YYYY-MM-DD
   const today = new Date();
-  const formattedDate = today.toISOString().split('T')[0]; // Gets YYYY-MM-DD
+  const formattedDate = today.toLocaleDateString('en-CA'); // produces YYYY-MM-DD
   console.log("Today's date:", formattedDate);
   
   // Try to find riddle for today's date
