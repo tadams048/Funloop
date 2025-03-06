@@ -277,7 +277,7 @@
     // Load riddles from external JSON file
     async function loadRiddles() {
       try {
-        const response = await fetch('riddles.json');
+        const response = await fetch('Riddle-Quest/riddles-json.json');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
