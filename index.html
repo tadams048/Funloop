@@ -574,6 +574,126 @@ function getTodaysRiddle() {
         showFeedback('Could not copy to clipboard. Here\'s your result to share: ' + shareText, 'info');
       }
     }
+    
+// Reset game
+function resetGame() {
+  if (state.riddles.length === 0) return;
+  
+  state.currentRiddle = getTodaysRiddle();
+  state.revealedLines = 1;
+  state.gameStatus = 'playing';
+  state.score = 0;
+  state.guessHistory = [];
+  state.guessCount = 0;
+  
+  displayRiddle();
+  updateGuessInfo();
+  elements.historyContainer.classList.add('hidden');
+  elements.feedback.classList.add('hidden');
+  updateGameStatus();
+}
 
-    // Reset game
-    function resetGame()
+// Initialize game
+function initGame() {
+  // Set up UI
+  displayRiddle();
+  updateGuessInfo();
+  updateGameStatus();
+  
+  // Event listeners
+  elements.guessButton.addEventListener('click', handleGuess);
+  elements.guessInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      handleGuess();
+    }
+  });
+  elements.shareButton.addEventListener('click', shareResults);
+  elements.resetButton.addEventListener('click', resetGame);
+}
+
+// Add better debugging to loadRiddles
+async function loadRiddlesWithDebug() {
+  elements.loading.innerHTML = 'Loading today\'s riddle...<br><small id="debug"></small>';
+  const debug = document.getElementById('debug');
+  
+  try {
+    debug.textContent = "Attempting to fetch JSON...";
+    
+    // Try both paths
+    let response;
+    try {
+      debug.textContent = "Trying /Riddle-Quest/riddles-json.json";
+      response = await fetch('/Riddle-Quest/riddles-json.json');
+      if (!response.ok) throw new Error("First path failed");
+    } catch (e) {
+      debug.textContent = "Trying riddles-json.json";
+      response = await fetch('riddles-json.json');
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
+    debug.textContent = "Parsing JSON...";
+    state.riddles = await response.json();
+    debug.textContent = `Loaded ${state.riddles.length} riddles`;
+    
+    // Get today's riddle
+    debug.textContent = "Getting today's riddle...";
+    const todaysRiddle = getTodaysRiddle();
+    
+    if (!todaysRiddle) {
+      debug.textContent = "No riddle found for today";
+      elements.loading.innerHTML += '<br>No riddle available for today.';
+      
+      // Add the fallback riddle
+      debug.textContent = "Using emergency fallback";
+      state.currentRiddle = {
+        lines: [
+          "I'm created by humans yet have no physical form.",
+          "I can live eternally, yet never truly die.",
+          "I can entertain, educate, or inspire.",
+          "What am I?"
+        ],
+        answer: "story"
+      };
+      
+      // Hide loading and show game content
+      elements.loading.classList.add('hidden');
+      elements.gameContent.classList.remove('hidden');
+      
+      // Initialize game
+      initGame();
+      return;
+    }
+    
+    debug.textContent = "Riddle found, initializing game";
+    state.currentRiddle = todaysRiddle;
+    
+    // Hide loading and show game content
+    elements.loading.classList.add('hidden');
+    elements.gameContent.classList.remove('hidden');
+    
+    // Initialize game
+    initGame();
+  } catch (error) {
+    console.error('Error loading riddles:', error);
+    debug.textContent = `Error: ${error.message}`;
+    elements.loading.innerHTML += '<br>Error loading riddles. Check console for details.';
+    
+    // Use hardcoded riddle as an emergency fallback
+    state.currentRiddle = {
+      lines: [
+        "I'm created by humans yet have no physical form.",
+        "I can live eternally, yet never truly die.",
+        "I can entertain, educate, or inspire.",
+        "What am I?"
+      ],
+      answer: "story"
+    };
+    
+    // Hide loading and show game content after a short delay
+    setTimeout(() => {
+      elements.loading.classList.add('hidden');
+      elements.gameContent.classList.remove('hidden');
+      initGame();
+    }, 3000);
+  }
+}
