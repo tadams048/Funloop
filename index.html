@@ -242,10 +242,6 @@
   <footer>
     RiddleQuest &copy; 2025 - A daily word puzzle game
   </footer>
-
-  // Listen for DOMContentLoaded to trigger the riddle loading
-  window.addEventListener('DOMContentLoaded', loadRiddlesWithDebug);
-
   
   <script>
     // DOM Elements
@@ -702,5 +698,11 @@ async function loadRiddlesWithDebug() {
   }
 }
 
-// Start the game
-loadRiddlesWithDebug();
+// Add better debugging to loadRiddles
+  async function loadRiddlesWithDebug() {
+    // ... (your function code)
+  }
+
+  // Listen for DOMContentLoaded to trigger the riddle loading
+  window.addEventListener('DOMContentLoaded', loadRiddlesWithDebug);
+  </script>
