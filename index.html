@@ -182,6 +182,12 @@
       font-size: 14px;
       color: #aaa;
     }
+    
+    #loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
@@ -192,40 +198,46 @@
     </div>
   </header>
 
-  <div id="riddleContainer" class="riddle-container">
-    <!-- Riddle will be displayed here -->
+  <div id="loading">
+    Loading today's riddle...
   </div>
 
-  <div id="feedback" class="feedback hidden"></div>
-
-  <div id="guessForm">
-    <div class="input-group">
-      <input type="text" id="guessInput" class="guess-input" placeholder="Enter your guess...">
-      <button id="guessButton" class="guess-button">Guess</button>
+  <div id="gameContent" class="hidden">
+    <div id="riddleContainer" class="riddle-container">
+      <!-- Riddle will be displayed here -->
     </div>
-    <div id="guessInfo" class="guess-info">Line 1 of 4 revealed. Guess 0 of 20.</div>
+
+    <div id="feedback" class="feedback hidden"></div>
+
+    <div id="guessForm">
+      <div class="input-group">
+        <input type="text" id="guessInput" class="guess-input" placeholder="Enter your guess...">
+        <button id="guessButton" class="guess-button">Guess</button>
+      </div>
+      <div id="guessInfo" class="guess-info">Line 1 of 4 revealed. Guess 0 of 20.</div>
+    </div>
+
+    <button id="shareButton" class="share-button hidden">Share Result</button>
+
+    <div id="historyContainer" class="history-container hidden">
+      <h3>Guess History</h3>
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>Guess</th>
+            <th>Attempt #</th>
+            <th>Proximity</th>
+          </tr>
+        </thead>
+        <tbody id="historyTable">
+          <!-- Guess history will be displayed here -->
+        </tbody>
+      </table>
+      <div id="resultInfo" class="result-info hidden"></div>
+    </div>
+
+    <div id="countdown" class="countdown hidden"></div>
   </div>
-
-  <button id="shareButton" class="share-button hidden">Share Result</button>
-
-  <div id="historyContainer" class="history-container hidden">
-    <h3>Guess History</h3>
-    <table class="history-table">
-      <thead>
-        <tr>
-          <th>Guess</th>
-          <th>Attempt #</th>
-          <th>Proximity</th>
-        </tr>
-      </thead>
-      <tbody id="historyTable">
-        <!-- Guess history will be displayed here -->
-      </tbody>
-    </table>
-    <div id="resultInfo" class="result-info hidden"></div>
-  </div>
-
-  <div id="countdown" class="countdown hidden"></div>
 
   <footer>
     RiddleQuest &copy; 2025 - A daily word puzzle game
@@ -234,6 +246,8 @@
   <script>
     // DOM Elements
     const elements = {
+      loading: document.getElementById('loading'),
+      gameContent: document.getElementById('gameContent'),
       riddleContainer: document.getElementById('riddleContainer'),
       guessInput: document.getElementById('guessInput'),
       guessButton: document.getElementById('guessButton'),
@@ -250,6 +264,7 @@
 
     // Game state
     const state = {
+      riddles: [], // Will be loaded from JSON
       currentRiddle: null,
       revealedLines: 1,
       gameStatus: 'playing', // 'playing', 'solved', 'failed'
@@ -259,104 +274,62 @@
       MAX_GUESSES: 20
     };
 
-    // Riddles database
-    const riddles = [
-      {
-        lines: [
-          "I'm light as a feather, yet the strongest person cannot hold me for much more than a minute.",
-          "I can slip through your fingers without a trace.",
-          "People try to save me, but everyone loses me eventually.",
-          "In the end, I always run out."
-        ],
-        answer: "breath"
-      },
-      {
-        lines: [
-          "I have cities, but no houses.",
-          "I have mountains, but no trees.",
-          "I have water, but no fish.",
-          "What am I?"
-        ],
-        answer: "map"
-      },
-      {
-        lines: [
-          "I'm full of holes but still hold water.",
-          "I can be soft or rough against your skin.",
-          "I'm often hung after being used.",
-          "What am I?"
-        ],
-        answer: "sponge"
-      },
-      {
-        lines: [
-          "The more you take, the more you leave behind.",
-          "I can preserve memories or mark a path.",
-          "I follow you everywhere you go.",
-          "What am I?"
-        ],
-        answer: "footprints"
-      },
-      {
-        lines: [
-          "I fly without wings.",
-          "I cry without eyes.",
-          "Wherever I go, darkness follows me.",
-          "What am I?"
-        ],
-        answer: "cloud"
-      },
-      {
-        lines: [
-          "I speak without a mouth and hear without ears.",
-          "I have no body, but I come alive with wind.",
-          "You can't see me, but I can be heard.",
-          "What am I?"
-        ],
-        answer: "echo"
-      },
-      {
-        lines: [
-          "I'm tall when I'm young.",
-          "I'm short when I'm old.",
-          "I glow when used.",
-          "What am I?"
-        ],
-        answer: "candle"
-      },
-      {
-        lines: [
-          "I have keys but no locks.",
-          "I have space but no room.",
-          "You can enter, but you can't go inside.",
-          "What am I?"
-        ],
-        answer: "keyboard"
-      },
-      {
-        lines: [
-          "I have a head and a tail, but no body.",
-          "People flip me to decide things.",
-          "I'm often found in pockets and purses.",
-          "What am I?"
-        ],
-        answer: "coin"
-      },
-      {
-        lines: [
-          "I'm not alive, but I can grow.",
-          "I don't have lungs, but I need air.",
-          "I don't have a mouth, but I can drown.",
-          "What am I?"
-        ],
-        answer: "fire"
+    // Load riddles from external JSON file
+    async function loadRiddles() {
+      try {
+        const response = await fetch('riddles.json');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        state.riddles = await response.json();
+        
+        // Get today's riddle
+        const todaysRiddle = getTodaysRiddle();
+        
+        if (!todaysRiddle) {
+          elements.loading.textContent = 'No riddle available for today.';
+          return;
+        }
+        
+        state.currentRiddle = todaysRiddle;
+        
+        // Hide loading and show game content
+        elements.loading.classList.add('hidden');
+        elements.gameContent.classList.remove('hidden');
+        
+        // Initialize game
+        initGame();
+      } catch (error) {
+        console.error('Error loading riddles:', error);
+        elements.loading.textContent = 'Error loading riddles. Please try again later.';
       }
-    ];
+    }
 
-    // Get today's riddle
+    // Get today's riddle based on current date
     function getTodaysRiddle() {
-      // We'll just pick a random riddle since we can't store the daily choice
-      return riddles[Math.floor(Math.random() * riddles.length)];
+      if (!state.riddles || state.riddles.length === 0) {
+        return null;
+      }
+      
+      // Format today's date as YYYY-MM-DD
+      const today = new Date();
+      const formattedDate = today.toISOString().split('T')[0]; // Gets YYYY-MM-DD
+      
+      // Find riddle for today's date
+      let todaysRiddle = state.riddles.find(riddle => riddle.date === formattedDate);
+      
+      // If no riddle is found for today, use fallback riddle
+      if (!todaysRiddle) {
+        todaysRiddle = state.riddles.find(riddle => riddle.fallback === true);
+        
+        // If no fallback riddle, use the first riddle
+        if (!todaysRiddle && state.riddles.length > 0) {
+          todaysRiddle = state.riddles[0];
+        }
+      }
+      
+      return todaysRiddle;
     }
 
     // Display riddle
@@ -394,8 +367,9 @@
         elements.shareButton.classList.remove('hidden');
         elements.countdown.classList.remove('hidden');
         
-        // Start countdown (just for show - we can't store the state anyway)
+        // Start countdown
         updateCountdown();
+        setInterval(updateCountdown, 1000);
       }
     }
 
@@ -500,7 +474,7 @@
     // Handle guess
     function handleGuess() {
       const guess = elements.guessInput.value.trim();
-      if (guess === '') return;
+      if (guess === '' || !state.currentRiddle) return;
       
       state.guessCount++;
       const proximityScore = calculateProximity(guess, state.currentRiddle.answer);
@@ -556,7 +530,8 @@
       
       const emoji = getGuessEmoji(successfulGuess.guessNumber);
       
-      const shareText = `RiddleQuest ${emoji}\nSolved in ${successfulGuess.guessNumber}/${state.MAX_GUESSES} guesses\n\nVisit riddlequest.com to play!`;
+      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      const shareText = `RiddleQuest ${emoji}\nSolved in ${successfulGuess.guessNumber}/${state.MAX_GUESSES} guesses\n\nVisit riddlequest.com to play today's riddle (${today})!`;
       
       try {
         // Try to copy to clipboard using document.execCommand
@@ -580,44 +555,4 @@
     }
 
     // Reset game
-    function resetGame() {
-      state.currentRiddle = getTodaysRiddle();
-      state.revealedLines = 1;
-      state.gameStatus = 'playing';
-      state.score = 0;
-      state.guessHistory = [];
-      state.guessCount = 0;
-      
-      displayRiddle();
-      updateGuessInfo();
-      elements.historyContainer.classList.add('hidden');
-      elements.feedback.classList.add('hidden');
-      updateGameStatus();
-    }
-
-    // Initialize game
-    function initGame() {
-      // Start with a random riddle
-      state.currentRiddle = getTodaysRiddle();
-      
-      // Set up UI
-      displayRiddle();
-      updateGuessInfo();
-      updateGameStatus();
-      
-      // Event listeners
-      elements.guessButton.addEventListener('click', handleGuess);
-      elements.guessInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          handleGuess();
-        }
-      });
-      elements.shareButton.addEventListener('click', shareResults);
-      elements.resetButton.addEventListener('click', resetGame);
-    }
-
-    // Start the game
-    initGame();
-  </script>
-</body>
-</html>
+    function resetGame()
