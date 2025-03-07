@@ -136,17 +136,41 @@
       border-radius: 4px;
       cursor: pointer;
     }
-
-    .share-row {
-      display: flex;          /* Place them side by side */
-      align-items: center;
-      justify-content: center;/* Center them horizontally */
-      gap: 20px;              /* Space between button & countdown */
-      margin-bottom: 20px;    /* Space above the guess table */
+    
+        share-row {
+      display: flex;            /* Place children side by side */
+      align-items: center;      /* Vertically center them */
+      justify-content: center;  /* Center horizontally (or space-between) */
+      gap: 16px;                /* Space between the button and countdown */
+      margin-bottom: 20px;      /* Extra space above the guess history */
     }
-
-    .share-button:hover {
-      background-color: #059669;
+    
+    .share-button {
+      /* Remove any margin: 0 auto; or display: block; 
+         so it doesn’t try to center itself alone */
+      display: inline-block;
+      background-color: #10b981;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .countdown {
+      /* Monospaced font & tabular-nums keep digits aligned */
+      font-family: 'Courier New', Courier, monospace;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;     /* Prevent line breaks */
+      
+      background-color: #333;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 4px;
+      
+      /* Ensure the width doesn’t jump as numbers change */
+      min-width: 160px;        /* Enough for "Next riddle in: 00:00:00" */
+      text-align: center;
     }
 
     .history-container {
@@ -172,18 +196,6 @@
       margin-top: 15px;
       padding-top: 15px;
       border-top: 1px solid #555;
-    }
-
-   .countdown {
-      font-size: 16px;
-      font-weight: bold;
-      color: #fff;
-      background-color: #333;
-      padding: 8px 12px;
-      border-radius: 4px;
-      margin-left: 10px;   /* Spacing if it's placed next to the Share button */
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      display: inline-block; /* Ensures the background wraps around the text only */
     }
 
     .hidden {
