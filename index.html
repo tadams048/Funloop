@@ -547,8 +547,8 @@
           debug.textContent = "Attempting to fetch JSON...";
           let response;
           try {
-            debug.textContent = "Trying /Riddle-Quest/riddles-json.json";
-            response = await fetch('/Riddle-Quest/riddles-json.json');
+            debug.textContent = "Trying riddles-json.json";
+            response = await fetch('riddles-json.json');
             if (!response.ok) throw new Error("First path failed");
           } catch (e) {
             console.error("First fetch failed:", e);
