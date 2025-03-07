@@ -8,24 +8,24 @@
       "In the end, I always run out."
     ],
     "answer": "breath"
+    "difficulty": 91
   },
   {
     "date": "2025-03-07",
     "lines": [
       "I have cities, but no houses.",
       "I have mountains, but no trees.",
-      "I have water, but no fish.",
-      "What am I?"
+      "I have water, but no fish."
     ],
     "answer": "map"
+    "difficulty": 91
   },
   {
     "date": "2025-03-08",
     "lines": [
       "I'm full of holes but still hold water.",
       "I can be soft or rough against your skin.",
-      "I'm often hung after being used.",
-      "What am I?"
+      "I'm often hung after being used."
     ],
     "answer": "sponge"
   },
@@ -34,8 +34,7 @@
     "lines": [
       "The more you take, the more you leave behind.",
       "I can preserve memories or mark a path.",
-      "I follow you everywhere you go.",
-      "What am I?"
+      "I follow you everywhere you go."
     ],
     "answer": "footprints"
   },
@@ -44,8 +43,7 @@
     "lines": [
       "I fly without wings.",
       "I cry without eyes.",
-      "Wherever I go, darkness follows me.",
-      "What am I?"
+      "Wherever I go, darkness follows me."
     ],
     "answer": "cloud"
   },
@@ -54,8 +52,7 @@
     "lines": [
       "I speak without a mouth and hear without ears.",
       "I have no body, but I come alive with wind.",
-      "You can't see me, but I can be heard.",
-      "What am I?"
+      "You can't see me, but I can be heard."
     ],
     "answer": "echo"
   },
@@ -64,8 +61,7 @@
     "lines": [
       "I'm tall when I'm young.",
       "I'm short when I'm old.",
-      "I glow when used.",
-      "What am I?"
+      "I glow when used."
     ],
     "answer": "candle"
   },
@@ -74,8 +70,7 @@
     "lines": [
       "I have keys but no locks.",
       "I have space but no room.",
-      "You can enter, but you can't go inside.",
-      "What am I?"
+      "You can enter, but you can't go inside."
     ],
     "answer": "keyboard"
   },
@@ -84,8 +79,7 @@
     "lines": [
       "I have a head and a tail, but no body.",
       "People flip me to decide things.",
-      "I'm often found in pockets and purses.",
-      "What am I?"
+      "I'm often found in pockets and purses."
     ],
     "answer": "coin"
   },
@@ -94,8 +88,7 @@
     "lines": [
       "I'm not alive, but I can grow.",
       "I don't have lungs, but I need air.",
-      "I don't have a mouth, but I can drown.",
-      "What am I?"
+      "I don't have a mouth, but I can drown."
     ],
     "answer": "fire"
   },
@@ -104,8 +97,7 @@
     "lines": [
       "I run all around the backyard, yet never move.",
       "I'm often stepped on, but never seem to mind.",
-      "When the weather is warm, I may feel cool beneath your feet.",
-      "What am I?"
+      "When the weather is warm, I may feel cool beneath your feet."
     ],
     "answer": "grass"
   },
@@ -114,8 +106,7 @@
     "lines": [
       "I can fill a room but take up no space.",
       "I can be felt but not touched or seen.",
-      "I come and go as I please.",
-      "What am I?"
+      "I come and go as I please."
     ],
     "answer": "darkness"
   },
@@ -124,8 +115,7 @@
     "lines": [
       "I can travel around the world while staying in a corner.",
       "I have many faces but no head or body.",
-      "I help you get where you're going.",
-      "What am I?"
+      "I help you get where you're going."
     ],
     "answer": "stamp"
   },
@@ -134,8 +124,7 @@
     "lines": [
       "I am taken from a mine, and shut up in a wooden case.",
       "I value nothing, but I am used to mark something valuable.",
-      "When using me, you almost always leave a mark.",
-      "What am I?"
+      "When using me, you almost always leave a mark."
     ],
     "answer": "pencil"
   },
@@ -144,8 +133,7 @@
     "lines": [
       "I'm always in front of you, but you can never see me.",
       "No matter how hard you try, you can't reach out and touch me.",
-      "As you move, I move too, always staying the same distance away.",
-      "What am I?"
+      "As you move, I move too, always staying the same distance away."
     ],
     "answer": "future"
   },
@@ -154,8 +142,7 @@
     "lines": [
       "I have a face but no eyes, hands but no arms.",
       "I tell you something important, but I never speak.",
-      "People look at me daily, but often take me for granted.",
-      "What am I?"
+      "People look at me daily, but often take me for granted."
     ],
     "answer": "clock"
   },
@@ -164,8 +151,7 @@
     "lines": [
       "I have four legs, but no tail.",
       "I'm not alive, but I support life.",
-      "Sometimes I hold food, sometimes books, sometimes people.",
-      "What am I?"
+      "Sometimes I hold food, sometimes books, sometimes people."
     ],
     "answer": "table"
   },
@@ -174,8 +160,7 @@
     "lines": [
       "I'm found in socks, scarves, and mittens.",
       "I'm often made by grandmothers and stay with you when you're cold.",
-      "I'm created by loops within loops.",
-      "What am I?"
+      "I'm created by loops within loops."
     ],
     "answer": "knitting"
   },
@@ -184,8 +169,7 @@
     "lines": [
       "I'm orange on the outside, white inside, and have seeds you can eat.",
       "I grow on a vine and am harvested in fall.",
-      "I can be carved and lit up on a special night.",
-      "What am I?"
+      "I can be carved and lit up on a special night."
     ],
     "answer": "pumpkin"
   },
@@ -194,8 +178,7 @@
     "lines": [
       "I have keys that open no locks.",
       "I have space but no room.",
-      "I allow you to enter a world of imagination.",
-      "What am I?"
+      "I allow you to enter a world of imagination."
     ],
     "answer": "keyboard"
   },
@@ -204,8 +187,7 @@
     "lines": [
       "I'm easy to lift, but hard to throw.",
       "The stronger the wind, the more I struggle to fly.",
-      "I can be made of feathers, rubber, or plastic.",
-      "What am I?"
+      "I can be made of feathers, rubber, or plastic."
     ],
     "answer": "shuttlecock"
   },
@@ -214,8 +196,7 @@
     "lines": [
       "I'm white or colored, but never the same.",
       "I grow larger as I age.",
-      "I have many tiny hairs, but people want me bald.",
-      "What am I?"
+      "I have many tiny hairs, but people want me bald."
     ],
     "answer": "dandelion"
   },
@@ -224,8 +205,7 @@
     "lines": [
       "I am gentle enough to soothe your skin, harsh enough to scour your pans.",
       "I'm made of something soft and yet I'm good for scrubbing.",
-      "I make things clean but get very dirty in the process.",
-      "What am I?"
+      "I make things clean but get very dirty in the process."
     ],
     "answer": "sponge"
   },
@@ -234,8 +214,7 @@
     "lines": [
       "I'm the source of all light in our solar system.",
       "Plants need me to grow through a special process.",
-      "Too much exposure to me can be harmful to your skin.",
-      "What am I?"
+      "Too much exposure to me can be harmful to your skin."
     ],
     "answer": "sun"
   },
@@ -244,8 +223,7 @@
     "lines": [
       "I start with T, end with T, and have T in me.",
       "You might put things in me to steep.",
-      "I'm a container known for holding a hot beverage.",
-      "What am I?"
+      "I'm a container known for holding a hot beverage."
     ],
     "answer": "teapot"
   },
@@ -254,8 +232,7 @@
     "lines": [
       "I come in sheets, rolls, and squares.",
       "I can be soft or strong, patterned or plain.",
-      "Some people hoard me when disasters loom.",
-      "What am I?"
+      "Some people hoard me when disasters loom."
     ],
     "answer": "toilet paper"
   },
@@ -264,8 +241,7 @@
     "lines": [
       "I occur once in a minute, twice in a moment, but never in a thousand years.",
       "I'm always in the middle of the sea, but never in the ocean.",
-      "I'm not found in your mouth, but I'm embedded in your teeth.",
-      "What am I?"
+      "I'm not found in your mouth, but I'm embedded in your teeth."
     ],
     "answer": "the letter m"
   },
@@ -274,8 +250,7 @@
     "lines": [
       "I am a seed with three letters in my name.",
       "Remove the first letter and I'm a crime.",
-      "Remove the second letter instead and I'm an animal.",
-      "What am I?"
+      "Remove the second letter instead and I'm an animal."
     ],
     "answer": "pea"
   },
@@ -284,8 +259,7 @@
     "lines": [
       "I'm a word of letters three, add two and fewer there will be.",
       "I'm a series of small elements, each serving a purpose.",
-      "Look at me from a different way, and I'm no longer the same.",
-      "What am I?"
+      "Look at me from a different way, and I'm no longer the same."
     ],
     "answer": "net"
   },
@@ -294,8 +268,7 @@
     "lines": [
       "I have branches, but no fruit, trunk or leaves.",
       "I have a fork but no knife, and many have me in their home.",
-      "You use me when hungry, especially at night.",
-      "What am I?"
+      "You use me when hungry, especially at night."
     ],
     "answer": "river"
   },
@@ -304,8 +277,7 @@
     "lines": [
       "I get wet when drying.",
       "I'm full of holes, but still hold water.",
-      "The more I work, the more I'm consumed.",
-      "What am I?"
+      "The more I work, the more I'm consumed."
     ],
     "answer": "towel"
   },
@@ -314,9 +286,206 @@
     "lines": [
       "I'm created by humans yet have no physical form.",
       "I can live eternally, yet never truly die.",
-      "I can entertain, educate, or inspire.",
-      "What am I?"
+      "I can entertain, educate, or inspire."
     ],
     "answer": "story"
+  },
+  {
+    "date": "2025-04-06",
+    "lines": [
+      "I have no mouth, yet I quietly speak,",
+      "Marking moments, strong or weak.",
+      "I vanish fast when joy is bright,",
+      "Yet crawl in sorrow, lost in night."
+    ],
+    "answer": "time",
+    "difficulty": 90
+  },
+  {
+    "date": "2025-04-07",
+    "lines": [
+      "Born of silence, yet known to all,",
+      "Carving sky with patterns tall.",
+      "No hands to touch, no feet to stray,",
+      "A map of night that fades by day."
+    ],
+    "answer": "constellation",
+    "difficulty": 93
+  },
+  {
+    "date": "2025-04-08",
+    "lines": [
+      "Forged in fire, unyielding and true,",
+      "A tempered core with a molten hue.",
+      "Lining the stars and coursing through veins,",
+      "The backbone of towers and anchors of chains."
+    ],
+    "answer": "iron",
+    "difficulty": 92
+  },
+  {
+    "date": "2025-04-09",
+    "lines": [
+      "Cradling tempests where monsoons ignite,",
+      "A path for the traders who vanish from sight.",
+      "Spiced with the echoes of empires past,",
+      "Vast and relentless, yet holding steadfast."
+    ],
+    "answer": "Indian Ocean",
+    "difficulty": 95
+  },
+  {
+    "date": "2025-04-10",
+    "lines": [
+      "Walking beside but never ahead,",
+      "Stretching long when the sun is red.",
+      "Born from light but never bright,",
+      "Growing tall in the fading light."
+    ],
+    "answer": "shadow",
+    "difficulty": 91
+  },
+  {
+    "date": "2025-04-11",
+    "lines": [
+      "A silent breath upon the land,",
+      "Carving glass with a careful hand.",
+      "Fragile lace that melts at dawn,",
+      "A fleeting kiss before it's gone."
+    ],
+    "answer": "frost",
+    "difficulty": 92
+  },
+  {
+    "date": "2025-04-12",
+    "lines": [
+      "Carving stone yet light as air,",
+      "A restless traveler, never there.",
+      "A whispering voice, a howling scream,",
+      "Shaping mountains and shifting streams."
+    ],
+    "answer": "wind",
+    "difficulty": 94
+  },
+  {
+    "date": "2025-04-13",
+    "lines": [
+      "Swallowing light, yet holding weight,",
+      "A hunger vast, a silent fate.",
+      "No walls to bind, no door to close,",
+      "An endless fall where nothing slows."
+    ],
+    "answer": "black hole",
+    "difficulty": 95
+  },
+  {
+    "date": "2025-04-14",
+    "lines": [
+      "Slipping through fingers, yet shaping the world,",
+      "A whisper of wealth where fates are unfurled.",
+      "Hidden in vaults, sought in despair,",
+      "Melting in fire, yet gleaming with care."
+    ],
+    "answer": "gold",
+    "difficulty": 91
+  },
+  {
+    "date": "2025-04-15",
+    "lines": [
+      "Born of silver, fading fast,",
+      "A fleeting glow that cannot last.",
+      "Guiding wanderers through the night,",
+      "Draping shadows in borrowed light."
+    ],
+    "answer": "moonbeam",
+    "difficulty": 93
+  },
+  {
+   "date": "2025-04-16"
+    "lines": [
+      "Weaving threads too fine to see,",
+      "A quiet master of what will be.",
+      "No voice to speak, no hands to write,",
+      "A force unseen but burning bright."
+    ],
+    "answer": "destiny",
+    "difficulty": 94
+  },
+  {
+    "date": "2025-04-17",
+    "lines": [
+      "No blade to strike, no breath to take,",
+      "Yet still I cause the flesh to break.",
+      "A silent thief, a patient foe,",
+      "Creeping where the shadows grow."
+    ],
+    "answer": "disease",
+    "difficulty": 95
+  },
+  {
+    "date": "2025-04-18",
+    "lines": [
+      "Climbing high but never falling,",
+      "A burning king, the day enthralling.",
+      "Gilding lands with molten hands,",
+      "Vanishing past the distant sands."
+    ],
+    "answer": "sun",
+    "difficulty": 90
+  },
+  {
+    "date": "2025-04-19",
+    "lines": [
+      "No bricks to build, no walls to see,",
+      "Yet within, whole worlds can be.",
+      "Bound in silence, rich with sound,",
+      "Holding truths that time has found."
+    ],
+    "answer": "book",
+    "difficulty": 91
+  },
+  {
+   "date": "2025-04-20",
+    "lines": [
+      "No hands to push, yet all obey,",
+      "A silent ruler, none betray.",
+      "Bending stars and curving fate,",
+      "Shaping space at every gate."
+    ],
+    "answer": "gravity",
+    "difficulty": 94
+  },
+  {
+    "date": "2025-04-21",
+    "lines": [
+      "Moving slow yet shaping might,",
+      "A patient hand, a crushing bite.",
+      "No haste to show, no race to run,",
+      "Carving valleys, one by one."
+    ],
+    "answer": "glacier",
+    "difficulty": 92
+  },
+  {
+   "date": "2025-04-22",
+    "lines": [
+      "A silent twin of those who stare,",
+      "Mimicking life, yet always bare.",
+      "Shattered once, I break to dust,",
+      "Yet stand so clear, reflecting trust."
+    ],
+    "answer": "mirror",
+    "difficulty": 91
+  },
+  {
+    "date": "2025-04-23",
+    "lines": [
+      "Lingering where the past remains,",
+      "A faded echo locked in chains.",
+      "Shaped by joy, etched by pain,",
+      "A shadow walking in the brain."
+    ],
+    "answer": "memory",
+    "difficulty": 95
   }
 ]
