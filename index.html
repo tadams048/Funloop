@@ -5,195 +5,196 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RiddleQuest</title>
   <style>
-    :root {
-      /* Masterclass-like dark theme and cobalt accent */
-      --accent-color: #2a57cc; 
-      --bg-color: #000;       
-      --fg-color: #fff;       
-      --card-bg: #1a1a1a;     
-    }
+  :root {
+    /* Masterclass-like dark theme and cobalt accent */
+    --accent-color: #2a57cc; 
+    --bg-color: #000;       
+    --fg-color: #fff;       
+    --card-bg: #1a1a1a;     
+  }
 
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: var(--bg-color);
-      color: var(--fg-color);
-      line-height: 1.5;
-      max-width: 800px;
-      margin: 0 auto;
-    }
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+    line-height: 1.5;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #444;
-    }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #444;
+  }
 
-    .header-left {
-      display: flex;
-      align-items: center;
-    }
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
 
-    .app-title {
-      font-size: 24px;
-      margin: 0;
-    }
+  .app-title {
+    font-size: 24px;
+    margin: 0;
+  }
 
-    .reset-button {
-      margin-left: 15px;
-      opacity: 0.1;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      color: var(--fg-color);
-    }
-    .reset-button:hover {
-      opacity: 0.5;
-    }
+  .reset-button {
+    margin-left: 15px;
+    opacity: 0.1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--fg-color);
+  }
+  .reset-button:hover {
+    opacity: 0.5;
+  }
 
-    /* Card-like containers (riddle, history, etc.) */
-    .riddle-container,
-    .history-container {
-      background-color: var(--card-bg);
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(255,255,255,0.1);
-      margin-bottom: 20px;
-    }
+  /* Card-like containers (riddle, history, etc.) */
+  .riddle-container,
+  .history-container {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+    margin-bottom: 20px;
+  }
 
-    .riddle-line {
-      margin-bottom: 10px;
-    }
+  .riddle-line {
+    margin-bottom: 10px;
+  }
 
-    .input-group {
-      display: flex;
-      margin-bottom: 20px;
-    }
+  .input-group {
+    display: flex;
+    margin-bottom: 20px;
+  }
 
-    .guess-input {
-      flex-grow: 1;
-      padding: 10px;
-      border: 1px solid #666;
-      border-right: none;
-      border-top-left-radius: 4px;
-      border-bottom-left-radius: 4px;
-      font-size: 16px;
-      background-color: #444;
-      color: #fff;
-    }
+  .guess-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #666;
+    border-right: none;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    font-size: 16px;
+    background-color: #444;
+    color: #fff;
+  }
 
-    /* Accent color for buttons */
-    .guess-button,
-    .share-button {
-      background-color: var(--accent-color);
-      color: var(--fg-color);
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      display: inline-block;
-      text-transform: uppercase;
-      font-weight: 600;
-    }
+  /* Accent color for buttons */
+  .guess-button,
+  .share-button {
+    background-color: var(--accent-color);
+    color: var(--fg-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-block; /* ensures no forced block centering */
+    text-transform: uppercase;
+    font-weight: 600;
+  }
 
-    .guess-button:hover,
-    .share-button:hover {
-      background-color: #1d4bb3;
-    }
+  .guess-button:hover,
+  .share-button:hover {
+    /* A darker cobalt for hover */
+    background-color: #1d4bb3;
+  }
 
-    .guess-info {
-      font-size: 14px;
-      color: #aaa;
-      margin-top: 10px;
-    }
+  .guess-info {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 10px;
+  }
 
-    /* Feedback messages */
-    .feedback {
-      padding: 12px;
-      border-radius: 4px;
-      margin-bottom: 20px;
-    }
-    .feedback.success {
-      background-color: #065f46;
-      color: #d1fae5;
-    }
-    .feedback.close {
-      background-color: #92400e;
-      color: #fef3c7;
-    }
-    .feedback.fail {
-      background-color: #b91c1c;
-      color: #fee2e2;
-    }
-    .feedback.info {
-      background-color: #1e40af;
-      color: #dbeafe;
-    }
+  /* Feedback messages */
+  .feedback {
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  .feedback.success {
+    background-color: #065f46;
+    color: #d1fae5;
+  }
+  .feedback.close {
+    background-color: #92400e;
+    color: #fef3c7;
+  }
+  .feedback.fail {
+    background-color: #b91c1c;
+    color: #fee2e2;
+  }
+  .feedback.info {
+    background-color: #1e40af;
+    color: #dbeafe;
+  }
 
-    /* Align Share button & Countdown on one row */
-    .share-row {
-      display: flex; 
-      align-items: center;
-      justify-content: center; 
-      gap: 16px;
-      margin-bottom: 20px;
-    }
+  /* Align Share button & Countdown on one row */
+  .share-row {
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+    gap: 16px;
+    margin-bottom: 20px;
+  }
 
-    /* Countdown styling */
-    .countdown {
-      font-family: 'Courier New', Courier, monospace;
-      font-variant-numeric: tabular-nums;
-      white-space: normal; /* allow line breaks */
-      background-color: #333;
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 4px;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      border: 2px solid var(--accent-color);
-      max-width: 100%;
-    }
+  /* Monospaced countdown, more visible */
+  .countdown {
+    font-family: 'Courier New', Courier, monospace;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    min-width: 120px; 
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    border: 2px solid var(--accent-color); /* Outline in cobalt */
+  }
 
-    .history-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .history-table th,
-    .history-table td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #555;
-    }
+  .history-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .history-table th,
+  .history-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #555;
+  }
 
-    .result-info {
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #555;
-    }
+  .result-info {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #555;
+  }
 
-    .hidden {
-      display: none;
-    }
+  .hidden {
+    display: none;
+  }
 
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 14px;
-      color: #aaa;
-    }
+  footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 14px;
+    color: #aaa;
+  }
 
-    #loading {
-      text-align: center;
-      padding: 40px;
-      font-size: 18px;
-    }
-  </style>
+  #loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+  }
+</style>
 </head>
 <body>
   <header>
@@ -219,13 +220,13 @@
         <input type="text" id="guessInput" class="guess-input" placeholder="Enter your guess...">
         <button id="guessButton" class="guess-button">Guess</button>
       </div>
-      <div id="guessInfo" class="guess-info">Guess 0 of 20.</div>
+      <div id="guessInfo" class="guess-info">Line 1 of 4 revealed. Guess 0 of 20.</div>
     </div>
 
-    <div class="share-row">
-      <button id="shareButton" class="share-button hidden">Share Result</button>
-      <div id="countdown" class="countdown hidden"></div>
-    </div>
+   <div class="share-row">
+  <button id="shareButton" class="share-button hidden">Share Result</button>
+  <div id="countdown" class="countdown hidden"></div>
+  </div>
 
     <div id="historyContainer" class="history-container hidden">
       <h3>Guess History</h3>
@@ -245,9 +246,9 @@
     </div>
   </div>
 
-  <footer>
-    RiddleQuest &copy; 2025 - A daily word puzzle game
-  </footer>
+<footer>
+  RiddleQuest &copy; 2025 - A daily word puzzle game
+</footer>
 
   <script>
     // DOM Elements
@@ -270,7 +271,7 @@
 
     // Game state
     const state = {
-      riddles: [], // Loaded from JSON
+      riddles: [], // Will be loaded from JSON
       currentRiddle: null,
       revealedLines: 4,
       gameStatus: 'playing', // 'playing', 'solved', 'failed'
@@ -280,21 +281,19 @@
       MAX_GUESSES: 20
     };
 
-    // --- Semantic Similarity Integration ---
-
     async function calculateSemanticSimilarity(guess, answer) {
       try {
-        // Replace the URL below with your actual API endpoint
         const response = await fetch('https://api.semantic-similarity.com/compare', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
+          // Send both texts to be compared
           body: JSON.stringify({ text1: guess, text2: answer })
         });
         if (!response.ok) {
           console.error('Semantic similarity API error:', response.status);
-          return 0;
+          return 0; // Return a low similarity if the API fails
         }
         const data = await response.json();
         // Expecting a response like: { similarity: 0.85 }
@@ -305,130 +304,87 @@
       }
     }
 
-    // --- Updated Guess Handler ---
-    async function handleGuess() {
-      const guess = elements.guessInput.value.trim();
-      if (guess === '' || !state.currentRiddle) return;
-      
-      state.guessCount++;
-      
-      // Get semantic similarity score (0 to 1)
-      const similarity = await calculateSemanticSimilarity(guess, state.currentRiddle.answer);
-      console.log(`Semantic similarity between "${guess}" and "${state.currentRiddle.answer}" is ${similarity}`);
-      
-      // Map similarity to a proximity score
-      let proximityScore = 0;
-      if (similarity >= 0.9) {
-        proximityScore = 100;
-      } else if (similarity >= 0.85) {
-        proximityScore = 90;
-      } else if (similarity >= 0.8) {
-        proximityScore = 80;
-      } else if (similarity >= 0.75) {
-        proximityScore = 70;
-      } else if (similarity >= 0.7) {
-        proximityScore = 60;
-      } else if (similarity >= 0.65) {
-        proximityScore = 50;
-      } else if (similarity >= 0.6) {
-        proximityScore = 40;
-      } else if (similarity >= 0.55) {
-        proximityScore = 30;
-      } else if (similarity >= 0.5) {
-        proximityScore = 20;
-      } else {
-        proximityScore = 10;
-      }
-      
-      // Record guess in history
-      state.guessHistory.push({
-        text: guess,
-        guessNumber: state.guessCount,
-        proximityScore: proximityScore
-      });
-      
-      // Check for a correct guess
-      if (proximityScore === 100) {
-        state.gameStatus = 'solved';
-        state.score = state.guessCount;
-        showFeedback('Perfect! You solved the riddle!', 'success');
-      } else {
-        if (proximityScore >= 90) {
-          showFeedback('Very close! Try a different word.', 'close');
-        } else if (proximityScore >= 80) {
-          showFeedback('You\'re on the right track.', 'close');
-        } else if (proximityScore >= 70) {
-          showFeedback('Getting warmer, but still quite far.', 'close');
-        } else {
-          showFeedback('Not quite right. Try another approach.', 'fail');
+    
+    // Load riddles from external JSON file
+    async function loadRiddles() {
+      try {
+        const response = await fetch('/Riddle-Quest/riddles-json.json');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
         
-        if (state.guessCount >= state.MAX_GUESSES) {
-          state.gameStatus = 'failed';
-          showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
-        } else {
-          if (state.revealedLines < 4) {
-            state.revealedLines++;
-            displayRiddle();
-          }
+        state.riddles = await response.json();
+        
+        // Get today's riddle
+        const todaysRiddle = getTodaysRiddle();
+        
+        if (!todaysRiddle) {
+          elements.loading.textContent = 'No riddle available for today.';
+          return;
         }
+        
+        state.currentRiddle = todaysRiddle;
+        
+        // Hide loading and show game content
+        elements.loading.classList.add('hidden');
+        elements.gameContent.classList.remove('hidden');
+        
+        // Initialize game
+        initGame();
+      } catch (error) {
+        console.error('Error loading riddles:', error);
+        elements.loading.textContent = 'Error loading riddles. Please try again later.';
       }
-      
-      elements.guessInput.value = '';
-      updateGuessInfo();
-      updateHistory();
-      updateGameStatus();
     }
 
-    // --- Other Functions (Display, Update, etc.) ---
-
-        function getTodaysRiddle() {
-          if (!state.riddles || state.riddles.length === 0) {
-            console.error("No riddles available");
-            return null;
-          }
-        
-          // Format today's date as YYYY-MM-DD
-          const today = new Date();
-          const formattedDate = today.toLocaleDateString('en-CA'); // produces YYYY-MM-DD
-          console.log("Today's date:", formattedDate);
-        
-          // Try to find riddle for today's date
-          let todaysRiddle = state.riddles.find(riddle => riddle.date === formattedDate);
-          console.log("Matched riddle for today:", todaysRiddle ? "Yes" : "No");
-        
-          // If no riddle is found for today
-          if (!todaysRiddle) {
-            // Try to find a fallback riddle
-            todaysRiddle = state.riddles.find(riddle => riddle.fallback === true);
-            console.log("Found fallback riddle:", todaysRiddle ? "Yes" : "No");
-        
-            // If no fallback riddle, use the first riddle
-            if (!todaysRiddle && state.riddles.length > 0) {
-              console.log("Using first riddle as default");
-              todaysRiddle = state.riddles[0];
-            }
-        
-            // If we still don't have a riddle, use a hardcoded one
-            if (!todaysRiddle) {
-              console.log("Using hardcoded fallback riddle");
-              todaysRiddle = {
-                lines: [
-                  "I'm created by humans yet have no physical form.",
-                  "I can live eternally, yet never truly die.",
-                  "I can entertain, educate, or inspire.",
-                  "What am I?"
-                ],
-                answer: "story"
-              };
-            }
-          }
-        
-          console.log("Selected riddle answer:", todaysRiddle.answer);
-          return todaysRiddle;
-        }
-
+    // Get today's riddle based on current date
+function getTodaysRiddle() {
+  if (!state.riddles || state.riddles.length === 0) {
+    console.error("No riddles available");
+    return null;
+  }
+  
+  // Format today's date as YYYY-MM-DD
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('en-CA'); // produces YYYY-MM-DD
+  console.log("Today's date:", formattedDate);
+  
+  // Try to find riddle for today's date
+  let todaysRiddle = state.riddles.find(riddle => riddle.date === formattedDate);
+  console.log("Matched riddle for today:", todaysRiddle ? "Yes" : "No");
+  
+  // If no riddle is found for today
+  if (!todaysRiddle) {
+    // Try to find a fallback riddle
+    todaysRiddle = state.riddles.find(riddle => riddle.fallback === true);
+    console.log("Found fallback riddle:", todaysRiddle ? "Yes" : "No");
     
+    // If no fallback riddle, use the first riddle
+    if (!todaysRiddle && state.riddles.length > 0) {
+      console.log("Using first riddle as default");
+      todaysRiddle = state.riddles[0];
+    }
+    
+    // If we still don't have a riddle, use a hardcoded one
+    if (!todaysRiddle) {
+      console.log("Using hardcoded fallback riddle");
+      todaysRiddle = {
+        lines: [
+          "I'm created by humans yet have no physical form.",
+          "I can live eternally, yet never truly die.",
+          "I can entertain, educate, or inspire.",
+          "What am I?"
+        ],
+        answer: "story"
+      };
+    }
+  }
+  
+  console.log("Selected riddle answer:", todaysRiddle.answer);
+  return todaysRiddle;
+}
+
+    // Display riddle
     function displayRiddle() {
       elements.riddleContainer.innerHTML = '';
       for (let i = 0; i < state.revealedLines; i++) {
@@ -439,10 +395,12 @@
       }
     }
 
-    function updateGuessInfo() {
-      elements.guessInfo.textContent = `Guess ${state.guessCount} of ${state.MAX_GUESSES}.`;
-    }
+    // Update guess info
+     function updateGuessInfo() {
+    elements.guessInfo.textContent = `Guess ${state.guessCount} of ${state.MAX_GUESSES}.`;
+  }
 
+    // Show feedback
     function showFeedback(message, type) {
       elements.feedback.textContent = message;
       elements.feedback.className = 'feedback';
@@ -450,6 +408,7 @@
       elements.feedback.classList.remove('hidden');
     }
 
+    // Update game status
     function updateGameStatus() {
       if (state.gameStatus === 'playing') {
         elements.guessForm.style.display = 'block';
@@ -459,30 +418,36 @@
         elements.guessForm.style.display = 'none';
         elements.shareButton.classList.remove('hidden');
         elements.countdown.classList.remove('hidden');
+        
+        // Start countdown
         updateCountdown();
         setInterval(updateCountdown, 1000);
       }
     }
 
-    function updateCountdown() {
+    // Update countdown
+     function updateCountdown() {
       const now = new Date();
       const tomorrow = new Date(now);
       tomorrow.setDate(tomorrow.getDate() + 1);
       tomorrow.setHours(0, 0, 0, 0);
-      
+    
       const diffMs = tomorrow - now;
       const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
       const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
       const diffSecs = Math.floor((diffMs % (1000 * 60)) / 1000);
-      
+    
+      // Zero-pad each unit so it always shows 2 digits
       const hrs = String(diffHrs).padStart(2, '0');
       const mins = String(diffMins).padStart(2, '0');
       const secs = String(diffSecs).padStart(2, '0');
-      
+    
+      // Shorter, more human-readable text
       elements.countdown.innerHTML = `Next Riddle in:<br>${hrs}h ${mins}m ${secs}s`;
       elements.countdown.classList.remove('hidden');
     }
 
+    // Get emoji based on guess count
     function getGuessEmoji(guessNumber) {
       const emojiMap = {
         1: '👑', 2: '🎯', 3: '🔥', 4: '💯', 5: '🌟',
@@ -493,12 +458,51 @@
       return emojiMap[guessNumber] || '❓';
     }
 
-    // (Retain the old calculateProximity function if desired, but it's no longer used)
-    
+    // Calculate proximity
+    function calculateProximity(guess, answer) {
+      const normalizedGuess = guess.toLowerCase().trim();
+      const normalizedAnswer = answer.toLowerCase().trim();
+      
+      if (normalizedGuess === normalizedAnswer) {
+        return 100;
+      }
+      
+      if (normalizedGuess.includes(normalizedAnswer) || normalizedAnswer.includes(normalizedGuess)) {
+        return 75;
+      }
+      
+      const guessWords = normalizedGuess.split(/\s+/);
+      const answerWords = normalizedAnswer.split(/\s+/);
+      
+      const commonWords = guessWords.filter(word => answerWords.includes(word));
+      if (commonWords.length > 0) {
+        return 50;
+      }
+      
+      const guessLetters = new Set(normalizedGuess.replace(/[^a-z]/g, ''));
+      const answerLetters = new Set(normalizedAnswer.replace(/[^a-z]/g, ''));
+      
+      let commonLetters = 0;
+      for (const letter of guessLetters) {
+        if (answerLetters.has(letter)) {
+          commonLetters++;
+        }
+      }
+      
+      const letterSimilarity = commonLetters / Math.max(guessLetters.size, answerLetters.size);
+      if (letterSimilarity > 0.5) {
+        return 25;
+      }
+      
+      return 10;
+    }
+
+    // Update history table
     function updateHistory() {
       if (state.guessHistory.length > 0) {
         elements.historyContainer.classList.remove('hidden');
         elements.historyTable.innerHTML = '';
+        
         state.guessHistory.forEach(guess => {
           const row = document.createElement('tr');
           
@@ -514,30 +518,154 @@
           row.appendChild(guessCell);
           row.appendChild(attemptCell);
           row.appendChild(proximityCell);
+          
           elements.historyTable.appendChild(row);
         });
       }
-      
+
       if (state.gameStatus === 'solved') {
         elements.resultInfo.classList.remove('hidden');
         elements.resultInfo.textContent = `Solved with ${getGuessEmoji(state.score)} on guess #${state.score}`;
       }
     }
 
+    // Handle guess
+         async function handleGuess() {
+        const guess = elements.guessInput.value.trim();
+        if (guess === '' || !state.currentRiddle) return;
+      
+        state.guessCount++;
+      
+        // Get a semantic similarity score from the external service
+        const similarity = await calculateSemanticSimilarity(guess, state.currentRiddle.answer);
+        console.log(`Semantic similarity between "${guess}" and "${state.currentRiddle.answer}" is ${similarity}`);
+      
+        // Map the similarity (0 to 1) to a proximity score
+        let proximityScore = 0;
+        if (similarity >= 0.9) {
+          proximityScore = 100;
+        } else if (similarity >= 0.85) {
+          proximityScore = 90;
+        } else if (similarity >= 0.8) {
+          proximityScore = 80;
+        } else if (similarity >= 0.75) {
+          proximityScore = 70;
+        } else if (similarity >= 0.7) {
+          proximityScore = 60;
+        } else if (similarity >= 0.65) {
+          proximityScore = 50;
+        } else if (similarity >= 0.6) {
+          proximityScore = 40;
+        } else if (similarity >= 0.55) {
+          proximityScore = 30;
+        } else if (similarity >= 0.5) {
+          proximityScore = 20;
+        } else {
+          proximityScore = 10;
+        }
+      
+        // Record the guess in history
+        state.guessHistory.push({
+          text: guess,
+          guessNumber: state.guessCount,
+          proximityScore: proximityScore
+        });
+      
+        // Check if the guess is correct
+        if (proximityScore === 100) {
+          state.gameStatus = 'solved';
+          state.score = state.guessCount;
+          showFeedback('Perfect! You solved the riddle!', 'success');
+        } else {
+          if (proximityScore >= 90) {
+            showFeedback('Very close! Try a different word.', 'close');
+          } else if (proximityScore >= 80) {
+            showFeedback('You\'re on the right track.', 'close');
+          } else if (proximityScore >= 70) {
+            showFeedback('Getting warmer, but still quite far.', 'close');
+          } else {
+            showFeedback('Not quite right. Try another approach.', 'fail');
+          }
+          
+          if (state.guessCount >= state.MAX_GUESSES) {
+            state.gameStatus = 'failed';
+            showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
+          } else {
+            if (state.revealedLines < 4) {
+              state.revealedLines++;
+              displayRiddle();
+            }
+          }
+        }
+        
+        elements.guessInput.value = '';
+        updateGuessInfo();
+        updateHistory();
+        updateGameStatus();
+      }
+      
+      // Add to history
+      state.guessHistory.push({
+        text: guess,
+        guessNumber: state.guessCount,
+        proximityScore
+      });
+      
+      // Check if correct
+      if (proximityScore === 100) {
+        state.gameStatus = 'solved';
+        state.score = state.guessCount;
+        showFeedback('Perfect! You solved the riddle!', 'success');
+      } else {
+        // Feedback based on proximity
+        if (proximityScore >= 75) {
+          showFeedback('Very close! Try a different word.', 'close');
+        } else if (proximityScore >= 50) {
+          showFeedback('You\'re on the right track.', 'close');
+        } else if (proximityScore >= 25) {
+          showFeedback('Getting warmer, but still quite far.', 'close');
+        } else {
+          showFeedback('Not quite right. Try another approach.', 'fail');
+        }
+        
+        // Check if max guesses reached
+        if (state.guessCount >= state.MAX_GUESSES) {
+          state.gameStatus = 'failed';
+          showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
+        } else {
+          // Reveal next line if available
+          if (state.revealedLines < 4) {
+            state.revealedLines++;
+            displayRiddle();
+          }
+        }
+      }
+      
+      // Reset input and update UI
+      elements.guessInput.value = '';
+      updateGuessInfo();
+      updateHistory();
+      updateGameStatus();
+    }
+
+    // Share results
     function shareResults() {
       const successfulGuess = state.guessHistory.find(guess => guess.proximityScore === 100);
       if (!successfulGuess) return;
       
       const emoji = getGuessEmoji(successfulGuess.guessNumber);
-      const today = new Date().toISOString().split('T')[0];
+      
+      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
       const shareText = `RiddleQuest ${emoji}\nSolved in ${successfulGuess.guessNumber}/${state.MAX_GUESSES} guesses\n\nVisit riddlequest.com to play today's riddle (${today})!`;
       
       try {
+        // Try to copy to clipboard using document.execCommand
         const textArea = document.createElement('textarea');
         textArea.value = shareText;
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
+        
         const successful = document.execCommand('copy');
         document.body.removeChild(textArea);
         
@@ -550,106 +678,130 @@
         showFeedback('Could not copy to clipboard. Here\'s your result to share: ' + shareText, 'info');
       }
     }
+    
+// Reset game
+function resetGame() {
+  if (state.riddles.length === 0) return;
+  
+  state.currentRiddle = getTodaysRiddle();
+  state.revealedLines = 1;
+  state.gameStatus = 'playing';
+  state.score = 0;
+  state.guessHistory = [];
+  state.guessCount = 0;
+  
+  displayRiddle();
+  updateGuessInfo();
+  elements.historyContainer.classList.add('hidden');
+  elements.feedback.classList.add('hidden');
+  updateGameStatus();
+}
 
-    function resetGame() {
-      if (state.riddles.length === 0) return;
-      
-      state.currentRiddle = getTodaysRiddle();
-      state.revealedLines = 1;
-      state.gameStatus = 'playing';
-      state.score = 0;
-      state.guessHistory = [];
-      state.guessCount = 0;
-      
-      displayRiddle();
-      updateGuessInfo();
-      elements.historyContainer.classList.add('hidden');
-      elements.feedback.classList.add('hidden');
-      updateGameStatus();
+// Initialize game
+function initGame() {
+  // Set up UI
+  displayRiddle();
+  updateGuessInfo();
+  updateGameStatus();
+  
+  // Event listeners
+  elements.guessButton.addEventListener('click', handleGuess);
+  elements.guessInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      handleGuess();
     }
+  });
+  elements.shareButton.addEventListener('click', shareResults);
+  elements.resetButton.addEventListener('click', resetGame);
+}
 
-    // Initialize game by attaching event listeners and starting the game
-    function initGame() {
-      displayRiddle();
-      updateGuessInfo();
-      updateGameStatus();
-      
-      // Attach updated event listeners for the async handleGuess()
-      elements.guessButton.addEventListener('click', () => { handleGuess(); });
-      elements.guessInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          handleGuess();
-        }
-      });
-      elements.shareButton.addEventListener('click', shareResults);
-      elements.resetButton.addEventListener('click', resetGame);
+// Add better debugging to loadRiddles
+async function loadRiddlesWithDebug() {
+  elements.loading.innerHTML = 'Loading today\'s riddle...<br><small id="debug"></small>';
+  const debug = document.getElementById('debug');
+  
+  try {
+    debug.textContent = "Attempting to fetch JSON...";
+    
+    // Try both paths
+    let response;
+    try {
+      debug.textContent = "Trying /Riddle-Quest/riddles-json.json";
+      response = await fetch('/Riddle-Quest/riddles-json.json');
+      if (!response.ok) throw new Error("First path failed");
+    } catch (e) {
+      debug.textContent = "Trying riddles-json.json";
+      response = await fetch('riddles-json.json');
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     }
+    
+    debug.textContent = "Parsing JSON...";
+    state.riddles = await response.json();
+    debug.textContent = `Loaded ${state.riddles.length} riddles`;
+    
+    // Get today's riddle
+    debug.textContent = "Getting today's riddle...";
+    const todaysRiddle = getTodaysRiddle();
+    
+    if (!todaysRiddle) {
+      debug.textContent = "No riddle found for today";
+      elements.loading.innerHTML += '<br>No riddle available for today.';
+      
+      // Add the fallback riddle
+      debug.textContent = "Using emergency fallback";
+      state.currentRiddle = {
+        lines: [
+          "I'm created by humans yet have no physical form.",
+          "I can live eternally, yet never truly die.",
+          "I can entertain, educate, or inspire.",
+          "What am I?"
+        ],
+        answer: "story"
+      };
+      
+      // Hide loading and show game content
+      elements.loading.classList.add('hidden');
+      elements.gameContent.classList.remove('hidden');
+      
+      // Initialize game
+      initGame();
+      return;
+    }
+    
+    debug.textContent = "Riddle found, initializing game";
+    state.currentRiddle = todaysRiddle;
+    
+    // Hide loading and show game content
+    elements.loading.classList.add('hidden');
+    elements.gameContent.classList.remove('hidden');
+    
+    // Initialize game
+    initGame();
+  } catch (error) {
+    console.error('Error loading riddles:', error);
+    debug.textContent = `Error: ${error.message}`;
+    elements.loading.innerHTML += '<br>Error loading riddles. Check console for details.';
+    
+    // Use hardcoded riddle as an emergency fallback
+    state.currentRiddle = {
+      lines: [
+        "I'm created by humans yet have no physical form.",
+        "I can live eternally, yet never truly die.",
+        "I can entertain, educate, or inspire.",
+        "What am I?"
+      ],
+      answer: "story"
+    };
+    
+    // Hide loading and show game content after a short delay
+    setTimeout(() => {
+      elements.loading.classList.add('hidden');
+      elements.gameContent.classList.remove('hidden');
+      initGame();
+    }, 3000);
+  }
+}
 
-    // Load riddles and start the game
-          async function loadRiddlesWithDebug() {
-        elements.loading.innerHTML = 'Loading today\'s riddle...<br><small id="debug"></small>';
-        const debug = document.getElementById('debug');
-        
-        try {
-          debug.textContent = "Attempting to fetch JSON...";
-          let response;
-          try {
-            debug.textContent = "Trying riddles-json.json";
-            response = await fetch('riddles-json.json');
-            if (!response.ok) throw new Error("First path failed");
-          } catch (e) {
-            console.error("First fetch failed:", e);
-            debug.textContent = "Trying riddles-json.json";
-            response = await fetch('riddles-json.json');
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          
-          debug.textContent = "Parsing JSON...";
-          state.riddles = await response.json();
-          debug.textContent = `Loaded ${state.riddles.length} riddles`;
-          
-          debug.textContent = "Getting today's riddle...";
-          const todaysRiddle = getTodaysRiddle();
-          
-          if (!todaysRiddle) {
-            debug.textContent = "No riddle found for today";
-            elements.loading.innerHTML += '<br>No riddle available for today.';
-            return;
-          }
-          
-          debug.textContent = "Riddle found, initializing game";
-          state.currentRiddle = todaysRiddle;
-          
-          // Hide loading and show game content
-          elements.loading.classList.add('hidden');
-          elements.gameContent.classList.remove('hidden');
-          
-          initGame();
-        } catch (error) {
-          console.error('Error loading riddles:', error);
-          debug.textContent = `Error: ${error.message}`;
-          elements.loading.innerHTML += '<br>Error loading riddles. Check console for details.';
-          
-          // Fallback: Use a hardcoded riddle after a delay
-          state.currentRiddle = {
-            lines: [
-              "I'm created by humans yet have no physical form.",
-              "I can live eternally, yet never truly die.",
-              "I can entertain, educate, or inspire.",
-              "What am I?"
-            ],
-            answer: "story"
-          };
-          
-          setTimeout(() => {
-            elements.loading.classList.add('hidden');
-            elements.gameContent.classList.remove('hidden');
-            initGame();
-          }, 3000);
-        }
-      }
-
-    window.addEventListener('DOMContentLoaded', loadRiddlesWithDebug);
+  // Listen for DOMContentLoaded to trigger the riddle loading
+  window.addEventListener('DOMContentLoaded', loadRiddlesWithDebug);
   </script>
-</body>
-</html>
