@@ -402,18 +402,24 @@ function getTodaysRiddle() {
     }
 
     // Update countdown
-    function updateCountdown() {
+     function updateCountdown() {
       const now = new Date();
       const tomorrow = new Date(now);
       tomorrow.setDate(tomorrow.getDate() + 1);
       tomorrow.setHours(0, 0, 0, 0);
-      
+    
       const diffMs = tomorrow - now;
       const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
       const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
       const diffSecs = Math.floor((diffMs % (1000 * 60)) / 1000);
-      
-      elements.countdown.textContent = `Next riddle in: ${String(diffHrs).padStart(2, '0')}:${String(diffMins).padStart(2, '0')}:${String(diffSecs).padStart(2, '0')}`;
+    
+      // Zero-pad each unit so it always shows 2 digits
+      const hrs = String(diffHrs).padStart(2, '0');
+      const mins = String(diffMins).padStart(2, '0');
+      const secs = String(diffSecs).padStart(2, '0');
+    
+      // Shorter, more human-readable text
+      elements.countdown.textContent = `Time left: ${hrs}h ${mins}m ${secs}s`;
       elements.countdown.classList.remove('hidden');
     }
 
