@@ -530,79 +530,91 @@ function getTodaysRiddle() {
     }
 
     // Handle guess
-         async function handleGuess() {
-        const guess = elements.guessInput.value.trim();
-        if (guess === '' || !state.currentRiddle) return;
-      
-        state.guessCount++;
-      
-        // Get a semantic similarity score from the external service
-        const similarity = await calculateSemanticSimilarity(guess, state.currentRiddle.answer);
-        console.log(`Semantic similarity between "${guess}" and "${state.currentRiddle.answer}" is ${similarity}`);
-      
-        // Map the similarity (0 to 1) to a proximity score
-        let proximityScore = 0;
-        if (similarity >= 0.9) {
-          proximityScore = 100;
-        } else if (similarity >= 0.85) {
-          proximityScore = 90;
-        } else if (similarity >= 0.8) {
-          proximityScore = 80;
-        } else if (similarity >= 0.75) {
-          proximityScore = 70;
-        } else if (similarity >= 0.7) {
-          proximityScore = 60;
-        } else if (similarity >= 0.65) {
-          proximityScore = 50;
-        } else if (similarity >= 0.6) {
-          proximityScore = 40;
-        } else if (similarity >= 0.55) {
-          proximityScore = 30;
-        } else if (similarity >= 0.5) {
-          proximityScore = 20;
-        } else {
-          proximityScore = 10;
-        }
-      
-        // Record the guess in history
-        state.guessHistory.push({
-          text: guess,
-          guessNumber: state.guessCount,
-          proximityScore: proximityScore
-        });
-      
-        // Check if the guess is correct
-        if (proximityScore === 100) {
-          state.gameStatus = 'solved';
-          state.score = state.guessCount;
-          showFeedback('Perfect! You solved the riddle!', 'success');
-        } else {
-          if (proximityScore >= 90) {
-            showFeedback('Very close! Try a different word.', 'close');
-          } else if (proximityScore >= 80) {
-            showFeedback('You\'re on the right track.', 'close');
-          } else if (proximityScore >= 70) {
-            showFeedback('Getting warmer, but still quite far.', 'close');
-          } else {
-            showFeedback('Not quite right. Try another approach.', 'fail');
-          }
-          
-          if (state.guessCount >= state.MAX_GUESSES) {
-            state.gameStatus = 'failed';
-            showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
-          } else {
-            if (state.revealedLines < 4) {
-              state.revealedLines++;
-              displayRiddle();
-            }
-          }
-        }
-        
-        elements.guessInput.value = '';
-        updateGuessInfo();
-        updateHistory();
-        updateGameStatus();
+          async function handleGuess() {
+      const guess = elements.guessInput.value.trim();
+      if (guess === '' || !state.currentRiddle) return;
+
+      state.guessCount++;
+
+      // Normalize both texts for comparison
+      const normalizedGuess = guess.toLowerCase();
+      const normalizedAnswer = state.currentRiddle.answer.toLowerCase();
+
+      let similarity = 0;
+      // Check for an exact match first
+      if (normalizedGuess === normalizedAnswer) {
+      similarity = 1;
+      console.log('Exact match found; similarity set to 1');
+      } else {
+      // Otherwise, call the semantic similarity API
+      similarity = await calculateSemanticSimilarity(guess, state.currentRiddle.answer);
+      console.log(`Semantic similarity between "${guess}" and "${state.currentRiddle.answer}" is ${similarity}`);
       }
+
+      // Map the similarity (0 to 1) to a proximity score
+      let proximityScore = 0;
+      if (similarity >= 0.9) {
+      proximityScore = 100;
+      } else if (similarity >= 0.85) {
+      proximityScore = 90;
+      } else if (similarity >= 0.8) {
+      proximityScore = 80;
+      } else if (similarity >= 0.75) {
+      proximityScore = 70;
+      } else if (similarity >= 0.7) {
+      proximityScore = 60;
+      } else if (similarity >= 0.65) {
+      proximityScore = 50;
+      } else if (similarity >= 0.6) {
+      proximityScore = 40;
+      } else if (similarity >= 0.55) {
+      proximityScore = 30;
+      } else if (similarity >= 0.5) {
+      proximityScore = 20;
+      } else {
+      proximityScore = 10;
+      }
+
+      // Record the guess in history
+      state.guessHistory.push({
+      text: guess,
+      guessNumber: state.guessCount,
+      proximityScore: proximityScore
+      });
+
+      // Check if the guess is correct (exactly 100 proximity)
+      if (proximityScore === 100) {
+      state.gameStatus = 'solved';
+      state.score = state.guessCount;
+      showFeedback('Perfect! You solved the riddle!', 'success');
+      } else {
+      if (proximityScore >= 90) {
+       showFeedback('Very close! Try a different word.', 'close');
+      } else if (proximityScore >= 80) {
+       showFeedback('You\'re on the right track.', 'close');
+      } else if (proximityScore >= 70) {
+       showFeedback('Getting warmer, but still quite far.', 'close');
+      } else {
+       showFeedback('Not quite right. Try another approach.', 'fail');
+      }
+
+      if (state.guessCount >= state.MAX_GUESSES) {
+       state.gameStatus = 'failed';
+       showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
+      } else {
+       if (state.revealedLines < 4) {
+         state.revealedLines++;
+         displayRiddle();
+       }
+      }
+      }
+
+      elements.guessInput.value = '';
+      updateGuessInfo();
+      updateHistory();
+      updateGameStatus();
+      }
+
       
 
     // Share results
