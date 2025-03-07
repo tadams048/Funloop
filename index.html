@@ -5,216 +5,196 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RiddleQuest</title>
   <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: var(--bg-color);
-      color: var(--fg-color);
-      line-height: 1.5;
-      max-width: 800px;
-      margin: 0 auto;
-    }
+  :root {
+    /* Masterclass-like dark theme and cobalt accent */
+    --accent-color: #2a57cc; 
+    --bg-color: #000;       
+    --fg-color: #fff;       
+    --card-bg: #1a1a1a;     
+  }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #444;
-    }
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+    line-height: 1.5;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-    .header-left {
-      display: flex;
-      align-items: center;
-    }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #444;
+  }
 
-    .app-title {
-      font-size: 24px;
-      margin: 0;
-    }
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
 
-    .reset-button {
-      margin-left: 15px;
-      opacity: 0.1;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      color: #f5f5f5;
-    }
+  .app-title {
+    font-size: 24px;
+    margin: 0;
+  }
 
-    .reset-button:hover {
-      opacity: 0.5;
-    }
+  .reset-button {
+    margin-left: 15px;
+    opacity: 0.1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--fg-color);
+  }
+  .reset-button:hover {
+    opacity: 0.5;
+  }
 
-    .riddle-container {
-      background-color: #333;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(255,255,255,0.1);
-      margin-bottom: 20px;
-    }
+  /* Card-like containers (riddle, history, etc.) */
+  .riddle-container,
+  .history-container {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+    margin-bottom: 20px;
+  }
 
-    .riddle-line {
-      margin-bottom: 10px;
-    }
+  .riddle-line {
+    margin-bottom: 10px;
+  }
 
-    .input-group {
-      display: flex;
-      margin-bottom: 20px;
-    }
+  .input-group {
+    display: flex;
+    margin-bottom: 20px;
+  }
 
-    .guess-input {
-      flex-grow: 1;
-      padding: 10px;
-      border: 1px solid #666;
-      border-right: none;
-      border-top-left-radius: 4px;
-      border-bottom-left-radius: 4px;
-      font-size: 16px;
-      background-color: #444;
-      color: #fff;
-    }
+  .guess-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #666;
+    border-right: none;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    font-size: 16px;
+    background-color: #444;
+    color: #fff;
+  }
 
-    .guess-button {
-      padding: 10px 20px;
-      background-color: #3b82f6;
-      color: white;
-      border: none;
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-    }
+  /* Accent color for buttons */
+  .guess-button,
+  .share-button {
+    background-color: var(--accent-color);
+    color: var(--fg-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-block; /* ensures no forced block centering */
+    text-transform: uppercase;
+    font-weight: 600;
+  }
 
-    .guess-button:hover {
-      background-color: #2563eb;
-    }
+  .guess-button:hover,
+  .share-button:hover {
+    /* A darker cobalt for hover */
+    background-color: #1d4bb3;
+  }
 
-    .guess-info {
-      font-size: 14px;
-      color: #aaa;
-      margin-top: 10px;
-    }
+  .guess-info {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 10px;
+  }
 
-    .feedback {
-      padding: 12px;
-      border-radius: 4px;
-      margin-bottom: 20px;
-    }
+  /* Feedback messages */
+  .feedback {
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  .feedback.success {
+    background-color: #065f46;
+    color: #d1fae5;
+  }
+  .feedback.close {
+    background-color: #92400e;
+    color: #fef3c7;
+  }
+  .feedback.fail {
+    background-color: #b91c1c;
+    color: #fee2e2;
+  }
+  .feedback.info {
+    background-color: #1e40af;
+    color: #dbeafe;
+  }
 
-    .feedback.success {
-      background-color: #065f46;
-      color: #d1fae5;
-    }
+  /* Align Share button & Countdown on one row */
+  .share-row {
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+    gap: 16px;
+    margin-bottom: 20px;
+  }
 
-    .feedback.close {
-      background-color: #92400e;
-      color: #fef3c7;
-    }
+  /* Monospaced countdown, more visible */
+  .countdown {
+    font-family: 'Courier New', Courier, monospace;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    min-width: 160px; 
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    border: 2px solid var(--accent-color); /* Outline in cobalt */
+  }
 
-    .feedback.fail {
-      background-color: #b91c1c;
-      color: #fee2e2;
-    }
+  .history-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .history-table th,
+  .history-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #555;
+  }
 
-    .feedback.info {
-      background-color: #1e40af;
-      color: #dbeafe;
-    }
+  .result-info {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #555;
+  }
 
-    .share-button {
-      display: block;
-      width: fit-content;
-      margin: 0 auto;
-      background-color: #10b981;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-        share-row {
-      display: flex;            /* Place children side by side */
-      align-items: center;      /* Vertically center them */
-      justify-content: center;  /* Center horizontally (or space-between) */
-      gap: 16px;                /* Space between the button and countdown */
-      margin-bottom: 20px;      /* Extra space above the guess history */
-    }
-    
-    .share-button {
-      /* Remove any margin: 0 auto; or display: block; 
-         so it doesn’t try to center itself alone */
-      display: inline-block;
-      background-color: #10b981;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    .countdown {
-      /* Monospaced font & tabular-nums keep digits aligned */
-      font-family: 'Courier New', Courier, monospace;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;     /* Prevent line breaks */
-      
-      background-color: #333;
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 4px;
-      
-      /* Ensure the width doesn’t jump as numbers change */
-      min-width: 160px;        /* Enough for "Next riddle in: 00:00:00" */
-      text-align: center;
-    }
+  .hidden {
+    display: none;
+  }
 
-    .history-container {
-      background-color: #333;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(255,255,255,0.1);
-      margin-bottom: 20px;
-    }
+  footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 14px;
+    color: #aaa;
+  }
 
-    .history-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .history-table th, .history-table td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #555;
-    }
-
-    .result-info {
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #555;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 14px;
-      color: #aaa;
-    }
-    
-    #loading {
-      text-align: center;
-      padding: 40px;
-      font-size: 18px;
-    }
-  </style>
+  #loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+  }
+</style>
 </head>
 <body>
   <header>
