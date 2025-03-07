@@ -419,7 +419,7 @@ function getTodaysRiddle() {
       const secs = String(diffSecs).padStart(2, '0');
     
       // Shorter, more human-readable text
-      elements.countdown.textContent = `Time left: ${hrs}h ${mins}m ${secs}s`;
+      elements.countdown.innerHTML = `Next Riddle in:<br>${hrs}h ${mins}m ${secs}s`;
       elements.countdown.classList.remove('hidden');
     }
 
