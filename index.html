@@ -394,9 +394,9 @@ function getTodaysRiddle() {
     }
 
     // Update guess info
-    function updateGuessInfo() {
-      elements.guessInfo.textContent = `Line ${state.revealedLines} of 4 revealed. Guess ${state.guessCount} of ${state.MAX_GUESSES}.`;
-    }
+     function updateGuessInfo() {
+    elements.guessInfo.textContent = `Guess ${state.guessCount} of ${state.MAX_GUESSES}.`;
+  }
 
     // Show feedback
     function showFeedback(message, type) {
