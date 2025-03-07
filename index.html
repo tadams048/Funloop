@@ -386,18 +386,25 @@ function getTodaysRiddle() {
 
     // Display riddle
     function displayRiddle() {
-      elements.riddleContainer.innerHTML = '';
-      for (let i = 0; i < state.revealedLines; i++) {
-        const line = document.createElement('p');
-        line.className = 'riddle-line';
-        line.textContent = state.currentRiddle.lines[i];
-        elements.riddleContainer.appendChild(line);
-      }
+    elements.riddleContainer.innerHTML = '';
+    // Loop until either the number of revealed lines or total lines, whichever is smaller.
+    const totalLines = state.currentRiddle.lines.length;
+    for (let i = 0; i < state.revealedLines && i < totalLines; i++) {
+      const line = document.createElement('p');
+      line.className = 'riddle-line';
+      line.textContent = state.currentRiddle.lines[i];
+      elements.riddleContainer.appendChild(line);
     }
+  }
 
-    // Update guess info
-     function updateGuessInfo() {
-    elements.guessInfo.textContent = `Guess ${state.guessCount} of ${state.MAX_GUESSES}.`;
+  function updateGuessInfo() {
+    // Show dynamic line info: "Line X of Y revealed"
+    if (state.currentRiddle) {
+      const totalLines = state.currentRiddle.lines.length;
+      elements.guessInfo.textContent = `Guess ${state.guessCount} of ${state.MAX_GUESSES}. Line ${state.revealedLines} of ${totalLines} revealed.`;
+    } else {
+      elements.guessInfo.textContent = `Guess ${state.guessCount} of ${state.MAX_GUESSES}.`;
+    }
   }
 
     // Show feedback
@@ -613,10 +620,10 @@ function getTodaysRiddle() {
             state.gameStatus = 'failed';
             showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
           } else {
-            if (state.revealedLines < 4) {
-              state.revealedLines++;
-              displayRiddle();
-            }
+            if (state.revealedLines < state.currentRiddle.lines.length) {
+            state.revealedLines++;
+            displayRiddle();
+          }
           }
         }
 
