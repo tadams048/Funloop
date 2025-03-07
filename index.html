@@ -401,7 +401,7 @@ function getTodaysRiddle() {
     // Show dynamic line info: "Line X of Y revealed"
     if (state.currentRiddle) {
       const totalLines = state.currentRiddle.lines.length;
-      elements.guessInfo.textContent = `Guess ${state.guessCount} of ${state.MAX_GUESSES}. Line ${state.revealedLines} of ${totalLines} revealed.`;
+      elements.guessInfo.textContent = `Guess ${state.guessCount} of ${state.MAX_GUESSES}.`;
     } else {
       elements.guessInfo.textContent = `Guess ${state.guessCount} of ${state.MAX_GUESSES}.`;
     }
