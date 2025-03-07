@@ -604,49 +604,6 @@ function getTodaysRiddle() {
         updateGameStatus();
       }
       
-      // Add to history
-      state.guessHistory.push({
-        text: guess,
-        guessNumber: state.guessCount,
-        proximityScore
-      });
-      
-      // Check if correct
-      if (proximityScore === 100) {
-        state.gameStatus = 'solved';
-        state.score = state.guessCount;
-        showFeedback('Perfect! You solved the riddle!', 'success');
-      } else {
-        // Feedback based on proximity
-        if (proximityScore >= 75) {
-          showFeedback('Very close! Try a different word.', 'close');
-        } else if (proximityScore >= 50) {
-          showFeedback('You\'re on the right track.', 'close');
-        } else if (proximityScore >= 25) {
-          showFeedback('Getting warmer, but still quite far.', 'close');
-        } else {
-          showFeedback('Not quite right. Try another approach.', 'fail');
-        }
-        
-        // Check if max guesses reached
-        if (state.guessCount >= state.MAX_GUESSES) {
-          state.gameStatus = 'failed';
-          showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
-        } else {
-          // Reveal next line if available
-          if (state.revealedLines < 4) {
-            state.revealedLines++;
-            displayRiddle();
-          }
-        }
-      }
-      
-      // Reset input and update UI
-      elements.guessInput.value = '';
-      updateGuessInfo();
-      updateHistory();
-      updateGameStatus();
-    }
 
     // Share results
     function shareResults() {
