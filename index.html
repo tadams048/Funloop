@@ -382,6 +382,53 @@
 
     // --- Other Functions (Display, Update, etc.) ---
 
+        function getTodaysRiddle() {
+          if (!state.riddles || state.riddles.length === 0) {
+            console.error("No riddles available");
+            return null;
+          }
+        
+          // Format today's date as YYYY-MM-DD
+          const today = new Date();
+          const formattedDate = today.toLocaleDateString('en-CA'); // produces YYYY-MM-DD
+          console.log("Today's date:", formattedDate);
+        
+          // Try to find riddle for today's date
+          let todaysRiddle = state.riddles.find(riddle => riddle.date === formattedDate);
+          console.log("Matched riddle for today:", todaysRiddle ? "Yes" : "No");
+        
+          // If no riddle is found for today
+          if (!todaysRiddle) {
+            // Try to find a fallback riddle
+            todaysRiddle = state.riddles.find(riddle => riddle.fallback === true);
+            console.log("Found fallback riddle:", todaysRiddle ? "Yes" : "No");
+        
+            // If no fallback riddle, use the first riddle
+            if (!todaysRiddle && state.riddles.length > 0) {
+              console.log("Using first riddle as default");
+              todaysRiddle = state.riddles[0];
+            }
+        
+            // If we still don't have a riddle, use a hardcoded one
+            if (!todaysRiddle) {
+              console.log("Using hardcoded fallback riddle");
+              todaysRiddle = {
+                lines: [
+                  "I'm created by humans yet have no physical form.",
+                  "I can live eternally, yet never truly die.",
+                  "I can entertain, educate, or inspire.",
+                  "What am I?"
+                ],
+                answer: "story"
+              };
+            }
+          }
+        
+          console.log("Selected riddle answer:", todaysRiddle.answer);
+          return todaysRiddle;
+        }
+
+    
     function displayRiddle() {
       elements.riddleContainer.innerHTML = '';
       for (let i = 0; i < state.revealedLines; i++) {
