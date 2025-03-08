@@ -247,7 +247,7 @@
   </div>
 
 <footer>
-  RiddleQuest2 &copy; 2025 - A daily word puzzle game
+  RiddleQuest &copy; 2025 - A daily word puzzle game
 </footer>
 
   <script>
@@ -300,27 +300,14 @@
       return Array.isArray(data) && data.length > 0 ? data[0] : null;
     }
 
-    async function calculateSemanticSimilarity(guess, answer) {
-      try {
-        const response = await fetch('https://api.semantic-similarity.com/compare', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          // Send both texts to be compared
-          body: JSON.stringify({ text1: guess, text2: answer })
-        });
-        if (!response.ok) {
-          console.error('Semantic similarity API error:', response.status);
-          return 0; // Return a low similarity if the API fails
-        }
-        const data = await response.json();
-        // Expecting a response like: { similarity: 0.85 }
-        return data.similarity;
-      } catch (err) {
-        console.error('Error calling semantic similarity API:', err);
+        async function computeSemanticSimilarity(guess, answer) {
+      const guessEmbedding = await getEmbedding(guess);
+      const answerEmbedding = await getEmbedding(answer);
+      if (!guessEmbedding || !answerEmbedding) {
+        console.error("Could not fetch embeddings for similarity computation.");
         return 0;
       }
+      return cosineSimilarity(guessEmbedding, answerEmbedding);
     }
 
     function cosineSimilarity(vecA, vecB) {
@@ -584,7 +571,7 @@ function getTodaysRiddle() {
       similarity = 1;
       console.log('Exact match found; similarity set to 1');
     } else {
-      similarity = await calculateSemanticSimilarity(guess, state.currentRiddle.answer);
+      similarity = await computeSemanticSimilarity(guess, state.currentRiddle.answer);
       console.log(`Semantic similarity between "${normalizedGuess}" and "${normalizedAnswer}" is ${similarity}`);
     }
 
