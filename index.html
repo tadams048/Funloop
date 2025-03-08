@@ -341,7 +341,7 @@
     // Load riddles from external JSON file
     async function loadRiddles() {
       try {
-        const response = await fetch('/Riddle-Quest/riddles-json.json');
+        const response = await fetch('riddles-json.json');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -726,14 +726,14 @@ async function loadRiddlesWithDebug() {
   
   try {
     debug.textContent = "Attempting to fetch JSON...";
-    console.log("Step 2: Trying first path /Riddle-Quest/riddles-json.json");
+    console.log("Step 2: Trying first path riddles-json.json");
 
 
     
     // Try both paths
     let response;
     try {
-      debug.textContent = "Trying /Riddle-Quest/riddles-json.json";
+      debug.textContent = "Trying riddles-json.json";
       response = await fetch('/Riddle-Quest/riddles-json.json');
       if (!response.ok) throw new Error("First path failed");
     } catch (e) {
