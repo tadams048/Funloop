@@ -199,7 +199,7 @@
 <body>
   <header>
     <div class="header-left">
-      <h1 class="app-title">RiddleQuest1</h1>
+      <h1 class="app-title">RiddleQuest</h1>
       <button id="resetButton" class="reset-button">↻</button>
     </div>
   </header>
@@ -247,7 +247,7 @@
   </div>
 
 <footer>
-  RiddleQuest1 &copy; 2025 - A daily word puzzle game
+  RiddleQuest &copy; 2025 - A daily word puzzle game
 </footer>
 
   <script>
@@ -718,11 +718,17 @@ function initGame() {
 
 // Add better debugging to loadRiddles
 async function loadRiddlesWithDebug() {
+  console.log("Step 1: Starting to load riddles...");
+
+
   elements.loading.innerHTML = 'Loading today\'s riddle...<br><small id="debug"></small>';
   const debug = document.getElementById('debug');
   
   try {
     debug.textContent = "Attempting to fetch JSON...";
+    console.log("Step 2: Trying first path /Riddle-Quest/riddles-json.json");
+
+
     
     // Try both paths
     let response;
@@ -731,13 +737,15 @@ async function loadRiddlesWithDebug() {
       response = await fetch('/Riddle-Quest/riddles-json.json');
       if (!response.ok) throw new Error("First path failed");
     } catch (e) {
+      console.log("Step 3: First path failed. Trying fallback path riddles-json.json");
       debug.textContent = "Trying riddles-json.json";
       response = await fetch('riddles-json.json');
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    
+    console.log("Step 4: Fetch successful! Now parsing JSON...");
     debug.textContent = "Parsing JSON...";
     state.riddles = await response.json();
+    console.log("Step 5: JSON loaded successfully!", state.riddles);
     debug.textContent = `Loaded ${state.riddles.length} riddles`;
     
     // Get today's riddle
