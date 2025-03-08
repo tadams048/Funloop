@@ -579,6 +579,7 @@ function getTodaysRiddle() {
     const normalizedAnswer = state.currentRiddle.answer.trim().toLowerCase();
 
     let similarity = 0;
+    // Check for an exact match first
     if (normalizedGuess === normalizedAnswer) {
       similarity = 1;
       console.log('Exact match found; similarity set to 1');
@@ -587,7 +588,7 @@ function getTodaysRiddle() {
       console.log(`Semantic similarity between "${normalizedGuess}" and "${normalizedAnswer}" is ${similarity}`);
     }
 
-    // Map similarity to a proximity score
+    // Map similarity (0 to 1) to a proximity score
     let proximityScore = 0;
     if (similarity >= 0.9) {
       proximityScore = 100;
@@ -611,6 +612,7 @@ function getTodaysRiddle() {
       proximityScore = 10;
     }
 
+    // Record the guess in history
     state.guessHistory.push({
       text: guess.trim(),
       guessNumber: state.guessCount,
@@ -641,45 +643,11 @@ function getTodaysRiddle() {
         }
       }
     }
+
     elements.guessInput.value = '';
     updateGuessInfo();
     updateHistory();
     updateGameStatus();
-  }
-
-
-        // Check if the guess is correct (proximityScore 100 means correct)
-        if (proximityScore === 100) {
-          state.gameStatus = 'solved';
-          state.score = state.guessCount;
-          showFeedback('Perfect! You solved the riddle!', 'success');
-        } else {
-          if (proximityScore >= 90) {
-            showFeedback('Very close! Try a different word.', 'close');
-          } else if (proximityScore >= 80) {
-            showFeedback('You\'re on the right track.', 'close');
-          } else if (proximityScore >= 70) {
-            showFeedback('Getting warmer, but still quite far.', 'close');
-          } else {
-            showFeedback('Not quite right. Try another approach.', 'fail');
-          }
-
-          if (state.guessCount >= state.MAX_GUESSES) {
-            state.gameStatus = 'failed';
-            showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
-          } else {
-            if (state.revealedLines < state.currentRiddle.lines.length) {
-            state.revealedLines++;
-            displayRiddle();
-          }
-          }
-        }
-
-        elements.guessInput.value = '';
-        updateGuessInfo();
-        updateHistory();
-        updateGameStatus();
-      }
 
     // Share results
     function shareResults() {
