@@ -699,13 +699,14 @@ function resetGame() {
   updateGameStatus();
 }
 
-// Initialize game
-function initGame() {function initGame() {
-  displayRiddle();
-  updateGuessInfo();
-  updateGameStatus();
-}
+// Initialize game (single definition)
+  function initGame() {
+    displayRiddle();
+    updateGuessInfo();
+    updateGameStatus();
+  }
 
+  
 // Add better debugging to loadRiddles
 async function loadRiddlesWithDebug() {
   console.log("Step 1: Starting to load riddles...");
