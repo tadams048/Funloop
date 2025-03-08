@@ -700,21 +700,10 @@ function resetGame() {
 }
 
 // Initialize game
-function initGame() {
-  // Set up UI
+function initGame() {function initGame() {
   displayRiddle();
   updateGuessInfo();
   updateGameStatus();
-  
-  // Event listeners
-  elements.guessButton.addEventListener('click', handleGuess);
-  elements.guessInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      handleGuess();
-    }
-  });
-  elements.shareButton.addEventListener('click', shareResults);
-  elements.resetButton.addEventListener('click', resetGame);
 }
 
 // Add better debugging to loadRiddles
@@ -813,5 +802,19 @@ async function loadRiddlesWithDebug() {
 }
 
   // Listen for DOMContentLoaded to trigger the riddle loading
-  window.addEventListener('DOMContentLoaded', loadRiddlesWithDebug);
+      window.addEventListener('DOMContentLoaded', () => {
+      // Attach event listeners only once
+      elements.guessButton.addEventListener('click', handleGuess);
+      elements.guessInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();  // Prevent any default action
+          handleGuess();
+        }
+      });
+      elements.shareButton.addEventListener('click', shareResults);
+      elements.resetButton.addEventListener('click', resetGame);
+
+      // Now load the riddles and initialize the game
+      loadRiddlesWithDebug();
+    });
   </script>
