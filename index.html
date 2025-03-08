@@ -292,7 +292,7 @@
         body: JSON.stringify({ inputs: text })
       });
       if (!response.ok) {
-        console.error("Error fetching embedding:", response.status);
+        console.error("Error fetching embedding:", response.status, errorDetails);
         return null;
       }
       const data = await response.json();
