@@ -247,7 +247,7 @@
   </div>
 
 <footer>
-  RiddleQuest4 &copy; 2025 - A daily word puzzle game
+  RiddleQuest &copy; 2025 - A daily word puzzle game
 </footer>
 
   <script>
@@ -320,6 +320,15 @@
       return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
     }
 
+    async function computeSemanticSimilarity(guess, answer) {
+      const guessEmbedding = await getEmbedding(guess);
+      const answerEmbedding = await getEmbedding(answer);
+      if (!guessEmbedding || !answerEmbedding) {
+        console.error("Could not fetch embeddings for similarity computation.");
+        return 0;
+      }
+      return cosineSimilarity(guessEmbedding, answerEmbedding);
+    }
 
     
     // Load riddles from external JSON file
@@ -555,22 +564,22 @@ function getTodaysRiddle() {
 
       // Updated guess handler with exact-match check using trim()
       async function handleGuess() {
-    const guess = elements.guessInput.value;
-    if (guess.trim() === '' || !state.currentRiddle) return;
-    state.guessCount++;
+        const guess = elements.guessInput.value;
+        if (guess.trim() === '' || !state.currentRiddle) return;
+        state.guessCount++;
 
-    const normalizedGuess = guess.trim().toLowerCase();
-    const normalizedAnswer = state.currentRiddle.answer.trim().toLowerCase();
+        const normalizedGuess = guess.trim().toLowerCase();
+        const normalizedAnswer = state.currentRiddle.answer.trim().toLowerCase();
 
-    let similarity = 0;
-    // Check for an exact match first
-    if (normalizedGuess === normalizedAnswer) {
-      similarity = 1;
-      console.log('Exact match found; similarity set to 1');
-    } else {
-      similarity = await computeSemanticSimilarity(guess, state.currentRiddle.answer);
-      console.log(`Semantic similarity between "${normalizedGuess}" and "${normalizedAnswer}" is ${similarity}`);
-    }
+        let similarity = 0;
+        // Check for an exact match first
+        if (normalizedGuess === normalizedAnswer) {
+          similarity = 1;
+          console.log('Exact match found; similarity set to 1');
+        } else {
+          similarity = await computeSemanticSimilarity(guess, state.currentRiddle.answer);
+          console.log(`Semantic similarity between "${normalizedGuess}" and "${normalizedAnswer}" is ${similarity}`);
+        }
 
     // Map similarity (0 to 1) to a proximity score
     let proximityScore = 0;
