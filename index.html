@@ -247,7 +247,7 @@
   </div>
 
 <footer>
-  RiddleQuest1 &copy; 2025 - A daily word puzzle game
+  RiddleQuest &copy; 2025 - A daily word puzzle game
 </footer>
 
   <script>
@@ -648,9 +648,10 @@ function getTodaysRiddle() {
     updateGuessInfo();
     updateHistory();
     updateGameStatus();
+  }
 
-    // --- Share Results (GLOBAL) ---
-    function shareResults() {
+        // Move shareResults to the global scope
+      function shareResults() {
       const successfulGuess = state.guessHistory.find(guess => guess.proximityScore === 100);
       if (!successfulGuess) return;
       const emoji = getGuessEmoji(successfulGuess.guessNumber);
@@ -672,7 +673,7 @@ function getTodaysRiddle() {
       } catch (err) {
         showFeedback('Could not copy to clipboard. Here\'s your result to share: ' + shareText, 'info');
       }
-    }
+      }
     
 // Reset game
 function resetGame() {
