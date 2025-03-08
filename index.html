@@ -247,7 +247,7 @@
   </div>
 
 <footer>
-  RiddleQuest3 &copy; 2025 - A daily word puzzle game
+  RiddleQuest &copy; 2025 - A daily word puzzle game
 </footer>
 
   <script>
@@ -283,7 +283,7 @@
 
     async function getEmbedding(text) {
       const apiKey = "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"; // Replace with your actual API key
-      const response = await fetch("https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2", {
+      const response = await fetch("https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2?wait_for_model=true", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${apiKey}`,
