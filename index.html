@@ -649,27 +649,21 @@ function getTodaysRiddle() {
     updateHistory();
     updateGameStatus();
 
-    // Share results
+    // --- Share Results (GLOBAL) ---
     function shareResults() {
       const successfulGuess = state.guessHistory.find(guess => guess.proximityScore === 100);
       if (!successfulGuess) return;
-      
       const emoji = getGuessEmoji(successfulGuess.guessNumber);
-      
-      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      const today = new Date().toISOString().split('T')[0];
       const shareText = `RiddleQuest ${emoji}\nSolved in ${successfulGuess.guessNumber}/${state.MAX_GUESSES} guesses\n\nVisit riddlequest.com to play today's riddle (${today})!`;
-      
       try {
-        // Try to copy to clipboard using document.execCommand
         const textArea = document.createElement('textarea');
         textArea.value = shareText;
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
-        
         const successful = document.execCommand('copy');
         document.body.removeChild(textArea);
-        
         if (successful) {
           showFeedback('Results copied to clipboard!', 'info');
         } else {
@@ -679,7 +673,6 @@ function getTodaysRiddle() {
         showFeedback('Could not copy to clipboard. Here\'s your result to share: ' + shareText, 'info');
       }
     }
-  }
     
 // Reset game
 function resetGame() {
@@ -694,8 +687,6 @@ function resetGame() {
   
   displayRiddle();
   updateGuessInfo();
-  elements.historyContainer.classList.add('hidden');
-  elements.feedback.classList.add('hidden');
   updateGameStatus();
 }
 
@@ -804,18 +795,15 @@ async function loadRiddlesWithDebug() {
 
   // Listen for DOMContentLoaded to trigger the riddle loading
       window.addEventListener('DOMContentLoaded', () => {
-      // Attach event listeners only once
       elements.guessButton.addEventListener('click', handleGuess);
       elements.guessInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-          e.preventDefault();  // Prevent any default action
+          e.preventDefault();
           handleGuess();
         }
       });
       elements.shareButton.addEventListener('click', shareResults);
       elements.resetButton.addEventListener('click', resetGame);
-
-      // Now load the riddles and initialize the game
       loadRiddlesWithDebug();
     });
   </script>
