@@ -271,15 +271,17 @@
 
     // Game state
     const state = {
-      riddles: [], // Will be loaded from JSON
-      currentRiddle: null,
-      revealedLines: 1,
-      gameStatus: 'playing', // 'playing', 'solved', 'failed'
-      score: 0,
-      guessHistory: [],
-      guessCount: 0,
-      MAX_GUESSES: 20
-    };
+    riddles: [],
+    currentRiddle: null,
+    revealedLines: 1,
+    gameStatus: 'playing',
+    score: 0,
+    guessHistory: [],
+    guessCount: 0,
+    MAX_GUESSES: 20,
+    processing: false
+  };
+
 
         async function getSimilarity(guess, answer) {
     try {
@@ -570,80 +572,87 @@ function getTodaysRiddle() {
 
       // Updated guess handler with exact-match check using trim()
       async function handleGuess() {
-    const guess = elements.guessInput.value;
-    if (guess.trim() === '' || !state.currentRiddle) return;
-    state.guessCount++;
+    if (state.processing) return;  // Prevent duplicate submissions
+    state.processing = true;
+    const originalText = elements.guessButton.textContent;
+    elements.guessButton.disabled = true;
+    elements.guessButton.textContent = "Submitting...";
 
-    const normalizedGuess = guess.trim().toLowerCase();
-    const normalizedAnswer = state.currentRiddle.answer.trim().toLowerCase();
+    try {
+      const guess = elements.guessInput.value;
+      if (guess.trim() === '' || !state.currentRiddle) return;
+      state.guessCount++;
 
-    let similarity = 0;
+      const normalizedGuess = guess.trim().toLowerCase();
+      const normalizedAnswer = state.currentRiddle.answer.trim().toLowerCase();
+      let similarity = 0;
 
-    // Exact match check
-    if (normalizedGuess === normalizedAnswer) {
-      similarity = 1;
-      console.log('Exact match found; similarity set to 1');
-    } else {
-      // First, check if the guess is one of the related words from the JSON.
-      let relatedSimilarity = null;
-      if (state.currentRiddle.related_words && state.currentRiddle.related_words.length > 0) {
-        const match = state.currentRiddle.related_words.find(item => item.word.toLowerCase() === normalizedGuess);
-        if (match) {
-          // The related_words similarity is stored as a percentage.
-          relatedSimilarity = match.similarity / 100; // convert to a 0–1 scale
-          console.log("Found related word with similarity:", relatedSimilarity);
+      // Exact match check
+      if (normalizedGuess === normalizedAnswer) {
+        similarity = 1;
+        console.log('Exact match found; similarity set to 1');
+      } else {
+        let relatedSimilarity = null;
+        if (state.currentRiddle.related_words && state.currentRiddle.related_words.length > 0) {
+          const match = state.currentRiddle.related_words.find(item => item.word.toLowerCase() === normalizedGuess);
+          if (match) {
+            relatedSimilarity = match.similarity / 100;
+            console.log("Found related word with similarity:", relatedSimilarity);
+          }
+        }
+        if (relatedSimilarity !== null) {
+          similarity = relatedSimilarity;
+        } else {
+          similarity = await getSimilarity(guess, state.currentRiddle.answer);
+          console.log(`Computed semantic similarity between "${normalizedGuess}" and "${normalizedAnswer}" is ${similarity}`);
         }
       }
 
-      if (relatedSimilarity !== null) {
-        similarity = relatedSimilarity;
-      } else {
-        // Otherwise, compute semantic similarity using your proxy.
-        similarity = await getSimilarity(guess, state.currentRiddle.answer);
-        console.log(`Computed semantic similarity between "${normalizedGuess}" and "${normalizedAnswer}" is ${similarity}`);
-      }
-    }
+      let proximityScore = Math.floor(similarity * 100);
+      state.guessHistory.push({
+        text: guess.trim(),
+        guessNumber: state.guessCount,
+        proximityScore: proximityScore
+      });
 
-    // Map similarity (0 to 1) to a smooth proximity score (0 to 100)
-    let proximityScore = Math.floor(similarity * 100);
-
-    // Record the guess in history
-    state.guessHistory.push({
-      text: guess.trim(),
-      guessNumber: state.guessCount,
-      proximityScore: proximityScore
-    });
-
-    if (proximityScore === 100) {
-      state.gameStatus = 'solved';
-      state.score = state.guessCount;
-      showFeedback('Perfect! You solved the riddle!', 'success');
-    } else {
-      if (proximityScore >= 90) {
-        showFeedback('Very close! Try a different word.', 'close');
-      } else if (proximityScore >= 80) {
-        showFeedback('You\'re on the right track.', 'close');
-      } else if (proximityScore >= 70) {
-        showFeedback('Getting warmer, but still quite far.', 'close');
+      if (proximityScore === 100) {
+        state.gameStatus = 'solved';
+        state.score = state.guessCount;
+        showFeedback('Perfect! You solved the riddle!', 'success');
       } else {
-        showFeedback('Not quite right. Try another approach.', 'fail');
-      }
-      if (state.guessCount >= state.MAX_GUESSES) {
-        state.gameStatus = 'failed';
-        showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
-      } else {
-        if (state.revealedLines < state.currentRiddle.lines.length) {
-          state.revealedLines++;
-          displayRiddle();
+        if (proximityScore >= 90) {
+          showFeedback('Very close! Try a different word.', 'close');
+        } else if (proximityScore >= 80) {
+          showFeedback('You\'re on the right track.', 'close');
+        } else if (proximityScore >= 70) {
+          showFeedback('Getting warmer, but still quite far.', 'close');
+        } else {
+          showFeedback('Not quite right. Try another approach.', 'fail');
+        }
+        if (state.guessCount >= state.MAX_GUESSES) {
+          state.gameStatus = 'failed';
+          showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
+        } else {
+          if (state.revealedLines < state.currentRiddle.lines.length) {
+            state.revealedLines++;
+            displayRiddle();
+          }
         }
       }
-    }
 
-    elements.guessInput.value = '';
-    updateGuessInfo();
-    updateHistory();
-    updateGameStatus();
+      elements.guessInput.value = '';
+      updateGuessInfo();
+      updateHistory();
+      updateGameStatus();
+    } catch (error) {
+      console.error("Error processing guess:", error);
+    } finally {
+      elements.guessButton.disabled = false;
+      elements.guessButton.textContent = originalText;
+      state.processing = false;
+    }
   }
+
 
         // Move shareResults to the global scope
       function shareResults() {
