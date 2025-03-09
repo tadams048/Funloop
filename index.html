@@ -283,7 +283,7 @@
 
         async function getSimilarity(guess, answer) {
     try {
-    const response = await fetch("http://localhost:3000/api/embedding", {
+    const response = await fetch("https://riddle-proxy.onrender.com/api/embedding", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
