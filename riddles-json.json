@@ -10,18 +10,29 @@
     "answer": "breath",
     "difficulty": 91
   },
-  {
-    "date": "2025-04-08",
-    "lines": [
-      "I have cities, but no houses.",
-      "I have mountains, but no trees.",
-      "I have water, but no fish."
-    ],
-    "answer": "map",
-    "difficulty": 91
+    {
+      "date": "2025-03-08",
+      "lines": [
+        "I have cities, but no houses.",
+        "I have mountains, but no trees.",
+        "I have water, but no fish.",
+        "I have roads, but no cars.",
+        "I have countries, but no people.",
+        "I have borders, but no guards.",
+        "I have islands, but no beaches.",
+        "I have routes, but no travelers.",
+        "I have scales, but cannot weigh.",
+        "I have a legend, but no myths.",
+        "I have a compass, but no magnet.",
+        "I have regions, but no governors.",
+        "I have colors, but no paint.",
+        "I am flat, yet show depth.",
+        "I guide many, but move nowhere."
+      ],
+      "answer": "map"
   },
   {
-    "date": "2025-03-08",
+    "date": "2025-04-08",
     "lines": [
       "I'm full of holes but still hold water.",
       "I can be soft or rough against your skin.",
@@ -489,3 +500,4 @@
     "difficulty": 95
   }
 ]
+
