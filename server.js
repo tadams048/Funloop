@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 */
 
 // Hugging Face key
-const HF_API_KEY = "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";
+const HF_API_KEY = "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";
 
 // Proxy endpoint
 app.post("/api/embedding", async (req, res) => {
