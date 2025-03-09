@@ -538,7 +538,10 @@ function getTodaysRiddle() {
         elements.historyContainer.classList.remove('hidden');
         elements.historyTable.innerHTML = '';
 
-        state.guessHistory.forEach(guess => {
+        // Sort guesses by proximityScore in descending order.
+        const sortedGuesses = state.guessHistory.slice().sort((a, b) => b.proximityScore - a.proximityScore);
+
+        sortedGuesses.forEach(guess => {
           const row = document.createElement('tr');
 
           const guessCell = document.createElement('td');
@@ -563,6 +566,7 @@ function getTodaysRiddle() {
         elements.resultInfo.textContent = `Solved with ${getGuessEmoji(state.score)} on guess #${state.score}`;
       }
     }
+
 
       // Updated guess handler with exact-match check using trim()
       async function handleGuess() {
