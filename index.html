@@ -566,26 +566,42 @@ function getTodaysRiddle() {
 
       // Updated guess handler with exact-match check using trim()
       async function handleGuess() {
-        const guess = elements.guessInput.value;
-        if (guess.trim() === '' || !state.currentRiddle) return;
-        state.guessCount++;
+    const guess = elements.guessInput.value;
+    if (guess.trim() === '' || !state.currentRiddle) return;
+    state.guessCount++;
 
-        const normalizedGuess = guess.trim().toLowerCase();
-        const normalizedAnswer = state.currentRiddle.answer.trim().toLowerCase();
+    const normalizedGuess = guess.trim().toLowerCase();
+    const normalizedAnswer = state.currentRiddle.answer.trim().toLowerCase();
 
-        let similarity = 0;
-        // Check for an exact match first
-        if (normalizedGuess === normalizedAnswer) {
-          similarity = 1;
-          console.log('Exact match found; similarity set to 1');
-        } else {
-          similarity = await getSimilarity(guess, state.currentRiddle.answer);
-          console.log(`Semantic similarity between "${normalizedGuess}" and "${normalizedAnswer}" is ${similarity}`);
+    let similarity = 0;
+
+    // Exact match check
+    if (normalizedGuess === normalizedAnswer) {
+      similarity = 1;
+      console.log('Exact match found; similarity set to 1');
+    } else {
+      // First, check if the guess is one of the related words from the JSON.
+      let relatedSimilarity = null;
+      if (state.currentRiddle.related_words && state.currentRiddle.related_words.length > 0) {
+        const match = state.currentRiddle.related_words.find(item => item.word.toLowerCase() === normalizedGuess);
+        if (match) {
+          // The related_words similarity is stored as a percentage.
+          relatedSimilarity = match.similarity / 100; // convert to a 0–1 scale
+          console.log("Found related word with similarity:", relatedSimilarity);
         }
+      }
 
-    // Map similarity (0 to 1) to a proximity score
+      if (relatedSimilarity !== null) {
+        similarity = relatedSimilarity;
+      } else {
+        // Otherwise, compute semantic similarity using your proxy.
+        similarity = await getSimilarity(guess, state.currentRiddle.answer);
+        console.log(`Computed semantic similarity between "${normalizedGuess}" and "${normalizedAnswer}" is ${similarity}`);
+      }
+    }
+
+    // Map similarity (0 to 1) to a smooth proximity score (0 to 100)
     let proximityScore = Math.floor(similarity * 100);
-
 
     // Record the guess in history
     state.guessHistory.push({
