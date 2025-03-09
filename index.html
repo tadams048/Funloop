@@ -7,10 +7,10 @@
   <style>
   :root {
     /* Masterclass-like dark theme and cobalt accent */
-    --accent-color: #2a57cc; 
-    --bg-color: #000;       
-    --fg-color: #fff;       
-    --card-bg: #1a1a1a;     
+    --accent-color: #2a57cc;
+    --bg-color: #000;
+    --fg-color: #fff;
+    --card-bg: #1a1a1a;
   }
 
   body {
@@ -139,9 +139,9 @@
 
   /* Align Share button & Countdown on one row */
   .share-row {
-    display: flex; 
+    display: flex;
     align-items: center;
-    justify-content: center; 
+    justify-content: center;
     gap: 16px;
     margin-bottom: 20px;
   }
@@ -155,7 +155,7 @@
     color: #fff;
     padding: 8px 12px;
     border-radius: 4px;
-    min-width: 120px; 
+    min-width: 120px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     border: 2px solid var(--accent-color); /* Outline in cobalt */
@@ -273,7 +273,7 @@
     const state = {
       riddles: [], // Will be loaded from JSON
       currentRiddle: null,
-      revealedLines: 4,
+      revealedLines: 1,
       gameStatus: 'playing', // 'playing', 'solved', 'failed'
       score: 0,
       guessHistory: [],
@@ -281,30 +281,32 @@
       MAX_GUESSES: 20
     };
 
-        async function getEmbedding(text) {
-      try {
-        const response = await fetch("http://localhost:3000/api/embedding", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ text: text })
-        });
+        async function getSimilarity(guess, answer) {
+    try {
+    const response = await fetch("http://localhost:3000/api/embedding", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      // Send both the guess and the answer so the server can compute similarity.
+      body: JSON.stringify({ guess: guess, answer: answer })
+    });
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Error from proxy:", response.status, errorText);
-          return null;
-        }
-
-        const data = await response.json();
-        // The API returns an array for a single input; return the first embedding.
-        return Array.isArray(data) && data.length > 0 ? data[0] : null;
-      } catch (err) {
-        console.error("Error calling proxy:", err);
-        return null;
-      }
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Error from proxy:", response.status, errorText);
+      return null;
     }
+
+    const data = await response.json();
+    // The server now returns an object like: { similarity: 0.85 }
+    return data.similarity;
+    } catch (err) {
+    console.error("Error calling proxy:", err);
+    return null;
+    }
+    }
+
 
 
     function cosineSimilarity(vecA, vecB) {
@@ -330,7 +332,7 @@
       return cosineSimilarity(guessEmbedding, answerEmbedding);
     }
 
-    
+
     // Load riddles from external JSON file
     async function loadRiddles() {
       try {
@@ -338,23 +340,23 @@
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
+
         state.riddles = await response.json();
-        
+
         // Get today's riddle
         const todaysRiddle = getTodaysRiddle();
-        
+
         if (!todaysRiddle) {
           elements.loading.textContent = 'No riddle available for today.';
           return;
         }
-        
+
         state.currentRiddle = todaysRiddle;
-        
+
         // Hide loading and show game content
         elements.loading.classList.add('hidden');
         elements.gameContent.classList.remove('hidden');
-        
+
         // Initialize game
         initGame();
       } catch (error) {
@@ -369,28 +371,28 @@ function getTodaysRiddle() {
     console.error("No riddles available");
     return null;
   }
-  
+
   // Format today's date as YYYY-MM-DD
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-CA'); // produces YYYY-MM-DD
   console.log("Today's date:", formattedDate);
-  
+
   // Try to find riddle for today's date
   let todaysRiddle = state.riddles.find(riddle => riddle.date === formattedDate);
   console.log("Matched riddle for today:", todaysRiddle ? "Yes" : "No");
-  
+
   // If no riddle is found for today
   if (!todaysRiddle) {
     // Try to find a fallback riddle
     todaysRiddle = state.riddles.find(riddle => riddle.fallback === true);
     console.log("Found fallback riddle:", todaysRiddle ? "Yes" : "No");
-    
+
     // If no fallback riddle, use the first riddle
     if (!todaysRiddle && state.riddles.length > 0) {
       console.log("Using first riddle as default");
       todaysRiddle = state.riddles[0];
     }
-    
+
     // If we still don't have a riddle, use a hardcoded one
     if (!todaysRiddle) {
       console.log("Using hardcoded fallback riddle");
@@ -405,7 +407,7 @@ function getTodaysRiddle() {
       };
     }
   }
-  
+
   console.log("Selected riddle answer:", todaysRiddle.answer);
   return todaysRiddle;
 }
@@ -451,7 +453,7 @@ function getTodaysRiddle() {
         elements.guessForm.style.display = 'none';
         elements.shareButton.classList.remove('hidden');
         elements.countdown.classList.remove('hidden');
-        
+
         // Start countdown
         updateCountdown();
         setInterval(updateCountdown, 1000);
@@ -464,17 +466,17 @@ function getTodaysRiddle() {
       const tomorrow = new Date(now);
       tomorrow.setDate(tomorrow.getDate() + 1);
       tomorrow.setHours(0, 0, 0, 0);
-    
+
       const diffMs = tomorrow - now;
       const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
       const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
       const diffSecs = Math.floor((diffMs % (1000 * 60)) / 1000);
-    
+
       // Zero-pad each unit so it always shows 2 digits
       const hrs = String(diffHrs).padStart(2, '0');
       const mins = String(diffMins).padStart(2, '0');
       const secs = String(diffSecs).padStart(2, '0');
-    
+
       // Shorter, more human-readable text
       elements.countdown.innerHTML = `Next Riddle in:<br>${hrs}h ${mins}m ${secs}s`;
       elements.countdown.classList.remove('hidden');
@@ -495,38 +497,38 @@ function getTodaysRiddle() {
     function calculateProximity(guess, answer) {
       const normalizedGuess = guess.toLowerCase().trim();
       const normalizedAnswer = answer.toLowerCase().trim();
-      
+
       if (normalizedGuess === normalizedAnswer) {
         return 100;
       }
-      
+
       if (normalizedGuess.includes(normalizedAnswer) || normalizedAnswer.includes(normalizedGuess)) {
         return 75;
       }
-      
+
       const guessWords = normalizedGuess.split(/\s+/);
       const answerWords = normalizedAnswer.split(/\s+/);
-      
+
       const commonWords = guessWords.filter(word => answerWords.includes(word));
       if (commonWords.length > 0) {
         return 50;
       }
-      
+
       const guessLetters = new Set(normalizedGuess.replace(/[^a-z]/g, ''));
       const answerLetters = new Set(normalizedAnswer.replace(/[^a-z]/g, ''));
-      
+
       let commonLetters = 0;
       for (const letter of guessLetters) {
         if (answerLetters.has(letter)) {
           commonLetters++;
         }
       }
-      
+
       const letterSimilarity = commonLetters / Math.max(guessLetters.size, answerLetters.size);
       if (letterSimilarity > 0.5) {
         return 25;
       }
-      
+
       return 10;
     }
 
@@ -535,23 +537,23 @@ function getTodaysRiddle() {
       if (state.guessHistory.length > 0) {
         elements.historyContainer.classList.remove('hidden');
         elements.historyTable.innerHTML = '';
-        
+
         state.guessHistory.forEach(guess => {
           const row = document.createElement('tr');
-          
+
           const guessCell = document.createElement('td');
           guessCell.textContent = guess.text;
-          
+
           const attemptCell = document.createElement('td');
           attemptCell.textContent = `${guess.guessNumber} ${guess.proximityScore === 100 ? getGuessEmoji(guess.guessNumber) : ''}`;
-          
+
           const proximityCell = document.createElement('td');
           proximityCell.textContent = guess.proximityScore;
-          
+
           row.appendChild(guessCell);
           row.appendChild(attemptCell);
           row.appendChild(proximityCell);
-          
+
           elements.historyTable.appendChild(row);
         });
       }
@@ -577,33 +579,13 @@ function getTodaysRiddle() {
           similarity = 1;
           console.log('Exact match found; similarity set to 1');
         } else {
-          similarity = await computeSemanticSimilarity(guess, state.currentRiddle.answer);
+          similarity = await getSimilarity(guess, state.currentRiddle.answer);
           console.log(`Semantic similarity between "${normalizedGuess}" and "${normalizedAnswer}" is ${similarity}`);
         }
 
     // Map similarity (0 to 1) to a proximity score
-    let proximityScore = 0;
-    if (similarity >= 0.9) {
-      proximityScore = 100;
-    } else if (similarity >= 0.85) {
-      proximityScore = 90;
-    } else if (similarity >= 0.8) {
-      proximityScore = 80;
-    } else if (similarity >= 0.75) {
-      proximityScore = 70;
-    } else if (similarity >= 0.7) {
-      proximityScore = 60;
-    } else if (similarity >= 0.65) {
-      proximityScore = 50;
-    } else if (similarity >= 0.6) {
-      proximityScore = 40;
-    } else if (similarity >= 0.55) {
-      proximityScore = 30;
-    } else if (similarity >= 0.5) {
-      proximityScore = 20;
-    } else {
-      proximityScore = 10;
-    }
+    let proximityScore = Math.floor(similarity * 100);
+
 
     // Record the guess in history
     state.guessHistory.push({
@@ -667,18 +649,18 @@ function getTodaysRiddle() {
         showFeedback('Could not copy to clipboard. Here\'s your result to share: ' + shareText, 'info');
       }
       }
-    
+
 // Reset game
 function resetGame() {
   if (state.riddles.length === 0) return;
-  
+
   state.currentRiddle = getTodaysRiddle();
   state.revealedLines = 1;
   state.gameStatus = 'playing';
   state.score = 0;
   state.guessHistory = [];
   state.guessCount = 0;
-  
+
   displayRiddle();
   updateGuessInfo();
   updateGameStatus();
@@ -691,7 +673,7 @@ function resetGame() {
     updateGameStatus();
   }
 
-  
+
 // Add better debugging to loadRiddles
 async function loadRiddlesWithDebug() {
   console.log("Step 1: Starting to load riddles...");
@@ -699,18 +681,18 @@ async function loadRiddlesWithDebug() {
 
   elements.loading.innerHTML = 'Loading today\'s riddle...<br><small id="debug"></small>';
   const debug = document.getElementById('debug');
-  
+
   try {
     debug.textContent = "Attempting to fetch JSON...";
     console.log("Step 2: Trying first path riddles-json.json");
 
 
-    
+
     // Try both paths
     let response;
     try {
       debug.textContent = "Trying riddles-json.json";
-      response = await fetch('/Riddle-Quest/riddles-json.json');
+      response = await fetch('riddles-json.json');
       if (!response.ok) throw new Error("First path failed");
     } catch (e) {
       console.log("Step 3: First path failed. Trying fallback path riddles-json.json");
@@ -723,15 +705,15 @@ async function loadRiddlesWithDebug() {
     state.riddles = await response.json();
     console.log("Step 5: JSON loaded successfully!", state.riddles);
     debug.textContent = `Loaded ${state.riddles.length} riddles`;
-    
+
     // Get today's riddle
     debug.textContent = "Getting today's riddle...";
     const todaysRiddle = getTodaysRiddle();
-    
+
     if (!todaysRiddle) {
       debug.textContent = "No riddle found for today";
       elements.loading.innerHTML += '<br>No riddle available for today.';
-      
+
       // Add the fallback riddle
       debug.textContent = "Using emergency fallback";
       state.currentRiddle = {
@@ -743,30 +725,30 @@ async function loadRiddlesWithDebug() {
         ],
         answer: "story"
       };
-      
+
       // Hide loading and show game content
       elements.loading.classList.add('hidden');
       elements.gameContent.classList.remove('hidden');
-      
+
       // Initialize game
       initGame();
       return;
     }
-    
+
     debug.textContent = "Riddle found, initializing game";
     state.currentRiddle = todaysRiddle;
-    
+
     // Hide loading and show game content
     elements.loading.classList.add('hidden');
     elements.gameContent.classList.remove('hidden');
-    
+
     // Initialize game
     initGame();
   } catch (error) {
     console.error('Error loading riddles:', error);
     debug.textContent = `Error: ${error.message}`;
     elements.loading.innerHTML += '<br>Error loading riddles. Check console for details.';
-    
+
     // Use hardcoded riddle as an emergency fallback
     state.currentRiddle = {
       lines: [
@@ -777,7 +759,7 @@ async function loadRiddlesWithDebug() {
       ],
       answer: "story"
     };
-    
+
     // Hide loading and show game content after a short delay
     setTimeout(() => {
       elements.loading.classList.add('hidden');
