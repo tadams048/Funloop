@@ -71,24 +71,36 @@
   }
 
   .input-group {
-    display: flex;
-    margin-bottom: 20px;
-  }
+  display: flex;
+  margin-bottom: 20px;
+  /* Add a small gap between the input and the button */
+  gap: 8px;
+}
 
-  .guess-input {
-    flex-grow: 1;
-    padding: 10px;
-    border: 1px solid #666;
-    border-right: none;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-    font-size: 16px;
-    background-color: #444;
-    color: #fff;
-  }
+.guess-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #666;
+  /* Remove border-right: none and let it have its own radius */
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #444;
+  color: #fff;
+}
 
-  /* Accent color for buttons */
-  .guess-button,
+.guess-button {
+  background-color: var(--accent-color);
+  color: var(--fg-color);
+  border: none;
+  /* Also give it a 4px radius */
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
   .share-button {
     background-color: var(--accent-color);
     color: var(--fg-color);
