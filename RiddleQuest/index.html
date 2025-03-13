@@ -53,19 +53,6 @@
     margin: 0;
   }
 
-  .reset-button {
-    margin-left: 15px;
-    opacity: 0.1;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    color: var(--fg-color);
-  }
-  .reset-button:hover {
-    opacity: 0.5;
-  }
-
   /* Card-like containers (riddle, history, etc.) */
   .riddle-container,
   .history-container {
@@ -222,7 +209,6 @@
   <header>
     <div class="header-left">
       <h1 class="app-title">RiddleQuest</h1>
-      <button id="resetButton" class="reset-button">↻</button>
     </div>
   </header>
 
@@ -653,7 +639,13 @@ function getTodaysRiddle() {
     try {
       const guess = elements.guessInput.value;
       if (guess.trim() === '' || !state.currentRiddle) return;
-      state.guessCount++;
+      state.guessCount++
+      gtag('event', 'guess_submitted', {
+      'event_category': 'game',
+      'event_label': 'Guess Submitted',
+      'guess_count': state.guessCount
+      });    
+      ;
 
       const normalizedGuess = guess.trim().toLowerCase();
       const normalizedAnswer = state.currentRiddle.answer.trim().toLowerCase();
@@ -701,6 +693,12 @@ function getTodaysRiddle() {
         state.gameStatus = 'solved';
         state.score = state.guessCount;
         showFeedback('Perfect! You solved the riddle!', 'success');
+        // Log that the riddle was solved
+        gtag('event', 'riddle_solved', {
+          'event_category': 'game',
+          'event_label': 'Riddle Solved',
+          'guess_count': state.guessCount
+        });
       } else {
         if (proximityScore >= 90) {
           showFeedback('Very close! Try a different word.', 'close');
@@ -714,6 +712,12 @@ function getTodaysRiddle() {
         if (state.guessCount >= state.MAX_GUESSES) {
           state.gameStatus = 'failed';
           showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
+          // Log that the game was failed
+          gtag('event', 'game_failed', {
+            'event_category': 'game',
+            'event_label': 'Game Failed',
+            'max_guesses': state.MAX_GUESSES
+          });
         } else {
           if (state.revealedLines < state.currentRiddle.lines.length) {
             state.revealedLines++;
@@ -743,6 +747,11 @@ function getTodaysRiddle() {
       const emoji = getGuessEmoji(successfulGuess.guessNumber);
       const today = new Date().toISOString().split('T')[0];
       const shareText = `RiddleQuest ${emoji}\nSolved in ${successfulGuess.guessNumber}/${state.MAX_GUESSES} guesses\n\nVisit riddlequest.com to play today's riddle (${today})!`;
+          gtag('event', 'result_shared', {
+        'event_category': 'game',
+        'event_label': 'Result Shared',
+        'guess_count': successfulGuess.guessNumber
+      });
       try {
         const textArea = document.createElement('textarea');
         textArea.value = shareText;
@@ -764,7 +773,11 @@ function getTodaysRiddle() {
 // Reset game
 function resetGame() {
   if (state.riddles.length === 0) return;
-
+    // Log that the game is being reset
+    gtag('event', 'game_reset', {
+        'event_category': 'game',
+        'event_label': 'Game Reset'
+      });
   state.currentRiddle = getTodaysRiddle();
   state.revealedLines = 1;
   state.gameStatus = 'playing';
@@ -782,6 +795,12 @@ function resetGame() {
     displayRiddle();
     updateGuessInfo();
     updateGameStatus();
+      // Log that the game has started
+    gtag('event', 'game_started', {
+    'event_category': 'game',
+    'event_label': 'RiddleQuest Started',
+    'riddle_date': new Date().toLocaleDateString('en-CA')
+  });
   }
 
 
@@ -890,8 +909,6 @@ async function loadRiddlesWithDebug() {
         }
       });
       elements.shareButton.addEventListener('click', shareResults);
-      elements.resetButton.addEventListener('click', resetGame);
       loadRiddlesWithDebug();
     });
   </script>
-
