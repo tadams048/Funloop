@@ -28,7 +28,7 @@
       "Knowledge freed, and swiftly learned.",
       "My ink-stained might turned dark to light,",
       "Revealing worlds in printed sight.",
-      "I am the inventor ushering in a new age.",
+      "I am the inventor ushering in a new age."
     ],
     "answer": "Gutenberg",
     "related_words": [
@@ -295,9 +295,7 @@
       {"word": "Decisive", "similarity": 1}
     ]
   },
-
-
-
+  
   {
       "date": "2025-03-10",
       "lines": [
@@ -313,7 +311,6 @@
         "I'm built grain by grain, but am not a sandcastle.",
         "I'm perfectly organized, but follow no blueprints.",
         "I have a queen, but rule no country."
-
       ],
       "answer": "anthill",
       "related_words": [
