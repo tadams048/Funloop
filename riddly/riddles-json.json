@@ -857,15 +857,7 @@
     ],
     "answer": "candle"
   },
-  {
-    "date": "2025-03-13",
-    "lines": [
-      "I have keys but no locks.",
-      "I have space but no room.",
-      "You can enter, but you can't go inside."
-    ],
-    "answer": "keyboard"
-  },
+  
   {
     "date": "2025-03-14",
     "lines": [
@@ -1279,5 +1271,15 @@
     ],
     "answer": "memory",
     "difficulty": 95
-  }
+  },
+{
+    "date": "2025-04-24",
+    "lines": [
+      "I have keys but no locks.",
+      "I have space but no room.",
+      "You can enter, but you can't go inside."
+    ],
+    "answer": "keyboard"
+  },
+  
 ]
