@@ -86,41 +86,40 @@
           "A sleeping threat to Naples' day."
         ],
         "answer": "Mount Vesuvius"
+        "related_words": [
+          {"word": "Volcano", "similarity": 95},
+          {"word": "Eruption", "similarity": 93},
+          {"word": "Pompeii", "similarity": 92},
+          {"word": "Italy", "similarity": 90},
+          {"word": "Mount", "similarity": 88},
+          {"word": "Ash", "similarity": 87},
+          {"word": "Naples", "similarity": 86},
+          {"word": "79 AD", "similarity": 85},
+          {"word": "Herculaneum", "similarity": 84},
+          {"word": "Roman", "similarity": 82},
+          {"word": "Lava", "similarity": 81},
+          {"word": "Preserved", "similarity": 80},
+          {"word": "Pliny", "similarity": 79},
+          {"word": "Excavation", "similarity": 78},
+          {"word": "Disaster", "similarity": 77},
+          {"word": "Archaeological", "similarity": 76},
+          {"word": "Campania", "similarity": 75},
+          {"word": "Mountain", "similarity": 74},
+          {"word": "Pyroclastic", "similarity": 73},
+          {"word": "Ancient", "similarity": 72},
+          {"word": "Destruction", "similarity": 71},
+          {"word": "Buried", "similarity": 70},
+          {"word": "Catastrophe", "similarity": 69},
+          {"word": "Archaeology", "similarity": 68},
+          {"word": "Ruins", "similarity": 67},
+          {"word": "Europe", "similarity": 66},
+          {"word": "Magma", "similarity": 65},
+          {"word": "Crater", "similarity": 64},
+          {"word": "Casts", "similarity": 63},
+          {"word": "Mediterranean", "similarity": 62}
+        ]
       },
 
-    "related_words": [
-      {"word": "Volcano", "similarity": 95},
-      {"word": "Eruption", "similarity": 93},
-      {"word": "Pompeii", "similarity": 92},
-      {"word": "Italy", "similarity": 90},
-      {"word": "Mount", "similarity": 88},
-      {"word": "Ash", "similarity": 87},
-      {"word": "Naples", "similarity": 86},
-      {"word": "79 AD", "similarity": 85},
-      {"word": "Herculaneum", "similarity": 84},
-      {"word": "Roman", "similarity": 82},
-      {"word": "Lava", "similarity": 81},
-      {"word": "Preserved", "similarity": 80},
-      {"word": "Pliny", "similarity": 79},
-      {"word": "Excavation", "similarity": 78},
-      {"word": "Disaster", "similarity": 77},
-      {"word": "Archaeological", "similarity": 76},
-      {"word": "Campania", "similarity": 75},
-      {"word": "Mountain", "similarity": 74},
-      {"word": "Pyroclastic", "similarity": 73},
-      {"word": "Ancient", "similarity": 72},
-      {"word": "Destruction", "similarity": 71},
-      {"word": "Buried", "similarity": 70},
-      {"word": "Catastrophe", "similarity": 69},
-      {"word": "Archaeology", "similarity": 68},
-      {"word": "Ruins", "similarity": 67},
-      {"word": "Europe", "similarity": 66},
-      {"word": "Magma", "similarity": 65},
-      {"word": "Crater", "similarity": 64},
-      {"word": "Casts", "similarity": 63},
-      {"word": "Mediterranean", "similarity": 62}
-    ]
-  },
   {
     "date": "2025-03-15",
     "lines": [
@@ -141,8 +140,7 @@
       "The Pilgrims' tale within me penned,",
       "My voyage shaped how dreams transcend."
     ],
-    "answer": "Mayflower"
-  },
+    "answer": "Mayflower",
     "related_words": [
       {"word": "Pilgrims", "similarity": 95},
       {"word": "Ship", "similarity": 93},
@@ -175,10 +173,7 @@
       {"word": "Native Americans", "similarity": 65},
       {"word": "Wampanoag", "similarity": 64}
     ]
-  }
-
-
-
+  },
   
   {
     "date": "2025-03-09",
