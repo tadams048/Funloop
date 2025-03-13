@@ -355,38 +355,6 @@
       return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
     }
 
-    // Load riddles from external JSON file
-    async function loadRiddles() {
-      try {
-        const response = await fetch('/riddly/riddles-json.json');
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        state.riddles = await response.json();
-
-        // Get today's riddle
-        const todaysRiddle = getTodaysRiddle();
-
-        if (!todaysRiddle) {
-          elements.loading.textContent = 'No riddle available for today.';
-          return;
-        }
-
-        state.currentRiddle = todaysRiddle;
-
-        // Hide loading and show game content
-        elements.loading.classList.add('hidden');
-        elements.gameContent.classList.remove('hidden');
-
-        // Initialize game
-        initGame();
-      } catch (error) {
-        console.error('Error loading riddles:', error);
-        elements.loading.textContent = 'Error loading riddles. Please try again later.';
-      }
-    }
-
     // Get today's riddle based on current date
 function getTodaysRiddle() {
   if (!state.riddles || state.riddles.length === 0) {
