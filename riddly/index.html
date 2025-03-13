@@ -829,12 +829,12 @@ async function loadRiddlesWithDebug() {
     let response;
     try {
       debug.textContent = "Trying riddles-json.json";
-      response = await fetch('riddles-json.json');
+      response = await fetch('/riddly/riddles-json.json');
       if (!response.ok) throw new Error("First path failed");
     } catch (e) {
       console.log("Step 3: First path failed. Trying fallback path riddles-json.json");
       debug.textContent = "Trying riddles-json.json";
-      response = await fetch('riddles-json.json');
+      response = await fetch('./riddles-json.json');
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     }
     console.log("Step 4: Fetch successful! Now parsing JSON...");
