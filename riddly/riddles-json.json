@@ -12,7 +12,7 @@
   },
 
   {
-    "date": "2025-03-13",
+    "date": "2025-03-13", 
     "lines": [
       "I sparked a change with subtle grace,",
       "Quiet power reshaped our pace.",
@@ -85,7 +85,7 @@
           "Now I watch across the bay,",
           "A sleeping threat to Naples' day."
         ],
-        "answer": "Mount Vesuvius"
+        "answer": "Mount Vesuvius",
         "related_words": [
           {"word": "Volcano", "similarity": 95},
           {"word": "Eruption", "similarity": 93},
