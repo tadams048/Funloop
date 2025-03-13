@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/svg+xml" href="/RiddleQuest/RiddleQuestLogo.svg">
-  <title>RiddleQuest</title>
+  <link rel="icon" type="image/svg+xml" href="/riddly/RiddleQuestLogo.svg">
+  <title>Riddly</title>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0C69WPWJ6S"></script>
     <script>
@@ -214,8 +214,8 @@
 <body>
   <header>
     <div class="header-left">
-      <img src="/RiddleQuest/RiddleQuestLogo.svg" alt="RiddleQuestLogo" class="header-logo">
-      <h1 class="app-title">RiddleQuest</h1>
+      <img src="/riddly/RiddleQuestLogo.svg" alt="RiddlyLogo" class="header-logo">
+      <h1 class="app-title">Riddly</h1>
     </div>
   </header>
 
@@ -262,7 +262,7 @@
   </div>
 
 <footer>
-  RiddleQuest &copy; 2025 - A daily word puzzle game
+  Riddly &copy; 2025 - A daily word puzzle game
 </footer>
 
   <script>
@@ -753,7 +753,7 @@ function getTodaysRiddle() {
       if (!successfulGuess) return;
       const emoji = getGuessEmoji(successfulGuess.guessNumber);
       const today = new Date().toISOString().split('T')[0];
-      const shareText = `RiddleQuest ${emoji}\nSolved in ${successfulGuess.guessNumber}/${state.MAX_GUESSES} guesses\n\nVisit riddlequest.com to play today's riddle (${today})!`;
+      const shareText = `Riddly ${emoji}\nSolved in ${successfulGuess.guessNumber}/${state.MAX_GUESSES} guesses\n\nVisit funloop.com/riddly to play today's riddle (${today})!`;
           gtag('event', 'result_shared', {
         'event_category': 'game',
         'event_label': 'Result Shared',
