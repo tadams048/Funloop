@@ -297,6 +297,21 @@
     processing: false
   };
 
+// Remap the raw similarity (assumed to be in [0.70, 0.85]) to a score between 10 and 100.
+function remapSimilarity(similarity) {
+  const minSim = 0.70;  // similarity that maps to minScore
+  const maxSim = 0.99;  // similarity that maps to maxScore
+  const minScore = 10;
+  const maxScore = 100;
+  
+  // Clamp the similarity to the defined range.
+  if (similarity <= minSim) return minScore;
+  if (similarity >= maxSim) return maxScore;
+  
+  // Compute linear interpolation:
+  const proportion = (similarity - minSim) / (maxSim - minSim);
+  return Math.floor(minScore + proportion * (maxScore - minScore));
+}
 
     // Levenshtein distance calculation
     function levenshteinDistance(str1, str2) {
@@ -706,7 +721,7 @@ function getTodaysRiddle() {
         }
       }
 
-      let proximityScore = Math.floor(similarity * 100);
+      let proximityScore = remapSimilarity(similarity);
       state.guessHistory.push({
         text: guess.trim(),
         guessNumber: state.guessCount,
