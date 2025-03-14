@@ -18,9 +18,43 @@ app.use((req, res, next) => {
 */
 
 // Hugging Face key
-const HF_API_KEY = "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";
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-// Proxy endpoint
+// Function to get embeddings from OpenAI
+async function getEmbedding(text) {
+  const response = await fetch("https://api.openai.com/v1/embeddings", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      input: text,
+      model: "text-embedding-ada-002"
+    })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error("OpenAI API Error:", data);
+    throw new Error("Failed to fetch embedding");
+  }
+
+  return data.data[0].embedding; // Return the embedding array
+}
+
+
+
+// Function to calculate cosine similarity
+function cosineSimilarity(vec1, vec2) {
+  const dotProduct = vec1.reduce((sum, val, i) => sum + val * vec2[i], 0);
+  const norm1 = Math.sqrt(vec1.reduce((sum, val) => sum + val * val, 0));
+  const norm2 = Math.sqrt(vec2.reduce((sum, val) => sum + val * val, 0));
+  return dotProduct / (norm1 * norm2);
+}
+
+// API Endpoint: Compare Guess with Answer
 app.post("/api/embedding", async (req, res) => {
   const { guess, answer } = req.body;
 
@@ -29,40 +63,18 @@ app.post("/api/embedding", async (req, res) => {
   }
 
   try {
-    // Call Hugging Face's API using the sentence similarity format.
-    const response = await fetch(
-      "https://api-inference.huggingface.co/models/sentence-transformers/all-MiniLM-L6-v2?wait_for_model=true",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${HF_API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          inputs: {
-            source_sentence: guess,      // The user's guess
-            sentences: [answer]          // The correct answer (or one of them)
-          }
-        })
-      }
-    );
+    // Get embeddings
+    const guessEmbedding = await getEmbedding(guess);
+    const answerEmbedding = await getEmbedding(answer);
 
-    if (!response.ok) {
-      const errorDetails = await response.text();
-      console.error("Error from HF API:", response.status, errorDetails);
-      return res.status(response.status).json({ error: "Failed to fetch embedding", details: errorDetails });
-    }
+    // Compute similarity
+    const similarity = cosineSimilarity(guessEmbedding, answerEmbedding);
+    console.log(`Similarity score: ${similarity}`);
 
-    // Parse the similarity scores.
-    const scores = await response.json();
-    // Expecting the response to be an array like [0.85]
-    const similarity = scores[0];
-    console.log("Similarity score from HF API:", similarity);
-
-    // Return the similarity score to the client.
+    // Return the similarity score
     res.json({ similarity });
-  } catch (err) {
-    console.error("Server error:", err);
+  } catch (error) {
+    console.error("Server error:", error);
     res.status(500).json({ error: "Server error" });
   }
 });
