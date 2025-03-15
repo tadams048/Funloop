@@ -300,7 +300,7 @@
 // Remap the raw similarity (assumed to be in [0.70, 0.85]) to a score between 10 and 100.
 function remapSimilarity(similarity) {
   const threshold = 0.78;
-  const maxSim = 0.8252;
+  const maxSim = 0.84;
   
   if (similarity <= threshold) return 0;
   if (similarity >= maxSim) return 99; // cap at 99 for non-exact guesses
@@ -813,20 +813,20 @@ async function loadRiddlesWithDebug() {
 
   try {
     debug.textContent = "Attempting to fetch JSON...";
-    console.log("Step 2: Trying first path riddles-json.json");
+    console.log("Step 2: Trying first path riddlestest-json.json");
 
 
 
     // Try both paths
     let response;
     try {
-      debug.textContent = "Trying riddles-json.json";
-      response = await fetch('/riddly/riddles-json.json');
+      debug.textContent = "Trying riddlestest-json.json";
+      response = await fetch('*/riddlestest-json.json');
       if (!response.ok) throw new Error("First path failed");
     } catch (e) {
-      console.log("Step 3: First path failed. Trying fallback path riddles-json.json");
-      debug.textContent = "Trying riddles-json.json";
-      response = await fetch('./riddles-json.json');
+      console.log("Step 3: First path failed. Trying fallback path riddlestest-json.json");
+      debug.textContent = "Trying riddlestest-json.json";
+      response = await fetch('./riddlestest-json.json');
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     }
     console.log("Step 4: Fetch successful! Now parsing JSON...");
