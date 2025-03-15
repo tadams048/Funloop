@@ -297,18 +297,6 @@
     processing: false
   };
 
-// Remap the raw similarity (assumed to be in [0.70, 0.85]) to a score between 10 and 100.
-function remapSimilarity(similarity) {
-  const threshold = 0.78;
-  const maxSim = 0.84;
-  
-  if (similarity <= threshold) return 0;
-  if (similarity >= maxSim) return 99; // cap at 99 for non-exact guesses
-  
-  return Math.floor(((similarity - threshold) / (maxSim - threshold)) * 100);
-  console.log("Raw similarity value:", similarity);
-
-}
 
     // Levenshtein distance calculation
     function levenshteinDistance(str1, str2) {
@@ -544,6 +532,45 @@ function getTodaysRiddle() {
       return emojiMap[guessNumber] || '❓';
     }
 
+    // Calculate proximity
+    function calculateProximity(guess, answer) {
+      const normalizedGuess = guess.toLowerCase().trim();
+      const normalizedAnswer = answer.toLowerCase().trim();
+
+      if (normalizedGuess === normalizedAnswer) {
+        return 100;
+      }
+
+      if (normalizedGuess.includes(normalizedAnswer) || normalizedAnswer.includes(normalizedGuess)) {
+        return 75;
+      }
+
+      const guessWords = normalizedGuess.split(/\s+/);
+      const answerWords = normalizedAnswer.split(/\s+/);
+
+      const commonWords = guessWords.filter(word => answerWords.includes(word));
+      if (commonWords.length > 0) {
+        return 50;
+      }
+
+      const guessLetters = new Set(normalizedGuess.replace(/[^a-z]/g, ''));
+      const answerLetters = new Set(normalizedAnswer.replace(/[^a-z]/g, ''));
+
+      let commonLetters = 0;
+      for (const letter of guessLetters) {
+        if (answerLetters.has(letter)) {
+          commonLetters++;
+        }
+      }
+
+      const letterSimilarity = commonLetters / Math.max(guessLetters.size, answerLetters.size);
+      if (letterSimilarity > 0.5) {
+        return 25;
+      }
+
+      return 10;
+    }
+
     // Update history table
     function updateHistory() {
       if (state.guessHistory.length > 0) {
@@ -627,116 +654,114 @@ function getTodaysRiddle() {
 
       // Updated guess handler with exact-match check using trim()
       async function handleGuess() {
-  if (state.processing) return; // Prevent duplicate submissions
-  state.processing = true;
-  const originalText = elements.guessButton.textContent;
-  elements.guessButton.disabled = true;
-  elements.guessButton.textContent = "Submitting...";
+    if (state.processing) return;  // Prevent duplicate submissions
+    state.processing = true;
+    const originalText = elements.guessButton.textContent;
+    elements.guessButton.disabled = true;
+    elements.guessButton.textContent = "Submitting...";
 
-  try {
-    const guess = elements.guessInput.value;
-    if (guess.trim() === '' || !state.currentRiddle) return;
-    state.guessCount++;
-    gtag('event', 'guess_submitted', {
+    try {
+      const guess = elements.guessInput.value;
+      if (guess.trim() === '' || !state.currentRiddle) return;
+      state.guessCount++
+      gtag('event', 'guess_submitted', {
       'event_category': 'game',
       'event_label': 'Guess Submitted',
       'guess_count': state.guessCount
-    });
+      });    
+      ;
 
-    const normalizedGuess = guess.trim().toLowerCase();
-    const normalizedAnswer = state.currentRiddle.answer.trim().toLowerCase();
+      const normalizedGuess = guess.trim().toLowerCase();
+      const normalizedAnswer = state.currentRiddle.answer.trim().toLowerCase();
+      let similarity = 0;
 
-    let proximityScore = 0;
-    let similarity = 0;
-
-    // First, check for an exact match.
-    if (normalizedGuess === normalizedAnswer) {
-      similarity = 1;
-      proximityScore = 100;
-      console.log('Exact match found; similarity set to 1, score 100.');
-    } else {
-      // Optionally check for related words in the riddle.
-      let relatedSimilarity = null;
-      if (state.currentRiddle.related_words && state.currentRiddle.related_words.length > 0) {
-        const match = state.currentRiddle.related_words.find(item => item.word.toLowerCase() === normalizedGuess);
-        if (match) {
-          relatedSimilarity = match.similarity / 100;
-          console.log("Found related word with similarity:", relatedSimilarity);
-        }
-      }
-      
-      if (relatedSimilarity !== null) {
-        similarity = relatedSimilarity;
+      // Exact match check
+            if (normalizedGuess === normalizedAnswer) {
+        similarity = 1;
+        console.log('Exact match found; similarity set to 1');
       } else {
-        // Get similarity from the embedding API.
-        similarity = await getSimilarity(guess, state.currentRiddle.answer);
-        if (similarity === null) {
-          console.warn("Similarity request failed. Using basic proximity calculation.");
-          similarity = calculateBasicProximity(normalizedGuess, normalizedAnswer);
-          showFeedback('Server busy. Using basic similarity.', 'info');
+        let relatedSimilarity = null;
+        if (state.currentRiddle.related_words && state.currentRiddle.related_words.length > 0) {
+          const match = state.currentRiddle.related_words.find(item => item.word.toLowerCase() === normalizedGuess);
+          if (match) {
+            relatedSimilarity = match.similarity / 100;
+            console.log("Found related word with similarity:", relatedSimilarity);
+          }
+        }
+        
+        if (relatedSimilarity !== null) {
+          similarity = relatedSimilarity;
         } else {
-          console.log(`API similarity computed: ${similarity}`);
+          // Get similarity with timeout handling built into the function
+          similarity = await getSimilarity(guess, state.currentRiddle.answer);
+          
+          if (similarity === null) {
+            // If similarity request failed or timed out, fall back to basic calculation
+            console.warn("Similarity request failed. Using basic proximity calculation.");
+            similarity = calculateBasicProximity(normalizedGuess, normalizedAnswer);
+            showFeedback('Server busy. Using basic similarity.', 'info');
+          } else {
+            console.log(`Computed semantic similarity between "${normalizedGuess}" and "${normalizedAnswer}" is ${similarity}`);
+          }
         }
       }
-      // Remap the similarity to a custom score so that even a high similarity (e.g. 0.84)
-      // gets capped below 100.
-      proximityScore = remapSimilarity(similarity);
-    }
 
-    // Save the guess result.
-    state.guessHistory.push({
-      text: guess.trim(),
-      guessNumber: state.guessCount,
-      proximityScore: proximityScore
-    });
-
-    if (proximityScore === 100) {
-      state.gameStatus = 'solved';
-      state.score = state.guessCount;
-      showFeedback('Perfect! You solved the riddle!', 'success');
-      gtag('event', 'riddle_solved', {
-        'event_category': 'game',
-        'event_label': 'Riddle Solved',
-        'guess_count': state.guessCount
+      let proximityScore = Math.floor(similarity * 100);
+      state.guessHistory.push({
+        text: guess.trim(),
+        guessNumber: state.guessCount,
+        proximityScore: proximityScore
       });
-    } else {
-      if (proximityScore >= 90) {
-        showFeedback('Very close! Try a different word.', 'close');
-      } else if (proximityScore >= 80) {
-        showFeedback('You\'re on the right track.', 'close');
-      } else if (proximityScore >= 70) {
-        showFeedback('Getting warmer, but still quite far.', 'close');
-      } else {
-        showFeedback('Not quite right. Try another approach.', 'fail');
-      }
-      if (state.guessCount >= state.MAX_GUESSES) {
-        state.gameStatus = 'failed';
-        showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
-        gtag('event', 'game_failed', {
+
+      if (proximityScore === 100) {
+        state.gameStatus = 'solved';
+        state.score = state.guessCount;
+        showFeedback('Perfect! You solved the riddle!', 'success');
+        // Log that the riddle was solved
+        gtag('event', 'riddle_solved', {
           'event_category': 'game',
-          'event_label': 'Game Failed',
-          'max_guesses': state.MAX_GUESSES
+          'event_label': 'Riddle Solved',
+          'guess_count': state.guessCount
         });
       } else {
-        if (state.revealedLines < state.currentRiddle.lines.length) {
-          state.revealedLines++;
-          displayRiddle();
+        if (proximityScore >= 90) {
+          showFeedback('Very close! Try a different word.', 'close');
+        } else if (proximityScore >= 80) {
+          showFeedback('You\'re on the right track.', 'close');
+        } else if (proximityScore >= 70) {
+          showFeedback('Getting warmer, but still quite far.', 'close');
+        } else {
+          showFeedback('Not quite right. Try another approach.', 'fail');
+        }
+        if (state.guessCount >= state.MAX_GUESSES) {
+          state.gameStatus = 'failed';
+          showFeedback(`Game over! The answer was "${state.currentRiddle.answer}".`, 'fail');
+          // Log that the game was failed
+          gtag('event', 'game_failed', {
+            'event_category': 'game',
+            'event_label': 'Game Failed',
+            'max_guesses': state.MAX_GUESSES
+          });
+        } else {
+          if (state.revealedLines < state.currentRiddle.lines.length) {
+            state.revealedLines++;
+            displayRiddle();
+          }
         }
       }
-    }
 
-    elements.guessInput.value = '';
-    updateGuessInfo();
-    updateHistory();
-    updateGameStatus();
-  } catch (error) {
-    console.error("Error processing guess:", error);
-  } finally {
-    elements.guessButton.disabled = false;
-    elements.guessButton.textContent = originalText;
-    state.processing = false;
+      elements.guessInput.value = '';
+      updateGuessInfo();
+      updateHistory();
+      updateGameStatus();
+    } catch (error) {
+      console.error("Error processing guess:", error);
+    } finally {
+      elements.guessButton.disabled = false;
+      elements.guessButton.textContent = originalText;
+      state.processing = false;
+    }
   }
-}
 
 
         // Move shareResults to the global scope
@@ -813,20 +838,20 @@ async function loadRiddlesWithDebug() {
 
   try {
     debug.textContent = "Attempting to fetch JSON...";
-    console.log("Step 2: Trying first path riddlestest-json.json");
+    console.log("Step 2: Trying first path riddles-json.json");
 
 
 
     // Try both paths
     let response;
     try {
-      debug.textContent = "Trying riddlestest-json.json";
-      response = await fetch('*/riddlestest-json.json');
+      debug.textContent = "Trying riddles-json.json";
+      response = await fetch('/riddly/riddles-json.json');
       if (!response.ok) throw new Error("First path failed");
     } catch (e) {
-      console.log("Step 3: First path failed. Trying fallback path riddlestest-json.json");
-      debug.textContent = "Trying riddlestest-json.json";
-      response = await fetch('./riddlestest-json.json');
+      console.log("Step 3: First path failed. Trying fallback path riddles-json.json");
+      debug.textContent = "Trying riddles-json.json";
+      response = await fetch('./riddles-json.json');
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     }
     console.log("Step 4: Fetch successful! Now parsing JSON...");
