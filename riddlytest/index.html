@@ -306,6 +306,8 @@ function remapSimilarity(similarity) {
   if (similarity >= maxSim) return 99; // cap at 99 for non-exact guesses
   
   return Math.floor(((similarity - threshold) / (maxSim - threshold)) * 100);
+  console.log("Raw similarity value:", similarity);
+
 }
 
     // Levenshtein distance calculation
@@ -542,45 +544,6 @@ function getTodaysRiddle() {
       return emojiMap[guessNumber] || '❓';
     }
 
-    // Calculate proximity
-    function calculateProximity(guess, answer) {
-      const normalizedGuess = guess.toLowerCase().trim();
-      const normalizedAnswer = answer.toLowerCase().trim();
-
-      if (normalizedGuess === normalizedAnswer) {
-        return 100;
-      }
-
-      if (normalizedGuess.includes(normalizedAnswer) || normalizedAnswer.includes(normalizedGuess)) {
-        return 75;
-      }
-
-      const guessWords = normalizedGuess.split(/\s+/);
-      const answerWords = normalizedAnswer.split(/\s+/);
-
-      const commonWords = guessWords.filter(word => answerWords.includes(word));
-      if (commonWords.length > 0) {
-        return 50;
-      }
-
-      const guessLetters = new Set(normalizedGuess.replace(/[^a-z]/g, ''));
-      const answerLetters = new Set(normalizedAnswer.replace(/[^a-z]/g, ''));
-
-      let commonLetters = 0;
-      for (const letter of guessLetters) {
-        if (answerLetters.has(letter)) {
-          commonLetters++;
-        }
-      }
-
-      const letterSimilarity = commonLetters / Math.max(guessLetters.size, answerLetters.size);
-      if (letterSimilarity > 0.5) {
-        return 25;
-      }
-
-      return 10;
-    }
-
     // Update history table
     function updateHistory() {
       if (state.guessHistory.length > 0) {
@@ -712,7 +675,7 @@ function getTodaysRiddle() {
           similarity = calculateBasicProximity(normalizedGuess, normalizedAnswer);
           showFeedback('Server busy. Using basic similarity.', 'info');
         } else {
-          console.log(`Computed semantic similarity between "${normalizedGuess}" and "${normalizedAnswer}" is ${similarity}`);
+          console.log(`API similarity computed: ${similarity}`);
         }
       }
       // Remap the similarity to a custom score so that even a high similarity (e.g. 0.84)
