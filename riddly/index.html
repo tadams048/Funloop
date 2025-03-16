@@ -209,6 +209,28 @@
     padding: 40px;
     font-size: 18px;
   }
+
+ /* Word count styling */
+ .word-count-info {
+    background-color: var(--card-bg);
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    text-align: center;
+    border-left: 3px solid var(--accent-color);
+  }
+
+  /* When the word count is revealed, add a subtle animation */
+  .word-count-revealed {
+    animation: pulse 1s;
+  }
+
+  @keyframes pulse {
+    0% { background-color: var(--accent-color); }
+    100% { background-color: var(--card-bg); }
+  }
+
 </style>
 </head>
 <body>
@@ -226,6 +248,10 @@
   <div id="gameContent" class="hidden">
     <div id="riddleContainer" class="riddle-container">
       <!-- Riddle will be displayed here -->
+    </div>
+
+    <div id="wordCountContainer" class="word-count-info hidden">
+      Answer: <span id="wordCountText">? words</span>
     </div>
 
     <div id="feedback" class="feedback hidden"></div>
@@ -280,9 +306,15 @@
       resultInfo: document.getElementById('resultInfo'),
       shareButton: document.getElementById('shareButton'),
       resetButton: document.getElementById('resetButton'),
+      wordCountContainer: document.getElementById('wordCountContainer'),
+      wordCountText: document.getElementById('wordCountText'),
       countdown: document.getElementById('countdown'),
       guessForm: document.getElementById('guessForm')
     };
+
+
+
+
 
     // Game state
     const state = {
@@ -297,6 +329,29 @@
     processing: false
   };
 
+  function updateWordCountDisplay() {
+    if (!state.currentRiddle) return;
+    
+    // Always make the container visible
+    elements.wordCountContainer.classList.remove('hidden');
+    
+    if (state.guessCount >= 4) {
+      // Count words in the answer
+      const wordCount = state.currentRiddle.answer.trim().split(/\s+/).length;
+      
+      // Set the text based on number of words
+      const wordText = wordCount === 1 ? "word" : "words";
+      elements.wordCountText.textContent = `${wordCount} ${wordText}`;
+      
+      // Add the revealed animation class
+      if (!elements.wordCountContainer.classList.contains('word-count-revealed')) {
+        elements.wordCountContainer.classList.add('word-count-revealed');
+      }
+    } else {
+      // Before 4 guesses, show the placeholder
+      elements.wordCountText.textContent = "? words";
+    }
+  }
 
     // Levenshtein distance calculation
     function levenshteinDistance(str1, str2) {
@@ -753,6 +808,7 @@ function getTodaysRiddle() {
       elements.guessInput.value = '';
       updateGuessInfo();
       updateHistory();
+      updateWordCountDisplay();
       updateGameStatus();
     } catch (error) {
       console.error("Error processing guess:", error);
@@ -819,6 +875,7 @@ function resetGame() {
     displayRiddle();
     updateGuessInfo();
     updateGameStatus();
+    updateWordCountDisplay();
       // Log that the game has started
     gtag('event', 'game_started', {
     'event_category': 'game',
