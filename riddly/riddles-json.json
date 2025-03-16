@@ -1,5 +1,150 @@
 [
   {
+    "date": "2025-03-16",
+    "lines": [
+      "Liquid rebellion brewed under moonlight",
+      "Colonial shadows danced on darkened waters",
+      "Humble leaves became symbols of defiance",
+      "Costumes concealed identities but not intentions",
+      "Taxation fueled this protest so profound",
+      "Colonial anger found its target sound",
+      "The British Empire faced this bold defiance",
+      "In Boston's waters, liberty found alliance",
+      "No representation meant resistance grew",
+      "A midnight dumping of a bitter brew",
+      "The crown would soon regret this bitter pill",
+      "As revolution sparked upon this hill"
+    ],
+    "answer": "BOSTON TEA PARTY"
+  },
+  {
+    "date": "2025-03-17",
+    "lines": [
+      "I emerged from neglect and carelessness",
+      "An unseen savior born of happenstance",
+      "What appeared a failure held hidden victory",
+      "From spoiled beginnings came healing's advance",
+      "Bacteria cowered before my might",
+      "A Scottish doctor noticed something strange",
+      "Infection's foe discovered overnight",
+      "Medicine's path I would forever change",
+      "A Nobel Prize would crown this great mistake",
+      "As countless lives were saved by what was found",
+      "A petri dish left dirty gave the break",
+      "When Alexander saw what grew around"
+    ],
+    "answer": "PENICILLIN"
+  },
+  {
+    "date": "2025-03-18",
+    "lines": [
+      "I shortened journeys never meant to be direct",
+      "A passage carved where nature placed no path",
+      "Blue waters flowing through golden barriers",
+      "Where continents almost touched but never met",
+      "De Lesseps dreamed me into life",
+      "A French ambition, Egypt's toil",
+      "I cut through ancient desert strife",
+      "To save long journeys and their spoil",
+      "The British Empire claimed my worth",
+      "As trade flowed freely through my gate",
+      "My waters gave new routes their birth",
+      "And changed the course of shipping's fate"
+    ],
+    "answer": "SUEZ CANAL"
+  },
+  {
+    "date": "2025-03-19",
+    "lines": [
+      "I proved what shape our world truly holds",
+      "Beginning and ending at the same point",
+      "Many started but few completed my circle",
+      "The leader's name lives on though he did not",
+      "The vast Pacific felt my wooden keel",
+      "The world was proven round, no longer flat",
+      "My spices worth more than their weight in gold",
+      "A Spanish flag claimed lands both new and old",
+      "Though started with so many, ended with few",
+      "The Victoria alone made it through",
+      "A Portuguese explorer led the way",
+      "Three years at sea to make history that day"
+    ],
+    "answer": "MAGELLAN"
+  },
+  {
+    "date": "2025-03-20",
+    "lines": [
+      "One breath ended, millions followed after",
+      "Summer streets witnessed destiny's pivot",
+      "A pistol's echo rippled across continents",
+      "Empires crumbled from a singular moment",
+      "An heir apparent met his end",
+      "A Serbian nationalist took aim",
+      "The Austro-Hungarian Empire would bend",
+      "As Europe's powers played their deadly game",
+      "Princip's hand delivered fatal shots",
+      "A royal couple fell on fateful day",
+      "The Great War followed after plotting plots",
+      "June twenty-eighth began the world's dismay"
+    ],
+    "answer": "FRANZ FERDINAND"
+  },
+  {
+    "date": "2025-03-21",
+    "lines": [
+      "Etched in basalt, I held time captive",
+      "Three voices spoke from a single throat",
+      "Buried secrets awaited soldier's shovels",
+      "My fragment nature completed knowledge's puzzle",
+      "Hieroglyphs revealed their mystery",
+      "Champollion decoded what I held",
+      "Egyptian history no longer history",
+      "As ancient pharaohs' stories soon were spelled",
+      "Ptolemy's decree in languages three",
+      "Demotic, Greek, and sacred script aligned",
+      "A fragment black that set knowledge free",
+      "The British Museum keeps me enshrined"
+    ],
+    "answer": "ROSETTA STONE"
+  },
+  {
+    "date": "2025-03-22",
+    "lines": [
+      "Merchants of wheels transcended their domain",
+      "Gravity surrendered its ancient dominion",
+      "North Carolina winds carried whispers of change",
+      "Twelve ticks of time transformed tomorrow",
+      "The wind beneath our crafted wings",
+      "On Carolina's shores we made our mark",
+      "Our powered machine defied earth's strings",
+      "A photograph captured this historic spark",
+      "Orville piloted as Wilbur ran beside",
+      "December seventeenth saw us rise",
+      "Four flights that day with distance multiplied",
+      "Our final one stretched to eight hundred size"
+    ],
+    "answer": "WRIGHT BROTHERS"
+  },
+  {
+    "date": "2025-03-23",
+    "lines": [
+      "I revealed what was always there but never seen",
+      "Distance collapsed through curved glass",
+      "Faith and observation clashed in my wake",
+      "The heavens reordered by my gaze",
+      "In Venice I first turned toward the sky",
+      "An Italian's mind improved the Dutch design",
+      "The craters of the moon no longer shy",
+      "My lenses brought the heavens into line",
+      "In Padua I taught while stars I chased",
+      "My observations challenged ancient thought",
+      "When Saturn's rings were finally embraced",
+      "And Copernicus' model I strongly sought"
+    ],
+    "answer": "GALILEO"
+  },
+  
+  {
     "date": "2025-03-06",
     "lines": [
       "I'm light as a feather, yet the strongest person cannot hold me for much more than a minute.",
@@ -808,475 +953,6 @@
     {"word": "Scroll", "similarity": 34},
     {"word": "Parchment", "similarity": 30}
   ]
-},
-  {
-    "date": "2025-04-08",
-    "lines": [
-      "I'm full of holes but still hold water.",
-      "I can be soft or rough against your skin.",
-      "I'm often hung after being used."
-    ],
-    "answer": "sponge"
-  },
-  {
-    "date": "2025-03-09",
-    "lines": [
-      "The more you take, the more you leave behind.",
-      "I can preserve memories or mark a path.",
-      "I follow you everywhere you go."
-    ],
-    "answer": "footprints"
-  },
-  {
-    "date": "2025-03-10",
-    "lines": [
-      "I fly without wings.",
-      "I cry without eyes.",
-      "Wherever I go, darkness follows me."
-    ],
-    "answer": "cloud"
-  },
-  {
-    "date": "2025-03-11",
-    "lines": [
-      "I speak without a mouth and hear without ears.",
-      "I have no body, but I come alive with wind.",
-      "You can't see me, but I can be heard."
-    ],
-    "answer": "echo"
-  },
-  {
-    "date": "2025-03-12",
-    "lines": [
-      "I'm tall when I'm young.",
-      "I'm short when I'm old.",
-      "I glow when used."
-    ],
-    "answer": "candle"
-  },
-  
-  {
-    "date": "2025-03-14",
-    "lines": [
-      "I have a head and a tail, but no body.",
-      "People flip me to decide things.",
-      "I'm often found in pockets and purses."
-    ],
-    "answer": "coin"
-  },
-  {
-    "date": "2025-03-15",
-    "lines": [
-      "I'm not alive, but I can grow.",
-      "I don't have lungs, but I need air.",
-      "I don't have a mouth, but I can drown."
-    ],
-    "answer": "fire"
-  },
-  {
-    "date": "2025-03-16",
-    "lines": [
-      "I run all around the backyard, yet never move.",
-      "I'm often stepped on, but never seem to mind.",
-      "When the weather is warm, I may feel cool beneath your feet."
-    ],
-    "answer": "grass"
-  },
-  {
-    "date": "2025-03-17",
-    "lines": [
-      "I can fill a room but take up no space.",
-      "I can be felt but not touched or seen.",
-      "I come and go as I please."
-    ],
-    "answer": "darkness"
-  },
-  {
-    "date": "2025-03-18",
-    "lines": [
-      "I can travel around the world while staying in a corner.",
-      "I have many faces but no head or body.",
-      "I help you get where you're going."
-    ],
-    "answer": "stamp"
-  },
-  {
-    "date": "2025-03-19",
-    "lines": [
-      "I am taken from a mine, and shut up in a wooden case.",
-      "I value nothing, but I am used to mark something valuable.",
-      "When using me, you almost always leave a mark."
-    ],
-    "answer": "pencil"
-  },
-  {
-    "date": "2025-03-20",
-    "lines": [
-      "I'm always in front of you, but you can never see me.",
-      "No matter how hard you try, you can't reach out and touch me.",
-      "As you move, I move too, always staying the same distance away."
-    ],
-    "answer": "future"
-  },
-  {
-    "date": "2025-03-21",
-    "lines": [
-      "I have a face but no eyes, hands but no arms.",
-      "I tell you something important, but I never speak.",
-      "People look at me daily, but often take me for granted."
-    ],
-    "answer": "clock"
-  },
-  {
-    "date": "2025-03-22",
-    "lines": [
-      "I have four legs, but no tail.",
-      "I'm not alive, but I support life.",
-      "Sometimes I hold food, sometimes books, sometimes people."
-    ],
-    "answer": "table"
-  },
-  {
-    "date": "2025-03-23",
-    "lines": [
-      "I'm found in socks, scarves, and mittens.",
-      "I'm often made by grandmothers and stay with you when you're cold.",
-      "I'm created by loops within loops."
-    ],
-    "answer": "knitting"
-  },
-  {
-    "date": "2025-03-24",
-    "lines": [
-      "I'm orange on the outside, white inside, and have seeds you can eat.",
-      "I grow on a vine and am harvested in fall.",
-      "I can be carved and lit up on a special night."
-    ],
-    "answer": "pumpkin"
-  },
-  {
-    "date": "2025-03-13",
-    "lines": [
-      "I have keys that open no locks.",
-      "I have space but no room.",
-      "I allow you to enter a world of imagination."
-    ],
-    "answer": "keyboard"
-  },
-  {
-    "date": "2025-03-26",
-    "lines": [
-      "I'm easy to lift, but hard to throw.",
-      "The stronger the wind, the more I struggle to fly.",
-      "I can be made of feathers, rubber, or plastic."
-    ],
-    "answer": "shuttlecock"
-  },
-  {
-    "date": "2025-03-27",
-    "lines": [
-      "I'm white or colored, but never the same.",
-      "I grow larger as I age.",
-      "I have many tiny hairs, but people want me bald."
-    ],
-    "answer": "dandelion"
-  },
-  {
-    "date": "2025-03-28",
-    "lines": [
-      "I am gentle enough to soothe your skin, harsh enough to scour your pans.",
-      "I'm made of something soft and yet I'm good for scrubbing.",
-      "I make things clean but get very dirty in the process."
-    ],
-    "answer": "sponge"
-  },
-  {
-    "date": "2025-03-29",
-    "lines": [
-      "I'm the source of all light in our solar system.",
-      "Plants need me to grow through a special process.",
-      "Too much exposure to me can be harmful to your skin."
-    ],
-    "answer": "sun"
-  },
-  {
-    "date": "2025-03-30",
-    "lines": [
-      "I start with T, end with T, and have T in me.",
-      "You might put things in me to steep.",
-      "I'm a container known for holding a hot beverage."
-    ],
-    "answer": "teapot"
-  },
-  {
-    "date": "2025-03-31",
-    "lines": [
-      "I come in sheets, rolls, and squares.",
-      "I can be soft or strong, patterned or plain.",
-      "Some people hoard me when disasters loom."
-    ],
-    "answer": "toilet paper"
-  },
-  {
-    "date": "2025-04-01",
-    "lines": [
-      "I occur once in a minute, twice in a moment, but never in a thousand years.",
-      "I'm always in the middle of the sea, but never in the ocean.",
-      "I'm not found in your mouth, but I'm embedded in your teeth."
-    ],
-    "answer": "the letter m"
-  },
-  {
-    "date": "2025-04-02",
-    "lines": [
-      "I am a seed with three letters in my name.",
-      "Remove the first letter and I'm a crime.",
-      "Remove the second letter instead and I'm an animal."
-    ],
-    "answer": "pea"
-  },
-  {
-    "date": "2025-04-03",
-    "lines": [
-      "I'm a word of letters three, add two and fewer there will be.",
-      "I'm a series of small elements, each serving a purpose.",
-      "Look at me from a different way, and I'm no longer the same."
-    ],
-    "answer": "net"
-  },
-  {
-    "date": "2025-04-04",
-    "lines": [
-      "I have branches, but no fruit, trunk or leaves.",
-      "I have a fork but no knife, and many have me in their home.",
-      "You use me when hungry, especially at night."
-    ],
-    "answer": "river"
-  },
-  {
-    "date": "2025-04-05",
-    "lines": [
-      "I get wet when drying.",
-      "I'm full of holes, but still hold water.",
-      "The more I work, the more I'm consumed."
-    ],
-    "answer": "towel"
-  },
-  {
-    "fallback": true,
-    "lines": [
-      "I'm created by humans yet have no physical form.",
-      "I can live eternally, yet never truly die.",
-      "I can entertain, educate, or inspire."
-    ],
-    "answer": "story"
-  },
-  {
-    "date": "2025-04-06",
-    "lines": [
-      "I have no mouth, yet I quietly speak,",
-      "Marking moments, strong or weak.",
-      "I vanish fast when joy is bright,",
-      "Yet crawl in sorrow, lost in night."
-    ],
-    "answer": "time",
-    "difficulty": 90
-  },
-  {
-    "date": "2025-04-07",
-    "lines": [
-      "Born of silence, yet known to all,",
-      "Carving sky with patterns tall.",
-      "No hands to touch, no feet to stray,",
-      "A map of night that fades by day."
-    ],
-    "answer": "constellation",
-    "difficulty": 93
-  },
-  {
-    "date": "2025-03-07",
-    "lines": [
-      "Forged in fire, as tough as can be,",
-      "A heavy weight champ like Mike Tyson you see.",
-      "In Earth's deep core, or a blacksmith's desire,",
-      "What am I, strong, yet shaped by the pyre?"
-    ],
-    "answer": "iron",
-    "difficulty": 92
-  },
-  {
-    "date": "2025-04-09",
-    "lines": [
-      "Cradling tempests where monsoons ignite,",
-      "A path for the traders who vanish from sight.",
-      "Spiced with the echoes of empires past,",
-      "Vast and relentless, yet holding steadfast."
-    ],
-    "answer": "Indian Ocean",
-    "difficulty": 95
-  },
-  {
-    "date": "2025-04-10",
-    "lines": [
-      "Walking beside but never ahead,",
-      "Stretching long when the sun is red.",
-      "Born from light but never bright,",
-      "Growing tall in the fading light."
-    ],
-    "answer": "shadow",
-    "difficulty": 91
-  },
-  {
-    "date": "2025-04-11",
-    "lines": [
-      "A silent breath upon the land,",
-      "Carving glass with a careful hand.",
-      "Fragile lace that melts at dawn,",
-      "A fleeting kiss before it's gone."
-    ],
-    "answer": "frost",
-    "difficulty": 92
-  },
-  {
-    "date": "2025-04-12",
-    "lines": [
-      "Carving stone yet light as air,",
-      "A restless traveler, never there.",
-      "A whispering voice, a howling scream,",
-      "Shaping mountains and shifting streams."
-    ],
-    "answer": "wind",
-    "difficulty": 94
-  },
-  {
-    "date": "2025-04-13",
-    "lines": [
-      "Swallowing light, yet holding weight,",
-      "A hunger vast, a silent fate.",
-      "No walls to bind, no door to close,",
-      "An endless fall where nothing slows."
-    ],
-    "answer": "black hole",
-    "difficulty": 95
-  },
-  {
-    "date": "2025-04-14",
-    "lines": [
-      "Slipping through fingers, yet shaping the world,",
-      "A whisper of wealth where fates are unfurled.",
-      "Hidden in vaults, sought in despair,",
-      "Melting in fire, yet gleaming with care."
-    ],
-    "answer": "gold",
-    "difficulty": 91
-  },
-  {
-    "date": "2025-04-15",
-    "lines": [
-      "Born of silver, fading fast,",
-      "A fleeting glow that cannot last.",
-      "Guiding wanderers through the night,",
-      "Draping shadows in borrowed light."
-    ],
-    "answer": "moonbeam",
-    "difficulty": 93
-  },
-  {
-   "date": "2025-04-16",
-    "lines": [
-      "Weaving threads too fine to see,",
-      "A quiet master of what will be.",
-      "No voice to speak, no hands to write,",
-      "A force unseen but burning bright."
-    ],
-    "answer": "destiny",
-    "difficulty": 94
-  },
-  {
-    "date": "2025-04-17",
-    "lines": [
-      "No blade to strike, no breath to take,",
-      "Yet still I cause the flesh to break.",
-      "A silent thief, a patient foe,",
-      "Creeping where the shadows grow."
-    ],
-    "answer": "disease",
-    "difficulty": 95
-  },
-  {
-    "date": "2025-04-18",
-    "lines": [
-      "Climbing high but never falling,",
-      "A burning king, the day enthralling.",
-      "Gilding lands with molten hands,",
-      "Vanishing past the distant sands."
-    ],
-    "answer": "sun",
-    "difficulty": 90
-  },
-  {
-    "date": "2025-04-19",
-    "lines": [
-      "No bricks to build, no walls to see,",
-      "Yet within, whole worlds can be.",
-      "Bound in silence, rich with sound,",
-      "Holding truths that time has found."
-    ],
-    "answer": "book",
-    "difficulty": 91
-  },
-  {
-   "date": "2025-04-20",
-    "lines": [
-      "No hands to push, yet all obey,",
-      "A silent ruler, none betray.",
-      "Bending stars and curving fate,",
-      "Shaping space at every gate."
-    ],
-    "answer": "gravity",
-    "difficulty": 94
-  },
-  {
-    "date": "2025-04-21",
-    "lines": [
-      "Moving slow yet shaping might,",
-      "A patient hand, a crushing bite.",
-      "No haste to show, no race to run,",
-      "Carving valleys, one by one."
-    ],
-    "answer": "glacier",
-    "difficulty": 92
-  },
-  {
-   "date": "2025-04-22",
-    "lines": [
-      "A silent twin of those who stare,",
-      "Mimicking life, yet always bare.",
-      "Shattered once, I break to dust,",
-      "Yet stand so clear, reflecting trust."
-    ],
-    "answer": "mirror",
-    "difficulty": 91
-  },
-  {
-    "date": "2025-04-23",
-    "lines": [
-      "Lingering where the past remains,",
-      "A faded echo locked in chains.",
-      "Shaped by joy, etched by pain,",
-      "A shadow walking in the brain."
-    ],
-    "answer": "memory",
-    "difficulty": 95
-  },
-{
-    "date": "2025-03-25",
-    "lines": [
-      "I have keys but no locks.",
-      "I have space but no room.",
-      "You can enter, but you can't go inside."
-    ],
-    "answer": "keyboard"
-  }
+}
   
 ]
