@@ -1,0 +1,1977 @@
+name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1b26;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        #game-container {
+            position: relative;
+            width: 400px;
+            height: 600px;
+            overflow: hidden;
+        }
+
+        #game-canvas {
+            background-color: #252836;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        #score-display {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+        }
+
+        #emoji-score {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        #energy-display {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+        }
+
+        #curse-meter {
+            position: absolute;
+            top: 40px;
+            left: 10px;
+            width: 380px;
+            height: 15px;
+            background-color: rgba(26, 27, 38, 0.6);
+            border-radius: 7px;
+        }
+
+        #curse-fill {
+            height: 100%;
+            width: 70%;
+            background-color: #9c3264;
+            border-radius: 7px;
+            transition: width 0.3s;
+        }
+
+        #curse-label {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 10px;
+            top: 1px;
+        }
+
+        #distance-display {
+            position: absolute;
+            top: 70px;
+            right: 10px;
+            font-size: 18px;
+        }
+
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(26, 27, 38, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        #game-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        #start-button {
+            padding: 10px 20px;
+            font-size: 20px;
+            background-color: #9c3264;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        #game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(26, 27, 38, 0.95);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        #game-over-emoji {
+            font-size: 64px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+        }
+
+        #final-score {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        #final-distance {
+            font-size: 20px;
+            margin-bottom: 30px;
+            color: #aaa;
+        }
+
+        #next-run {
+            font-size: 16px;
+            margin-bottom: 40px;
+            color: #aaa;
+        }
+
+        #countdown {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        #share-button {
+            padding: 12px 30px;
+            font-size: 22px;
+            background-color: #4267B2; /* Facebook blue color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            pointer-events: auto;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #share-button:before {
+            content: "📤";
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        #restart-button {
+            padding: 8px 20px;
+            font-size: 18px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .controls-hint {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: #8b8dab;
+        }
+        
+        /* Attack button */
+        #attack-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            background-color: rgba(0, 212, 255, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            user-select: none;
+            -webkit-user-select: none;
+            pointer-events: auto;
+            z-index: 5;
+        }
+        
+        /* Touch feedback overlay */
+        #touch-feedback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 4;
+        }
+        
+        /* Swipe indicators */
+        .swipe-indicator {
+            position: absolute;
+            display: none;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        #swipe-up {
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+        }
+        
+        #swipe-down {
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas" width="400" height="600"></canvas>
+        <div id="ui-layer">
+            <div id="score-display">SCORE: 0</div>
+            <div id="emoji-score">😐</div>
+            <div id="energy-display">ENERGY: 0</div>
+            <div id="curse-meter">
+                <div id="curse-fill"></div>
+                <div id="curse-label">CURSE</div>
+            </div>
+            <div id="distance-display">0m</div>
+            <div id="energy-meter" style="position: absolute; bottom: 20px; left: 10px; width: 200px; height: 15px; background-color: rgba(26, 27, 38, 0.6); border-radius: 7px;">
+                <div id="energy-fill" style="height: 100%; width: 0%; background-color: #00d4ff; border-radius: 7px; transition: width 0.3s;"></div>
+                <div id="energy-label" style="position: absolute; width: 100%; text-align: center; font-size: 10px; top: 1px;">ENERGY</div>
+            </div>
+        </div>
+        <div id="start-screen">
+            <div id="game-title">KNIGHT'S ESCAPE</div>
+            <button id="start-button">START GAME</button>
+            <div class="controls-hint">
+                SWIPE: Left/Right/Up/Down | ATTACK BUTTON: Kill skeletons
+            </div>
+        </div>
+        <div id="game-over">
+            <div id="game-over-emoji">👑</div>
+            <div id="final-score">FINAL SCORE: 0</div>
+            <div id="final-distance">DISTANCE: 0m</div>
+            <div id="next-run">NEXT RUN AVAILABLE IN <span id="countdown">23:59:59</span></div>
+            <button id="share-button">SHARE RESULTS</button>
+            <button id="restart-button">PLAY AGAIN</button>
+        </div>
+        
+        <!-- Attack button -->
+        <div id="attack-button">⚔️</div>
+        
+        <!-- Touch feedback for swipes -->
+        <div id="touch-feedback">
+            <div id="swipe-up" class="swipe-indicator">↑</div>
+            <div id="swipe-down" class="swipe-indicator">↓</div>
+        </div>
+    </div>
+
+    <script>
+        // Game constants
+        const GAME_WIDTH = 400;
+        const GAME_HEIGHT = 600;
+        const LANE_WIDTH = GAME_WIDTH / 3;
+        const LANE_POSITIONS = [LANE_WIDTH / 2, LANE_WIDTH * 1.5, LANE_WIDTH * 2.5];
+        const KNIGHT_WIDTH = 50;
+        const KNIGHT_HEIGHT = 70;
+        const OBSTACLE_SPEED = 5;
+        const ENERGY_SPEED = 5;
+        const JUMP_HEIGHT = 150;
+        const SLIDE_HEIGHT = 30;
+        const GRAVITY = 0.8;  // Increased gravity for better jumping
+        const JUMP_VELOCITY = -18; // Stronger initial jump velocity
+        const ENERGY_VALUE = 15;
+        const CURSE_INCREASE_RATE = 0.01;
+        const CURSE_DECREASE_VALUE = 5;
+        const ANIMATION_SPEED = 6;
+        const RUN_FRAMES = 4;
+        const ATTACK_ENERGY_COST = 30;
+        const ATTACK_DURATION = 20;
+        const ATTACK_RANGE = 200;
+        const ENEMY_DEFEAT_SCORE = 150;
+        const MAX_ENERGY = 100;
+
+        // Emoji score scale - from worst to best
+        const SCORE_EMOJIS = [
+            "🤮", "🤢", "😖", "😫", "😩", "😔", "😕", "😐", "🙂", "😊", 
+            "😄", "😁", "🥳", "🤩", "⭐", "🔥", "💯", "🏆", "👑", "💎"
+        ];
+
+        // Game variables
+        let canvas, ctx;
+        let knight, obstacles, energyBottles, powerUps;
+        let score, energyCollected, distance, curseLevel, energy;
+        let isJumping, isSliding, isAttacking, jumpVelocity, attackFrame;
+        let gameRunning, gameOver;
+        let frameCount, obstacleSpawnRate, energySpawnRate;
+        let curseTimer, countdownTimer;
+        let groundOffset = 0;
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        // DOM elements
+        let scoreDisplay, energyDisplay, curseFill, distanceDisplay, emojiScore;
+        let startScreen, gameOverScreen, finalScoreDisplay, finalDistanceDisplay, gameOverEmoji;
+        let energyFill, countdownDisplay;
+
+        // Initialize the game
+        window.onload = function() {
+            canvas = document.getElementById('game-canvas');
+            ctx = canvas.getContext('2d');
+            
+            // Get UI elements
+            scoreDisplay = document.getElementById('score-display');
+            energyDisplay = document.getElementById('energy-display');
+            curseFill = document.getElementById('curse-fill');
+            distanceDisplay = document.getElementById('distance-display');
+            emojiScore = document.getElementById('emoji-score');
+            startScreen = document.getElementById('start-screen');
+            gameOverScreen = document.getElementById('game-over');
+            finalScoreDisplay = document.getElementById('final-score');
+            finalDistanceDisplay = document.getElementById('final-distance');
+            gameOverEmoji = document.getElementById('game-over-emoji');
+            energyFill = document.getElementById('energy-fill');
+            countdownDisplay = document.getElementById('countdown');
+            
+            // Set up event listeners
+            document.getElementById('start-button').addEventListener('click', startGame);
+            document.getElementById('restart-button').addEventListener('click', startGame);
+            document.getElementById('share-button').addEventListener('click', shareResults);
+            document.addEventListener('keydown', handleKeyDown);
+            
+            // Set up mobile controls
+            setupMobileControls();
+            
+            // Draw initial screen
+            drawBackground();
+        };
+
+        // Start or restart the game
+        function startGame() {
+            // Reset game variables
+            obstacles = [];
+            energyBottles = [];
+            powerUps = [];
+            score = 0;
+            energyCollected = 0;
+            energy = 0;
+            distance = 0;
+            curseLevel = 0;
+            frameCount = 0;
+            obstacleSpawnRate = 100;
+            energySpawnRate = 60;
+            groundOffset = 0;
+            
+            // Reset knight
+            knight = {
+                x: LANE_POSITIONS[1],
+                y: GAME_HEIGHT - 100,
+                width: KNIGHT_WIDTH,
+                height: KNIGHT_HEIGHT,
+                lane: 1,
+                baseY: GAME_HEIGHT - 100,
+                invincible: false,
+                frame: 0,
+                animTimer: 0
+            };
+            
+            // Reset movement flags
+            isJumping = false;
+            isSliding = false;
+            isAttacking = false;
+            attackFrame = 0;
+            jumpVelocity = 0;
+            
+            // Update UI
+            scoreDisplay.textContent = 'SCORE: 0';
+            energyDisplay.textContent = 'ENERGY: 0';
+            curseFill.style.width = '0%';
+            energyFill.style.width = '0%';
+            distanceDisplay.textContent = '0m';
+            emojiScore.textContent = SCORE_EMOJIS[9]; // Start with neutral emoji
+            
+            // Clear any existing countdown
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+            }
+            
+            // Hide start screen, show game
+            startScreen.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            
+            // Start game loop
+            gameRunning = true;
+            gameOver = false;
+            
+            // Start curse timer
+            curseTimer = setInterval(increaseCurse, 100);
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Main game loop
+        function gameLoop() {
+            if (!gameRunning) return;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+            
+            // Draw background
+            drawBackground();
+            
+            // Animate ground
+            animateGround();
+            
+            // Update game state
+            updateKnight();
+            updateObstacles();
+            updateEnergyBottles();
+            checkCollisions();
+            
+            // Handle attack
+            if (isAttacking) {
+                updateAttack();
+            }
+            
+            // Spawn new objects
+            frameCount++;
+            if (frameCount % obstacleSpawnRate === 0) {
+                spawnObstacle();
+                // Make game harder over time
+                if (obstacleSpawnRate > 60) obstacleSpawnRate--;
+            }
+            if (frameCount % energySpawnRate === 0) {
+                spawnEnergyBottle();
+            }
+            
+            // Update score and distance
+            score++;
+            distance += 0.1;
+            
+            // Update UI
+            scoreDisplay.textContent = 'SCORE: ' + Math.floor(score);
+            distanceDisplay.textContent = Math.floor(distance) + 'm';
+            updateEmojiScore();
+            
+            // Check for game over
+            if (curseLevel >= 100) {
+                endGame();
+            }
+            
+            // Continue game loop
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Update emoji based on score
+        function updateEmojiScore() {
+            // Calculate emoji index based on score
+            // Score ranges from negative to positive 
+            // Emoji index ranges from 0 to 19
+            
+            let emojiIndex;
+            
+            if (score < 0) {
+                // Negative scores use the first 10 emojis (bad)
+                emojiIndex = Math.max(0, Math.min(9, 9 - Math.floor(score / -50)));
+            } else {
+                // Positive scores use the second 10 emojis (good)
+                emojiIndex = Math.max(10, Math.min(19, 10 + Math.floor(score / 100)));
+            }
+            
+            emojiScore.textContent = SCORE_EMOJIS[emojiIndex];
+        }
+        
+        // Animate the ground to create movement illusion
+        function animateGround() {
+            // Update ground offset
+            groundOffset += OBSTACLE_SPEED;
+            if (groundOffset >= 50) {
+                groundOffset = 0;
+            }
+            
+            // Draw the moving stone patterns
+            ctx.fillStyle = '#252836';
+            for (let i = 0; i < 9; i++) {
+                ctx.fillRect((i * 50 + 5 - groundOffset) % 400, GAME_HEIGHT - 38, 40, 5);
+                ctx.fillRect((i * 50 + 15 - groundOffset) % 400, GAME_HEIGHT - 30, 30, 5);
+                ctx.fillRect((i * 50 + 25 - groundOffset) % 400, GAME_HEIGHT - 22, 20, 5);
+            }
+            
+            // Add dust particles for running effect
+            if (!isJumping && !isSliding) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                const dustX = knight.x - 10;
+                const dustY = knight.y;
+                
+                // Only show dust particles on certain frames
+                if (frameCount % 6 === 0) {
+                    ctx.beginPath();
+                    ctx.arc(dustX, dustY, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.arc(dustX - 5, dustY - 2, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        // Draw background
+        function drawBackground() {
+            // Dark background
+            ctx.fillStyle = '#252836';
+            ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+            
+            // Add some depth with background details - distant castle features
+            // Arches in background
+            ctx.fillStyle = '#1f2130';
+            for (let i = 0; i < 3; i++) {
+                const x = i * GAME_WIDTH/3 + LANE_WIDTH/2;
+                ctx.beginPath();
+                ctx.arc(x, 150, 50, Math.PI, 0, false);
+                ctx.fill();
+            }
+            
+            // Distant windows
+            ctx.fillStyle = '#1a1c2a';
+            for (let i = 0; i < 5; i++) {
+                const y = 100 + i * 100;
+                if (y < GAME_HEIGHT - 100) { // Don't draw too low
+                    ctx.fillRect(50, y, 20, 30);
+                    ctx.fillRect(GAME_WIDTH - 70, y, 20, 30);
+                }
+            }
+            
+            // Floor with stones
+            ctx.fillStyle = '#1a1b26';
+            ctx.fillRect(0, GAME_HEIGHT - 40, GAME_WIDTH, 40);
+            
+            // Stone patterns on floor
+            ctx.fillStyle = '#252836';
+            for (let i = 0; i < 8; i++) {
+                ctx.fillRect(i * 50 + 5, GAME_HEIGHT - 38, 40, 5);
+                ctx.fillRect(i * 50 + 15, GAME_HEIGHT - 30, 30, 5);
+                ctx.fillRect(i * 50 + 25, GAME_HEIGHT - 22, 20, 5);
+            }
+            
+            // Lane dividers
+            ctx.strokeStyle = '#3a3c4e';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(LANE_WIDTH, 0);
+            ctx.lineTo(LANE_WIDTH, GAME_HEIGHT);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(LANE_WIDTH * 2, 0);
+            ctx.lineTo(LANE_WIDTH * 2, GAME_HEIGHT);
+            ctx.stroke();
+            
+            // Stone wall patterns
+            ctx.fillStyle = '#3a3c4e';
+            for (let i = 0; i < 3; i++) {
+                ctx.fillRect(0, 150 + i * 150, GAME_WIDTH, 10);
+                
+                // Add details to walls
+                for (let j = 0; j < 20; j++) {
+                    ctx.fillRect(j * 20, 150 + i * 150 - 5, 15, 5);
+                }
+            }
+            
+            // Add some torches for atmosphere
+            for (let i = 0; i < 2; i++) {
+                const y = 200 + i * 200;
+                if (y < GAME_HEIGHT - 100) {
+                    drawTorch(20, y);
+                    drawTorch(GAME_WIDTH - 20, y);
+                }
+            }
+            
+            // Helper to draw torches
+            function drawTorch(x, y) {
+                // Torch base
+                ctx.fillStyle = '#3a3c4e';
+                ctx.fillRect(x - 3, y - 15, 6, 15);
+                
+                // Torch flame - animate it
+                const flicker = Math.sin(frameCount * 0.2) * 3;
+                ctx.fillStyle = '#ff9d00';
+                ctx.beginPath();
+                ctx.moveTo(x - 5, y - 15);
+                ctx.quadraticCurveTo(x, y - 25 - flicker, x + 5, y - 15);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Inner flame
+                ctx.fillStyle = '#ffdf80';
+                ctx.beginPath();
+                ctx.moveTo(x - 2, y - 15);
+                ctx.quadraticCurveTo(x, y - 20 - flicker, x + 2, y - 15);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Glow effect
+                const gradient = ctx.createRadialGradient(x, y - 15, 0, x, y - 15, 30);
+                gradient.addColorStop(0, 'rgba(255,157,0,0.3)');
+                gradient.addColorStop(1, 'rgba(255,157,0,0)');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(x, y - 15, 30, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Update knight position and animation
+        function updateKnight() {
+            // Handle jumping
+            if (isJumping) {
+                knight.y += jumpVelocity;
+                jumpVelocity += GRAVITY;
+                
+                // Check if knight landed
+                if (knight.y >= knight.baseY) {
+                    knight.y = knight.baseY;
+                    isJumping = false;
+                }
+            }
+            
+            // Handle sliding
+            if (isSliding) {
+                // If jump and slide are both happening, prioritize jump animation
+                if (!isJumping && knight.y === knight.baseY) {
+                    // Check if slide duration is over
+                    if (frameCount % 30 === 0) {
+                        isSliding = false;
+                        knight.height = KNIGHT_HEIGHT;
+                    }
+                }
+            }
+            
+            // Draw knight with more detailed graphics
+            const knightX = knight.x;
+            const knightY = knight.y;
+            
+            // Determine animation frame based on game frames
+            const runFrame = Math.floor(frameCount / 6) % 4; // 4 running frames
+            
+            // Calculate offset for sliding
+            const yOffset = isSliding ? KNIGHT_HEIGHT - SLIDE_HEIGHT : 0;
+            
+            // Save context to restore later
+            ctx.save();
+            
+            // Flash when invincible
+            if (knight.invincible && Math.floor(frameCount / 5) % 2 === 0) {
+                ctx.globalAlpha = 0.7;
+                ctx.filter = 'brightness(1.5) sepia(0.5)';
+            }
+            
+            // Draw knight based on state (running, jumping, sliding)
+            if (isSliding) {
+                drawKnightSliding(knightX, knightY);
+            } else {
+                drawKnightRunning(knightX, knightY, runFrame, isJumping);
+            }
+            
+            // Restore context
+            ctx.restore();
+            
+            // Helper function to draw knight in running state
+            function drawKnightRunning(x, y, frame, jumping) {
+                // Body - armor torso
+                ctx.fillStyle = '#616687';
+                ctx.beginPath();
+                ctx.moveTo(x - 15, y - 50);
+                ctx.lineTo(x + 15, y - 50);
+                ctx.lineTo(x + 18, y - 20);
+                ctx.lineTo(x - 18, y - 20);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Helmet with details
+                ctx.fillStyle = '#4a4e67';
+                ctx.beginPath();
+                ctx.moveTo(x - 12, y - 65);
+                ctx.lineTo(x + 12, y - 65);
+                ctx.lineTo(x + 14, y - 50);
+                ctx.lineTo(x - 14, y - 50);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Helmet visor
+                ctx.fillStyle = '#2a2e47';
+                ctx.beginPath();
+                ctx.moveTo(x - 10, y - 60);
+                ctx.lineTo(x + 10, y - 60);
+                ctx.lineTo(x + 8, y - 55);
+                ctx.lineTo(x - 8, y - 55);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Plume on helmet
+                ctx.fillStyle = '#9c3264';
+                ctx.beginPath();
+                ctx.moveTo(x, y - 70);
+                ctx.quadraticCurveTo(x + 8, y - 75, x + 5, y - 65);
+                ctx.quadraticCurveTo(x - 5, y - 75, x, y - 70);
+                ctx.fill();
+                
+                // Shield
+                ctx.fillStyle = '#726b9f';
+                ctx.beginPath();
+                ctx.moveTo(x - 22, y - 45);
+                ctx.lineTo(x - 24, y - 30);
+                ctx.lineTo(x - 20, y - 15);
+                ctx.lineTo(x - 12, y - 20);
+                ctx.lineTo(x - 14, y - 45);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Shield emblem
+                ctx.fillStyle = '#9c3264';
+                ctx.beginPath();
+                ctx.arc(x - 18, y - 32, 4, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Sword
+                ctx.fillStyle = '#8b8dab';
+                ctx.save();
+                ctx.translate(x + 20, y - 35);
+                ctx.rotate(Math.PI / 4); // Angle the sword
+                ctx.fillRect(-2, -15, 4, 30);
+                ctx.restore();
+                
+                // Sword hilt
+                ctx.fillStyle = '#ffd700';
+                ctx.save();
+                ctx.translate(x + 20, y - 35);
+                ctx.rotate(Math.PI / 4); // Match sword angle
+                ctx.fillRect(-6, -17, 12, 5);
+                ctx.restore();
+                
+                // Legs with running animation
+                ctx.fillStyle = '#4a4e67';
+                
+                // Different leg positions based on animation frame
+                if (jumping) {
+                    // Jumping pose - legs together
+                    ctx.beginPath();
+                    ctx.moveTo(x - 10, y - 20);
+                    ctx.lineTo(x + 10, y - 20);
+                    ctx.lineTo(x + 8, y);
+                    ctx.lineTo(x - 8, y);
+                    ctx.closePath();
+                    ctx.fill();
+                } else if (frame === 0) {
+                    // Frame 1: Left leg forward, right leg back
+                    // Left leg
+                    ctx.beginPath();
+                    ctx.moveTo(x - 8, y - 20);
+                    ctx.lineTo(x, y - 20);
+                    ctx.lineTo(x - 5, y);
+                    ctx.lineTo(x - 13, y);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Right leg
+                    ctx.beginPath();
+                    ctx.moveTo(x, y - 20);
+                    ctx.lineTo(x + 8, y - 20);
+                    ctx.lineTo(x + 13, y - 5);
+                    ctx.lineTo(x + 5, y - 5);
+                    ctx.closePath();
+                    ctx.fill();
+                } else if (frame === 1 || frame === 3) {
+                    // Frame 2 & 4: Legs more vertical (mid-step)
+                    // Left leg
+                    ctx.beginPath();
+                    ctx.moveTo(x - 8, y - 20);
+                    ctx.lineTo(x, y - 20);
+                    ctx.lineTo(x - 2, y);
+                    ctx.lineTo(x - 10, y);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Right leg
+                    ctx.beginPath();
+                    ctx.moveTo(x, y - 20);
+                    ctx.lineTo(x + 8, y - 20);
+                    ctx.lineTo(x + 10, y);
+                    ctx.lineTo(x + 2, y);
+                    ctx.closePath();
+                    ctx.fill();
+                } else if (frame === 2) {
+                    // Frame 3: Right leg forward, left leg back
+                    // Left leg
+                    ctx.beginPath();
+                    ctx.moveTo(x - 8, y - 20);
+                    ctx.lineTo(x, y - 20);
+                    ctx.lineTo(x - 5, y - 5);
+                    ctx.lineTo(x - 13, y - 5);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Right leg
+                    ctx.beginPath();
+                    ctx.moveTo(x, y - 20);
+                    ctx.lineTo(x + 8, y - 20);
+                    ctx.lineTo(x + 13, y);
+                    ctx.lineTo(x + 5, y);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                
+                // Arms with running animation
+                ctx.fillStyle = '#4a4e67';
+                
+                // Different arm positions based on animation frame
+                if (jumping) {
+                    // Both arms out in jumping pose
+                    ctx.beginPath();
+                    ctx.moveTo(x - 18, y - 45);
+                    ctx.lineTo(x - 25, y - 40);
+                    ctx.lineTo(x - 23, y - 35);
+                    ctx.lineTo(x - 15, y - 38);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(x + 18, y - 45);
+                    ctx.lineTo(x + 25, y - 40);
+                    ctx.lineTo(x + 23, y - 35);
+                    ctx.lineTo(x + 15, y - 38);
+                    ctx.closePath();
+                    ctx.fill();
+                } else if (frame === 0 || frame === 2) {
+                    // Frame 1 & 3: Arms in opposite positions to legs
+                    // Left arm forward
+                    ctx.beginPath();
+                    ctx.moveTo(x - 15, y - 45);
+                    ctx.lineTo(x - 5, y - 45);
+                    ctx.lineTo(x - 10, y - 30);
+                    ctx.lineTo(x - 20, y - 30);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Right arm back
+                    ctx.beginPath();
+                    ctx.moveTo(x + 5, y - 45);
+                    ctx.lineTo(x + 15, y - 45);
+                    ctx.lineTo(x + 20, y - 35);
+                    ctx.lineTo(x + 10, y - 35);
+                    ctx.closePath();
+                    ctx.fill();
+                } else {
+                    // Frame 2 & 4: Arms in opposite positions
+                    // Left arm back
+                    ctx.beginPath();
+                    ctx.moveTo(x - 15, y - 45);
+                    ctx.lineTo(x - 5, y - 45);
+                    ctx.lineTo(x - 10, y - 35);
+                    ctx.lineTo(x - 20, y - 35);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Right arm forward
+                    ctx.beginPath();
+                    ctx.moveTo(x + 5, y - 45);
+                    ctx.lineTo(x + 15, y - 45);
+                    ctx.lineTo(x + 20, y - 30);
+                    ctx.lineTo(x + 10, y - 30);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                
+                // Cape flowing behind
+                ctx.fillStyle = '#9c3264';
+                
+                // Cape animation based on frame
+                const capeWave = Math.sin(frameCount * 0.1) * 5;
+                
+                ctx.beginPath();
+                ctx.moveTo(x - 10, y - 50);
+                ctx.lineTo(x + 10, y - 50);
+                ctx.bezierCurveTo(
+                    x + 5, y - 30,
+                    x, y - 10 + capeWave,
+                    x - 15, y - 20 + capeWave
+                );
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            // Helper function to draw knight in sliding state
+            function drawKnightSliding(x, y) {
+                // Sliding body - lower profile
+                ctx.fillStyle = '#616687';
+                ctx.beginPath();
+                ctx.moveTo(x - 20, y - 15);
+                ctx.lineTo(x + 20, y - 15);
+                ctx.lineTo(x + 25, y);
+                ctx.lineTo(x - 25, y);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Helmet while sliding
+                ctx.fillStyle = '#4a4e67';
+                ctx.beginPath();
+                ctx.moveTo(x + 15, y - 15);
+                ctx.lineTo(x + 25, y - 15);
+                ctx.lineTo(x + 22, y - 5);
+                ctx.lineTo(x + 12, y - 5);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Helmet visor
+                ctx.fillStyle = '#2a2e47';
+                ctx.beginPath();
+                ctx.moveTo(x + 17, y - 13);
+                ctx.lineTo(x + 23, y - 13);
+                ctx.lineTo(x + 21, y - 8);
+                ctx.lineTo(x + 15, y - 8);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Shield while sliding
+                ctx.fillStyle = '#726b9f';
+                ctx.beginPath();
+                ctx.arc(x - 15, y - 8, 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Shield emblem
+                ctx.fillStyle = '#9c3264';
+                ctx.beginPath();
+                ctx.arc(x - 15, y - 8, 4, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Cape flowing behind
+                ctx.fillStyle = '#9c3264';
+                const capeWave = Math.sin(frameCount * 0.1) * 3;
+                
+                ctx.beginPath();
+                ctx.moveTo(x - 25, y - 10);
+                ctx.lineTo(x - 15, y - 15);
+                ctx.bezierCurveTo(
+                    x - 30, y - 8 + capeWave,
+                    x - 35, y - 5 + capeWave,
+                    x - 40, y - 8 + capeWave
+                );
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        // Update obstacles
+        function updateObstacles() {
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obstacle = obstacles[i];
+                
+                // Move obstacle
+                obstacle.y += OBSTACLE_SPEED;
+                
+                // Remove if off screen
+                if (obstacle.y > GAME_HEIGHT + obstacle.height) {
+                    obstacles.splice(i, 1);
+                    continue;
+                }
+                
+                // Draw obstacle based on type
+                if (obstacle.type === 'skeleton') {
+                    drawSkeleton(obstacle);
+                } else if (obstacle.type === 'stone') {
+                    drawStone(obstacle);
+                } else if (obstacle.type === 'barrier') {
+                    drawBarrier(obstacle);
+                }
+            }
+            
+            // Helper function to draw skeleton with animation
+            function drawSkeleton(skeleton) {
+                // Body frame based on animation
+                const skeleFrame = Math.floor(frameCount / 8) % 2;
+                const bodyOffset = skeleFrame * 2;
+                
+                // Body
+                ctx.fillStyle = '#dad8e7';
+                
+                // Animated legs
+                ctx.beginPath();
+                ctx.moveTo(skeleton.x - 10, skeleton.y - 30 + bodyOffset);
+                ctx.lineTo(skeleton.x - 5, skeleton.y);
+                ctx.lineTo(skeleton.x + 5, skeleton.y);
+                ctx.lineTo(skeleton.x + 10, skeleton.y - 30 + bodyOffset);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Arms
+                ctx.beginPath();
+                ctx.moveTo(skeleton.x - 12, skeleton.y - 40 + bodyOffset);
+                ctx.lineTo(skeleton.x - 15, skeleton.y - 20 + bodyOffset);
+                ctx.lineTo(skeleton.x - 5, skeleton.y - 25 + bodyOffset);
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.moveTo(skeleton.x + 12, skeleton.y - 40 + bodyOffset);
+                ctx.lineTo(skeleton.x + 15, skeleton.y - 20 + bodyOffset);
+                ctx.lineTo(skeleton.x + 5, skeleton.y - 25 + bodyOffset);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Skeleton head with glowing eyes
+                ctx.fillStyle = '#dad8e7';
+                ctx.beginPath();
+                ctx.arc(skeleton.x, skeleton.y - 45 + bodyOffset, 12, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Skull details
+                ctx.fillStyle = '#3a3c4e';
+                // Nose hole
+                ctx.beginPath();
+                ctx.arc(skeleton.x, skeleton.y - 43 + bodyOffset, 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Eyes
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.7)';
+                ctx.beginPath();
+                ctx.arc(skeleton.x - 4, skeleton.y - 47 + bodyOffset, 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.arc(skeleton.x + 4, skeleton.y - 47 + bodyOffset, 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Weapon
+                ctx.fillStyle = '#8b8dab';
+                ctx.save();
+                ctx.translate(skeleton.x - 15, skeleton.y - 30 + bodyOffset);
+                ctx.rotate(Math.PI / 4 * (skeleFrame ? -1 : 1)); // Animate weapon swing
+                ctx.fillRect(-2, -20, 4, 20);
+                ctx.restore();
+                
+                // Hit animation effect when the attack hits but doesn't destroy
+                if (skeleton.isHit) {
+                    ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+                    ctx.beginPath();
+                    ctx.arc(skeleton.x, skeleton.y - 30, 20, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Reset hit flag after a brief period
+                    skeleton.hitTimer--;
+                    if (skeleton.hitTimer <= 0) {
+                        skeleton.isHit = false;
+                    }
+                }
+            }
+            
+            // Helper function to draw stone
+            function drawStone(stone) {
+                // Base stone
+                ctx.fillStyle = '#4a4e67';
+                
+                // Cracked stone look
+                ctx.beginPath();
+                ctx.moveTo(stone.x - stone.width/2, stone.y - stone.height);
+                ctx.lineTo(stone.x + stone.width/2, stone.y - stone.height);
+                ctx.lineTo(stone.x + stone.width/2 + 5, stone.y);
+                ctx.lineTo(stone.x - stone.width/2 - 5, stone.y);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Stone cracks
+                ctx.strokeStyle = '#333344';
+                ctx.lineWidth = 1;
+                
+                ctx.beginPath();
+                ctx.moveTo(stone.x - 10, stone.y - stone.height);
+                ctx.lineTo(stone.x, stone.y - 10);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(stone.x + 5, stone.y - stone.height);
+                ctx.lineTo(stone.x - 10, stone.y - 15);
+                ctx.stroke();
+            }
+            
+            // Helper function to draw barrier
+            function drawBarrier(barrier) {
+                // Wooden barrier
+                ctx.fillStyle = '#8c7651';
+                ctx.fillRect(barrier.x - barrier.width/2, barrier.y - barrier.height, barrier.width, barrier.height);
+                
+                // Wood grain details
+                ctx.strokeStyle = '#6a563b';
+                ctx.lineWidth = 1;
+                
+                for (let i = 0; i < 3; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(barrier.x - barrier.width/2 + i*barrier.width/3, barrier.y - barrier.height);
+                    ctx.lineTo(barrier.x - barrier.width/2 + i*barrier.width/3, barrier.y);
+                    ctx.stroke();
+                }
+                
+                // Nails
+                ctx.fillStyle = '#8b8dab';
+                ctx.beginPath();
+                ctx.arc(barrier.x - barrier.width/3, barrier.y - barrier.height/4, 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.arc(barrier.x + barrier.width/3, barrier.y - barrier.height/4, 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Update energy bottles
+        function updateEnergyBottles() {
+            for (let i = energyBottles.length - 1; i >= 0; i--) {
+                const bottle = energyBottles[i];
+                
+                // Move bottle
+                bottle.y += ENERGY_SPEED;
+                
+                // Remove if off screen
+                if (bottle.y > GAME_HEIGHT + 30) {
+                    energyBottles.splice(i, 1);
+                    continue;
+                }
+                
+                // Draw energy bottle
+                drawEnergyBottle(bottle);
+            }
+            
+            // Helper function to draw energy bottle
+            function drawEnergyBottle(bottle) {
+                // Bottle
+                ctx.fillStyle = '#173753';
+                
+                // Bottle body
+                ctx.beginPath();
+                ctx.moveTo(bottle.x - 6, bottle.y - 15);
+                ctx.lineTo(bottle.x + 6, bottle.y - 15);
+                ctx.lineTo(bottle.x + 8, bottle.y);
+                ctx.lineTo(bottle.x - 8, bottle.y);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Bottle neck
+                ctx.fillRect(bottle.x - 3, bottle.y - 20, 6, 5);
+                
+                // Bottle cap
+                ctx.fillStyle = '#4a4e67';
+                ctx.fillRect(bottle.x - 4, bottle.y - 22, 8, 2);
+                
+                // Energy glow
+                const glowIntensity = (Math.sin(frameCount * 0.1) + 1) * 0.5 * 0.3 + 0.2; // Pulsating between 0.2 and 0.5
+                
+                // Energy liquid
+                ctx.fillStyle = '#00d4ff';
+                ctx.beginPath();
+                ctx.moveTo(bottle.x - 5, bottle.y - 12);
+                ctx.lineTo(bottle.x + 5, bottle.y - 12);
+                ctx.lineTo(bottle.x + 7, bottle.y - 3);
+                ctx.lineTo(bottle.x - 7, bottle.y - 3);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Glowing effect
+                const gradient = ctx.createRadialGradient(bottle.x, bottle.y - 8, 0, bottle.x, bottle.y - 8, 20);
+                gradient.addColorStop(0, `rgba(0, 212, 255, ${glowIntensity})`);
+                gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(bottle.x, bottle.y - 8, 20, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Highlight
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.beginPath();
+                ctx.ellipse(bottle.x - 3, bottle.y - 10, 1, 3, Math.PI / 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Update attack animation and check for hits
+        function updateAttack() {
+            attackFrame++;
+            
+            // Draw attack animation
+            drawAttackAnimation();
+            
+            // If attack is done, reset
+            if (attackFrame >= ATTACK_DURATION) {
+                isAttacking = false;
+                attackFrame = 0;
+            }
+            
+            // Check for hits on multiple frames for more reliable detection
+            if (attackFrame >= 3 && attackFrame <= 12) {
+                checkAttackHits();
+            }
+        }
+        
+        // Draw attack animation
+        function drawAttackAnimation() {
+            const progress = attackFrame / ATTACK_DURATION;
+            const attackSize = 60 + progress * 60; // Larger attack size
+            
+            // Calculate alpha based on animation progress
+            let alpha = 1;
+            if (progress < 0.2) {
+                alpha = progress / 0.2; // Fade in
+            } else if (progress > 0.7) {
+                alpha = (1 - progress) / 0.3; // Fade out
+            }
+            
+            // Attack position is directly in front of the knight
+            const attackX = knight.x; // Center attack on knight
+            const attackY = knight.y - 50; // Move attack up slightly for better visibility
+            
+            // Draw sword slash effect - wider horizontally, in front of knight
+            ctx.save();
+            ctx.translate(attackX, attackY);
+            
+            // Draw sword trail - wider horizontally
+            const gradient = ctx.createLinearGradient(-attackSize/2, 0, attackSize/2, 0);
+            gradient.addColorStop(0, `rgba(255, 255, 255, 0)`);
+            gradient.addColorStop(0.5, `rgba(255, 255, 255, ${alpha})`);
+            gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.ellipse(0, -20, attackSize, attackSize/3, 0, 0, Math.PI * 2); // Positioned in front
+            ctx.fill();
+            
+            // Sword glow effect - larger and more visible, in front
+            const glowGradient = ctx.createRadialGradient(0, -20, 0, 0, -20, attackSize);
+            glowGradient.addColorStop(0, `rgba(0, 212, 255, ${alpha * 0.9})`);
+            glowGradient.addColorStop(1, `rgba(0, 212, 255, 0)`);
+            
+            ctx.fillStyle = glowGradient;
+            ctx.beginPath();
+            ctx.arc(0, -20, attackSize/1.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.restore();
+        }
+        
+        // Check if attack hits any obstacles
+        function checkAttackHits() {
+            // Attack area - tall rectangle in front of knight covering all 3 lanes
+            const attackX = knight.x;
+            const attackY = knight.y - 50;
+            const attackWidth = 120; // Wide enough to cover one lane + a bit
+            const attackHeight = 200; // Tall enough to catch approaching enemies
+            
+            // Check each obstacle
+            for (let i = 0; i < obstacles.length; i++) {
+                const obstacle = obstacles[i];
+                
+                // Skip if obstacle is out of reasonable distance
+                if (obstacle.y < 0 || obstacle.y > GAME_HEIGHT) continue; // Skip if not visible
+                
+                // ONLY skeletons can be destroyed with the attack
+                if (obstacle.type !== 'skeleton') continue;
+                
+                // Check if obstacle is in the same lane or directly adjacent lane
+                const laneDifference = Math.abs(knight.lane - obstacle.lane);
+                
+                // Only hit obstacles in front of the knight in same lane or adjacent lane if close enough
+                if (laneDifference <= 1) { // Same lane or adjacent lane
+                    // Improved hit detection with lane consideration
+                    if (obstacle.y > attackY - attackHeight/2 && // Obstacle is below top of attack area
+                        obstacle.y - obstacle.height < attackY + attackHeight/2 && // Obstacle is above bottom of attack area
+                        (laneDifference === 0 || // Same lane always hits
+                         (laneDifference === 1 && Math.abs(obstacle.y - attackY) < 70))) { // Adjacent lanes only hit if close enough
+                        
+                        // Only damage once per attack (avoid multiple damage on same obstacle)
+                        if (!obstacle.hitByCurrentAttack) {
+                            // Mark as hit to prevent multiple hits
+                            obstacle.hitByCurrentAttack = true; 
+                            
+                            // Add hit effect
+                            addHitEffect(obstacle.x, obstacle.y - obstacle.height / 2);
+                            
+                            // Add large score bonus for defeating a skeleton
+                            const skeletonBonus = 150;
+                            score += skeletonBonus;
+                            
+                            // Add destruction effect
+                            addDestructionEffect(obstacle.x, obstacle.y - obstacle.height / 2);
+                            
+                            // Show score popup
+                            addScorePopup(obstacle.x, obstacle.y - obstacle.height, skeletonBonus);
+                            
+                            // Remove the skeleton
+                            obstacles.splice(i, 1);
+                            i--; // Adjust index after removal
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Add hit effect at position
+        function addHitEffect(x, y) {
+            // Flash effect
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.beginPath();
+            ctx.arc(x, y, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Lines radiating outward
+            ctx.strokeStyle = 'rgba(0, 212, 255, 0.8)';
+            ctx.lineWidth = 2;
+            
+            for (let i = 0; i < 8; i++) {
+                const angle = i * Math.PI / 4;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(
+                    x + Math.cos(angle) * 30,
+                    y + Math.sin(angle) * 30
+                );
+                ctx.stroke();
+            }
+        }
+        
+        // Add destruction effect at position
+        function addDestructionEffect(x, y) {
+            // Explosion
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.beginPath();
+            ctx.arc(x, y, 40, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Energy ring
+            ctx.strokeStyle = '#00d4ff';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(x, y, 30, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Inner glow
+            const gradient = ctx.createRadialGradient(x, y, 0, x, y, 40);
+            gradient.addColorStop(0, 'rgba(0, 212, 255, 0.8)');
+            gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(x, y, 40, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Particle effect for skeleton bones
+            ctx.fillStyle = '#dad8e7';
+            for (let i = 0; i < 12; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 50 + 20;
+                const size = Math.random() * 4 + 2;
+                
+                ctx.beginPath();
+                ctx.arc(
+                    x + Math.cos(angle) * distance,
+                    y + Math.sin(angle) * distance,
+                    size,
+                    0,
+                    Math.PI * 2
+                );
+                ctx.fill();
+            }
+        }
+        
+        // Add a score popup at position
+        function addScorePopup(x, y, points) {
+            // Create floating text
+            ctx.fillStyle = '#ffd700';
+            ctx.font = 'bold 20px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('+' + points, x, y - 20);
+        }
+
+        // Check collisions between knight and objects
+        function checkCollisions() {
+            // Check obstacle collisions
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obstacle = obstacles[i];
+                
+                // Skip if knight is invincible
+                if (knight.invincible) continue;
+                
+                // Get knight position and size based on current state
+                const knightHeight = isSliding ? SLIDE_HEIGHT : KNIGHT_HEIGHT;
+                const knightYOffset = isSliding ? KNIGHT_HEIGHT - SLIDE_HEIGHT : 0;
+                
+                // Knight collision coordinates
+                const knightTop = knight.y - knightHeight + knightYOffset;
+                const knightBottom = knight.y;
+                const knightLeft = knight.x - knight.width/2;
+                const knightRight = knight.x + knight.width/2;
+                
+                // Obstacle collision coordinates
+                const obstacleTop = obstacle.y - obstacle.height;
+                const obstacleBottom = obstacle.y;
+                const obstacleLeft = obstacle.x - obstacle.width/2;
+                const obstacleRight = obstacle.x + obstacle.width/2;
+                
+                // Check if knight and obstacle are in the same lane first
+                if (Math.abs(knight.lane - obstacle.lane) > 0.5) {
+                    continue; // Not in the same lane, no collision possible
+                }
+                
+                // Improved collision detection with special handling for jumps and slides
+                if (knightRight > obstacleLeft && knightLeft < obstacleRight) {
+                    
+                    // Special case: If it's a barrier and knight is sliding, allow passage
+                    if (obstacle.type === 'barrier' && isSliding) {
+                        continue; // Allow knight to slide under if sliding
+                    }
+                    
+                    // Special case: If it's a stone and knight is jumping high enough, allow passage
+                    if (obstacle.type === 'stone' && isJumping) {
+                        // Check if knight's feet are higher than the stone's top with some buffer
+                        if (knightBottom < obstacleTop + 15) {
+                            continue; // Allow knight to jump over if high enough
+                        }
+                    }
+                    
+                    // Vertical collision check - only if horizontally overlapping
+                    if (knightBottom > obstacleTop && knightTop < obstacleBottom) {
+                        // Debug visualization of collision for testing
+                        // ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+                        // ctx.fillRect(obstacleLeft, obstacleTop, obstacle.width, obstacle.height);
+                        
+                        // Game over on collision
+                        endGame();
+                        return;
+                    }
+                }
+            }
+            
+            // Check energy bottle collisions
+            for (let i = energyBottles.length - 1; i >= 0; i--) {
+                const bottle = energyBottles[i];
+                
+                // Check for collision with knight (simple hitbox)
+                if (Math.abs(bottle.x - knight.x) < (15 + knight.width / 2) * 0.7 && 
+                    Math.abs(bottle.y - (knight.y - knight.height / 2)) < (20 + knight.height / 2) * 0.7) {
+                    
+                    // Collect energy bottle
+                    energyBottles.splice(i, 1);
+                    energyCollected += 1;
+                    
+                    // Add energy and limit to max
+                    energy = Math.min(MAX_ENERGY, energy + ENERGY_VALUE);
+                    
+                    // Reduce curse level
+                    curseLevel = Math.max(0, curseLevel - CURSE_DECREASE_VALUE);
+                    curseFill.style.width = curseLevel + '%';
+                    
+                    // Update energy meter
+                    energyFill.style.width = (energy / MAX_ENERGY * 100) + '%';
+                    
+                    // Update display
+                    energyDisplay.textContent = 'ENERGY: ' + energy;
+                    
+                    // Add collection effect
+                    addCollectionEffect(bottle.x, bottle.y);
+                }
+            }
+        }
+        
+        // Add energy collection effect
+        function addCollectionEffect(x, y) {
+            // Particles
+            ctx.fillStyle = '#00d4ff';
+            
+            for (let i = 0; i < 10; i++) {
+                const angle = i * Math.PI / 5;
+                const distance = 15;
+                
+                ctx.beginPath();
+                ctx.arc(
+                    x + Math.cos(angle) * distance,
+                    y + Math.sin(angle) * distance,
+                    3,
+                    0,
+                    Math.PI * 2
+                );
+                ctx.fill();
+            }
+            
+            // Glow
+            const gradient = ctx.createRadialGradient(x, y, 0, x, y, 30);
+            gradient.addColorStop(0, 'rgba(0, 212, 255, 0.6)');
+            gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(x, y, 30, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Spawn new obstacle
+        function spawnObstacle() {
+            const lane = Math.floor(Math.random() * 3);
+            const obstacleType = Math.random() < 0.3 ? 'barrier' : Math.random() < 0.7 ? 'skeleton' : 'stone';
+            
+            let width, height;
+            if (obstacleType === 'skeleton') {
+                width = 30;
+                height = 50;
+            } else if (obstacleType === 'stone') {
+                width = 40;
+                height = 40;
+            } else { // barrier
+                width = LANE_WIDTH - 20;
+                height = 20;
+            }
+            
+            obstacles.push({
+                x: LANE_POSITIONS[lane],
+                y: -20,
+                width: width,
+                height: height,
+                type: obstacleType,
+                lane: lane,
+                isHit: false,
+                hitTimer: 0,
+                hitByCurrentAttack: false // Track if hit by current attack to prevent double visual effects
+            });
+        }
+
+        // Spawn new energy bottle
+        function spawnEnergyBottle() {
+            const lane = Math.floor(Math.random() * 3);
+            
+            energyBottles.push({
+                x: LANE_POSITIONS[lane],
+                y: -20,
+                lane: lane
+            });
+        }
+
+        // Increase curse level
+        function increaseCurse() {
+            if (!gameRunning) return;
+            
+            curseLevel += CURSE_INCREASE_RATE;
+            curseFill.style.width = curseLevel + '%';
+        }
+
+        // Handle keyboard input
+        function handleKeyDown(e) {
+            if (!gameRunning) return;
+            
+            switch (e.key) {
+                case 'ArrowLeft':
+                    if (knight.lane > 0) {
+                        knight.lane--;
+                        knight.x = LANE_POSITIONS[knight.lane];
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (knight.lane < 2) {
+                        knight.lane++;
+                        knight.x = LANE_POSITIONS[knight.lane];
+                    }
+                    break;
+                case 'ArrowUp':
+                    if (!isJumping && knight.y === knight.baseY) {
+                        isJumping = true;
+                        jumpVelocity = JUMP_VELOCITY; // Use stronger jump velocity
+                    }
+                    break;
+                case 'ArrowDown':
+                    if (!isSliding && !isJumping) {
+                        isSliding = true;
+                        knight.height = SLIDE_HEIGHT;
+                    }
+                    break;
+                case ' ': // Space bar for attack
+                    performAttack();
+                    break;
+            }
+        }
+        
+        // Perform attack if enough energy
+        function performAttack() {
+            // Check if already attacking
+            if (isAttacking) return;
+            
+            // Check if enough energy
+            if (energy >= ATTACK_ENERGY_COST) {
+                // Consume energy
+                energy -= ATTACK_ENERGY_COST;
+                
+                // Update energy display
+                energyDisplay.textContent = 'ENERGY: ' + energy;
+                energyFill.style.width = (energy / MAX_ENERGY * 100) + '%';
+                
+                // Start attack
+                isAttacking = true;
+                attackFrame = 0;
+                
+                // Reset hit flags for all obstacles
+                for (let i = 0; i < obstacles.length; i++) {
+                    obstacles[i].hitByCurrentAttack = false;
+                }
+            } else {
+                // Show "not enough energy" indicator
+                showEnergyWarning();
+            }
+        }
+        
+        // Show warning when not enough energy
+        function showEnergyWarning() {
+            // Flash energy meter
+            const energyMeter = document.getElementById('energy-meter');
+            energyMeter.style.boxShadow = '0 0 10px 2px #ff3860';
+            
+            setTimeout(() => {
+                energyMeter.style.boxShadow = 'none';
+            }, 300);
+            
+            // Show warning text
+            ctx.fillStyle = '#ff3860';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Not enough energy!', knight.x, knight.y - 80);
+        }
+
+        // End the game
+        function endGame() {
+            gameRunning = false;
+            gameOver = true;
+            
+            // Stop curse timer
+            clearInterval(curseTimer);
+            
+            // Set final score and distance on game over screen
+            finalScoreDisplay.textContent = 'FINAL SCORE: ' + Math.floor(score);
+            finalDistanceDisplay.textContent = 'DISTANCE: ' + Math.floor(distance) + 'm';
+            
+            // Set emoji based on score
+            let emojiIndex;
+            if (score < 0) {
+                emojiIndex = 0;
+            } else {
+                emojiIndex = Math.min(19, Math.floor(score / 200));
+            }
+            gameOverEmoji.textContent = SCORE_EMOJIS[emojiIndex];
+            
+            // Start countdown for next run
+            startCountdown();
+            
+            // Show game over screen
+            gameOverScreen.style.display = 'flex';
+        }
+        
+        // Start countdown for next run
+        function startCountdown() {
+            // Set initial time - 24 hours from now
+            let timeLeft = 24 * 60 * 60; // 24 hours in seconds
+            
+            // Update the countdown display
+            updateCountdown();
+            
+            // Start the countdown timer
+            countdownTimer = setInterval(updateCountdown, 1000);
+            
+            // Update countdown display
+            function updateCountdown() {
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+                
+                // Format the time as HH:MM:SS
+                countdownDisplay.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Decrement time left
+                timeLeft--;
+                
+                // If countdown reaches zero
+                if (timeLeft < 0) {
+                    clearInterval(countdownTimer);
+                    countdownDisplay.textContent = "AVAILABLE NOW";
+                }
+            }
+        }
+        
+        // Share results
+        function shareResults() {
+            const shareText = `I scored ${Math.floor(score)} points and traveled ${Math.floor(distance)}m in Knight's Escape! ${SCORE_EMOJIS[Math.min(19, Math.max(0, Math.floor(score / 200)))]}`;
+            
+            // First attempt: Try Clipboard API
+            try {
+                // Create a fallback mechanism using a temporary textarea
+                const textArea = document.createElement("textarea");
+                textArea.value = shareText;
+                textArea.style.position = "fixed"; // Avoid scrolling to bottom
+                textArea.style.left = "0";
+                textArea.style.top = "0";
+                textArea.style.opacity = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                // Execute copy command
+                const successful = document.execCommand('copy');
+                
+                // Remove the temporary element
+                document.body.removeChild(textArea);
+                
+                if (successful) {
+                    showCopySuccess();
+                } else {
+                    showManualCopyDialog(shareText);
+                }
+            } catch (err) {
+                // If all else fails, show dialog with text to manually copy
+                showManualCopyDialog(shareText);
+            }
+            
+            // Show success message
+            function showCopySuccess() {
+                const shareButton = document.getElementById('share-button');
+                const originalText = shareButton.innerHTML;
+                
+                // Change button text temporarily
+                shareButton.innerHTML = '✓ COPIED TO CLIPBOARD!';
+                
+                // Reset button text after delay
+                setTimeout(() => {
+                    shareButton.innerHTML = originalText;
+                }, 2000);
+            }
+            
+            // Show dialog with text to manually copy
+            function showManualCopyDialog(text) {
+                // Create modal dialog
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.8)';
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.zIndex = '1000';
+                
+                // Create dialog content
+                const dialog = document.createElement('div');
+                dialog.style.backgroundColor = '#252836';
+                dialog.style.padding = '20px';
+                dialog.style.borderRadius = '10px';
+                dialog.style.maxWidth = '80%';
+                dialog.style.color = 'white';
+                dialog.style.textAlign = 'center';
+                
+                // Add title
+                const title = document.createElement('h3');
+                title.textContent = 'Copy Your Results';
+                title.style.marginTop = '0';
+                dialog.appendChild(title);
+                
+                // Add message
+                const message = document.createElement('p');
+                message.textContent = 'Copy the text below:';
+                dialog.appendChild(message);
+                
+                // Add text box
+                const textBox = document.createElement('textarea');
+                textBox.value = text;
+                textBox.style.width = '100%';
+                textBox.style.padding = '10px';
+                textBox.style.minHeight = '60px';
+                textBox.style.marginBottom = '20px';
+                textBox.style.backgroundColor = '#1a1b26';
+                textBox.style.color = 'white';
+                textBox.style.border = 'none';
+                textBox.style.borderRadius = '5px';
+                dialog.appendChild(textBox);
+                
+                // Add close button
+                const closeButton = document.createElement('button');
+                closeButton.textContent = 'CLOSE';
+                closeButton.style.padding = '10px 20px';
+                closeButton.style.backgroundColor = '#9c3264';
+                closeButton.style.color = 'white';
+                closeButton.style.border = 'none';
+                closeButton.style.borderRadius = '5px';
+                closeButton.style.cursor = 'pointer';
+                closeButton.onclick = function() {
+                    document.body.removeChild(modal);
+                };
+                dialog.appendChild(closeButton);
+                
+                // Add to document
+                modal.appendChild(dialog);
+                document.body.appendChild(modal);
+                
+                // Select text for easy copying
+                textBox.focus();
+                textBox.select();
+            }
+        }
+        
+        // Setup mobile controls
+        function setupMobileControls() {
+            // Touch events for attack button
+            const attackButton = document.getElementById('attack-button');
+            attackButton.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                performAttack();
+                
+                // Visual feedback
+                this.style.transform = 'scale(0.9)';
+                this.style.opacity = '1';
+            });
+            
+            attackButton.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+                this.style.opacity = '0.7';
+            });
+            
+            // Touch events for swipe gestures
+            canvas.addEventListener('touchstart', handleTouchStart, false);
+            canvas.addEventListener('touchmove', handleTouchMove, false);
+            canvas.addEventListener('touchend', handleTouchEnd, false);
+        }
+        
+        // Handle touch start
+        function handleTouchStart(e) {
+            if (!gameRunning) return;
+            
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+        }
+        
+        // Handle touch move
+        function handleTouchMove(e) {
+            // Prevent default scrolling behavior
+            e.preventDefault();
+        }
+        
+        // Handle touch end (for swipe detection)
+        function handleTouchEnd(e) {
+            if (!gameRunning || !touchStartX || !touchStartY) return;
+            
+            const touch = e.changedTouches[0];
+            const touchEndX = touch.clientX;
+            const touchEndY = touch.clientY;
+            
+            // Calculate swipe distance
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            
+            // Minimum swipe distance
+            const minSwipeDistance = 30;
+            
+            // Determine swipe direction
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                // Horizontal swipe
+                if (Math.abs(deltaX) > minSwipeDistance) {
+                    if (deltaX > 0) {
+                        // Swipe right
+                        if (knight.lane < 2) {
+                            knight.lane++;
+                            knight.x = LANE_POSITIONS[knight.lane];
+                        }
+                    } else {
+                        // Swipe left
+                        if (knight.lane > 0) {
+                            knight.lane--;
+                            knight.x = LANE_POSITIONS[knight.lane];
+                        }
+                    }
+                }
+            } else {
+                // Vertical swipe
+                if (Math.abs(deltaY) > minSwipeDistance) {
+                    if (deltaY > 0) {
+                        // Swipe down
+                        if (!isSliding && !isJumping) {
+                            isSliding = true;
+                            knight.height = SLIDE_HEIGHT;
+                            
+                            // Show swipe indicator for brief visual feedback
+                            showSwipeIndicator('down');
+                        }
+                    } else {
+                        // Swipe up
+                        if (!isJumping && knight.y === knight.baseY) {
+                            isJumping = true;
+                            jumpVelocity = JUMP_VELOCITY; // Use stronger jump velocity
+                            
+                            // Show swipe indicator for brief visual feedback
+                            showSwipeIndicator('up');
+                        }
+                    }
+                }
+            }
+            
+            // Reset touch coordinates
+            touchStartX = 0;
+            touchStartY = 0;
+        }
+        
+        // Show swipe indicator for visual feedback
+        function showSwipeIndicator(direction) {
+            const indicator = document.getElementById('swipe-' + direction);
+            indicator.style.display = 'block';
+            
+            // Hide after brief delay
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 300);
+        }
+    </script>
+</body>
+</html>
