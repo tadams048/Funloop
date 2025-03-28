@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Leksi!</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f8e1ff;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            color: #ff5e94;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            color: #7d4cff;
+            font-size: 1.5em;
+            margin-bottom: 40px;
+        }
+        
+        .poem {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            font-size: 1.2em;
+            line-height: 1.6;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: left;
+            margin-bottom: 30px;
+        }
+        
+        .poem p {
+            margin-bottom: 15px;
+        }
+        
+        .signature {
+            font-style: italic;
+            font-size: 1.2em;
+            margin-top: 30px;
+            color: #ff5e94;
+        }
+        
+        /* Balloon animation */
+        .balloon {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            animation: float 15s infinite ease-in-out;
+            z-index: 1;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); }
+            100% { transform: translateY(-100px) translateX(calc(var(--drift) * 100px)); }
+        }
+        
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ffcc00;
+            animation: confetti-fall 5s infinite linear;
+            z-index: 1;
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10px) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+        
+        /* Bouncing Emojis */
+        .bouncing-emoji {
+            position: absolute;
+            font-size: 2.5rem;
+            animation: bounce 8s infinite;
+            z-index: 3;
+        }
+        
+        .squirrel-emoji {
+            position: absolute;
+            animation: bounce-wide 12s infinite;
+            z-index: 3;
+        }
+        
+        @keyframes bounce {
+            0% { 
+                transform: translate(0, 0); 
+                animation-timing-function: ease-in;
+            }
+            10% {
+                transform: translate(var(--x-travel-1), var(--y-travel-1));
+                animation-timing-function: ease-out;
+            }
+            20% {
+                transform: translate(var(--x-travel-2), var(--y-travel-2));
+                animation-timing-function: ease-in;
+            }
+            30% {
+                transform: translate(var(--x-travel-3), var(--y-travel-3));
+                animation-timing-function: ease-out;
+            }
+            40% {
+                transform: translate(var(--x-travel-4), var(--y-travel-4));
+                animation-timing-function: ease-in;
+            }
+            50% {
+                transform: translate(var(--x-travel-5), var(--y-travel-5));
+                animation-timing-function: ease-out;
+            }
+            60% {
+                transform: translate(var(--x-travel-6), var(--y-travel-6));
+                animation-timing-function: ease-in;
+            }
+            70% {
+                transform: translate(var(--x-travel-7), var(--y-travel-7));
+                animation-timing-function: ease-out;
+            }
+            80% {
+                transform: translate(var(--x-travel-8), var(--y-travel-8));
+                animation-timing-function: ease-in;
+            }
+            90% {
+                transform: translate(var(--x-travel-9), var(--y-travel-9));
+                animation-timing-function: ease-out;
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+        
+        @keyframes bounce-wide {
+            0% { 
+                transform: translate(0, 0) rotate(var(--rotation-1)); 
+                animation-timing-function: ease-in;
+            }
+            10% {
+                transform: translate(var(--x-travel-wide-1), var(--y-travel-wide-1)) rotate(var(--rotation-2));
+                animation-timing-function: ease-out;
+            }
+            20% {
+                transform: translate(var(--x-travel-wide-2), var(--y-travel-wide-2)) rotate(var(--rotation-3));
+                animation-timing-function: ease-in;
+            }
+            30% {
+                transform: translate(var(--x-travel-wide-3), var(--y-travel-wide-3)) rotate(var(--rotation-4));
+                animation-timing-function: ease-out;
+            }
+            40% {
+                transform: translate(var(--x-travel-wide-4), var(--y-travel-wide-4)) rotate(var(--rotation-5));
+                animation-timing-function: ease-in;
+            }
+            50% {
+                transform: translate(var(--x-travel-wide-5), var(--y-travel-wide-5)) rotate(var(--rotation-6));
+                animation-timing-function: ease-out;
+            }
+            60% {
+                transform: translate(var(--x-travel-wide-6), var(--y-travel-wide-6)) rotate(var(--rotation-7));
+                animation-timing-function: ease-in;
+            }
+            70% {
+                transform: translate(var(--x-travel-wide-7), var(--y-travel-wide-7)) rotate(var(--rotation-8));
+                animation-timing-function: ease-out;
+            }
+            80% {
+                transform: translate(var(--x-travel-wide-8), var(--y-travel-wide-8)) rotate(var(--rotation-9));
+                animation-timing-function: ease-in;
+            }
+            90% {
+                transform: translate(var(--x-travel-wide-9), var(--y-travel-wide-9)) rotate(var(--rotation-10));
+                animation-timing-function: ease-out;
+            }
+            100% {
+                transform: translate(0, 0) rotate(var(--rotation-1));
+            }
+        }
+        
+        /* Images */
+        .images {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .images img {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            max-width: 200px;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            font-size: 1.2em;
+            color: #7d4cff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Happy Birthday Leksi! 🎉</h1>
+        <div class="subtitle">A special celebration for a special person!</div>
+        
+        <div class="poem">
+            <p>Today we cheer for Leksi,<br>
+            On this bright, fantastic day,<br>
+            A shining star at Masterclass,<br>
+            Who leads in her own way.</p>
+            
+            <p>She leaps through life's adventures,<br>
+            Like squirrels dancing free,<br>
+            Curious, quick, and lively,<br>
+            Scaling every tree.</p>
+            
+            <p>On the court, she's fearless,<br>
+            Volleyball ace with flair,<br>
+            Spiking dreams and goals,<br>
+            She soars high in the air.</p>
+            
+            <p>Beside her trots dear Groot,<br>
+            Her furry, loyal friend,<br>
+            Together chasing moments,<br>
+            Their joy knows no end.</p>
+            
+            <p>So here's to Leksi!<br>
+            May laughter fill your year,<br>
+            Surrounded by what you cherish—<br>
+            Squirrels, Groot, and creating cheer!</p>
+        </div>
+        
+        <div class="images">
+            <img src="/api/placeholder/200/200" alt="Volleyball player" />
+            <img src="/api/placeholder/200/200" alt="Squirrel" />
+            <img src="/api/placeholder/200/200" alt="Dog companion" />
+        </div>
+        
+        <div class="signature">Wishing you the happiest of birthdays!</div>
+        
+        <div class="footer">🎂 Celebrate! Laugh! Enjoy! 🎂</div>
+    </div>
+    
+    <!-- Balloons -->
+    <script>
+        function createBalloons() {
+            const colors = ['#ff5e94', '#7d4cff', '#4dcaff', '#ffcc00', '#66ff99'];
+            const container = document.body;
+            
+            for (let i = 0; i < 30; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.left = `${Math.random() * 100}%`;
+                balloon.style.animationDuration = `${15 + Math.random() * 10}s`;
+                balloon.style.animationDelay = `${Math.random() * 5}s`;
+                balloon.style.setProperty('--drift', Math.random() * 2 - 1);
+                
+                container.appendChild(balloon);
+            }
+        }
+        
+        function createConfetti() {
+            const colors = ['#ff5e94', '#7d4cff', '#4dcaff', '#ffcc00', '#66ff99'];
+            const container = document.body;
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.top = `${Math.random() * 100}%`;
+                confetti.style.animationDuration = `${3 + Math.random() * 7}s`;
+                confetti.style.animationDelay = `${Math.random() * 5}s`;
+                confetti.style.width = `${5 + Math.random() * 10}px`;
+                confetti.style.height = `${5 + Math.random() * 10}px`;
+                
+                container.appendChild(confetti);
+            }
+        }
+        
+        function createBouncingEmojis() {
+            const container = document.body;
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            // Add just one squirrel
+            createWideBouncingSquirrel(container, viewportWidth, viewportHeight);
+            
+            // Add just one dog emoji
+            createBouncingEmoji('🐕', container, viewportWidth, viewportHeight);
+        }
+        
+        function createBouncingEmoji(emoji, container, viewportWidth, viewportHeight) {
+            const emojiElement = document.createElement('div');
+            emojiElement.className = 'bouncing-emoji';
+            emojiElement.textContent = emoji;
+            
+            // Random starting position
+            emojiElement.style.left = `${Math.random() * (viewportWidth - 50)}px`;
+            emojiElement.style.top = `${Math.random() * (viewportHeight - 50)}px`;
+            
+            // Random animation duration and delay
+            emojiElement.style.animationDuration = `${8 + Math.random() * 7}s`;
+            emojiElement.style.animationDelay = `${Math.random() * 5}s`;
+            
+            // Set random travel paths
+            for (let i = 1; i <= 9; i++) {
+                // Random x and y travel distances (percentage of viewport)
+                const xTravel = Math.random() * 50 - 25; // -25% to 25% of viewport width
+                const yTravel = Math.random() * 50 - 25; // -25% to 25% of viewport height
+                
+                emojiElement.style.setProperty(`--x-travel-${i}`, `${xTravel}vw`);
+                emojiElement.style.setProperty(`--y-travel-${i}`, `${yTravel}vh`);
+            }
+            
+            // Add slight rotation for fun
+            emojiElement.style.transform = `rotate(${Math.random() * 360}deg)`;
+            
+            container.appendChild(emojiElement);
+        }
+        
+        function createWideBouncingSquirrel(container, viewportWidth, viewportHeight) {
+            const emojiElement = document.createElement('div');
+            emojiElement.className = 'squirrel-emoji';
+            emojiElement.textContent = '🐿️';
+            
+            // Random size - from small to large squirrels
+            const size = 1.5 + Math.random() * 2.5;
+            emojiElement.style.fontSize = `${size}rem`;
+            
+            // Random starting position
+            emojiElement.style.left = `${Math.random() * (viewportWidth - 50)}px`;
+            emojiElement.style.top = `${Math.random() * (viewportHeight - 50)}px`;
+            
+            // Random animation duration and delay
+            emojiElement.style.animationDuration = `${10 + Math.random() * 15}s`;
+            emojiElement.style.animationDelay = `${Math.random() * 8}s`;
+            
+            // Set random travel paths with wider movement
+            for (let i = 1; i <= 9; i++) {
+                // Wide random x and y travel distances (percentage of viewport)
+                const xTravel = Math.random() * 100 - 50; // -50% to 50% of viewport width
+                const yTravel = Math.random() * 100 - 50; // -50% to 50% of viewport height
+                
+                emojiElement.style.setProperty(`--x-travel-wide-${i}`, `${xTravel}vw`);
+                emojiElement.style.setProperty(`--y-travel-wide-${i}`, `${yTravel}vh`);
+            }
+            
+            // Set random rotations for more dynamic movement
+            for (let i = 1; i <= 10; i++) {
+                const rotation = Math.random() * 360;
+                emojiElement.style.setProperty(`--rotation-${i}`, `${rotation}deg`);
+            }
+            
+            container.appendChild(emojiElement);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            createBalloons();
+            createConfetti();
+            createBouncingEmojis();
+            
+            // Add click event to create squirrels
+            document.addEventListener('click', function(event) {
+                // Create a squirrel at the clicked position
+                createSquirrelAtPosition(event.clientX, event.clientY);
+            });
+        });
+        
+        function createSquirrelAtPosition(x, y) {
+            const container = document.body;
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            const emojiElement = document.createElement('div');
+            emojiElement.className = 'squirrel-emoji';
+            emojiElement.textContent = '🐿️';
+            
+            // Random size for the new squirrel
+            const size = 1.5 + Math.random() * 2.5;
+            emojiElement.style.fontSize = `${size}rem`;
+            
+            // Position at click coordinates
+            emojiElement.style.left = `${x}px`;
+            emojiElement.style.top = `${y}px`;
+            
+            // Random animation duration
+            emojiElement.style.animationDuration = `${10 + Math.random() * 15}s`;
+            emojiElement.style.animationDelay = '0s'; // Start immediately
+            
+            // Set random travel paths with wider movement
+            for (let i = 1; i <= 9; i++) {
+                // Wide random x and y travel distances (percentage of viewport)
+                const xTravel = Math.random() * 100 - 50; // -50% to 50% of viewport width
+                const yTravel = Math.random() * 100 - 50; // -50% to 50% of viewport height
+                
+                emojiElement.style.setProperty(`--x-travel-wide-${i}`, `${xTravel}vw`);
+                emojiElement.style.setProperty(`--y-travel-wide-${i}`, `${yTravel}vh`);
+            }
+            
+            // Set random rotations
+            for (let i = 1; i <= 10; i++) {
+                const rotation = Math.random() * 360;
+                emojiElement.style.setProperty(`--rotation-${i}`, `${rotation}deg`);
+            }
+            
+            container.appendChild(emojiElement);
+            
+            // Add a small pop animation at the beginning
+            emojiElement.animate([
+                { transform: 'scale(0.2)', opacity: 0 },
+                { transform: 'scale(1.2)', opacity: 1, offset: 0.6 },
+                { transform: 'scale(1)', opacity: 1 }
+            ], {
+                duration: 500,
+                easing: 'ease-out'
+            });
+        }
+    </script>
+</body>
+</html>
