@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Pop</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4cb963;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --error-color: #e63946;
+            --success-color: #2a9d8f;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+        }
+        
+        .info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .upcoming-letters {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .upcoming-letter {
+            width: 30px;
+            height: 35px; /* Slightly taller for balloon shape */
+            background: radial-gradient(circle at 30% 30%, #ffbe76 0%, #f0932b 70%);
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; /* Proper balloon shape - rounded top, tapered bottom */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 3px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: white;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transform: rotate(var(--rotate, 0deg));
+        }
+        
+        /* Balloon knot */
+        .upcoming-letter::before {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            width: 5px;
+            height: 3px;
+            background-color: rgba(0,0,0,0.15);
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Balloon string */
+        .upcoming-letter::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            height: 8px;
+            width: 1px;
+            background-color: rgba(0,0,0,0.3);
+            transform: translateX(-50%);
+        }
+        
+        /* Vary balloon shapes */
+        .upcoming-letter:nth-child(odd) {
+            --rotate: -3deg;
+            border-radius: 52% 48% 48% 52% / 38% 38% 62% 62%;
+        }
+        
+        .upcoming-letter:nth-child(even) {
+            --rotate: 3deg;
+            border-radius: 48% 52% 52% 48% / 35% 35% 65% 65%;
+        }
+        
+        .transition-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 150;
+            pointer-events: none;
+            display: none;
+            overflow: hidden;
+        }
+        
+        .transition-balloon {
+            position: absolute;
+            width: 60px;
+            height: 70px;
+            border-radius: 50%;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            transform-origin: bottom center;
+            animation: float-up 3s ease-out forwards;
+            opacity: 0.85;
+        }
+        
+        .transition-balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            height: 15px;
+            width: 2px;
+            background-color: rgba(0,0,0,0.3);
+            transform: translateX(-50%);
+        }
+        
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            80% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-200px) rotate(5deg);
+                opacity: 0;
+            }
+        }
+        
+        .upcoming-title {
+            margin-right: 10px;
+            color: var(--secondary-color);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .timer, .score {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .timer {
+            color: var(--error-color);
+        }
+        
+        .score {
+            color: var(--success-color);
+        }
+        
+        .date {
+            font-weight: bold;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .board-container {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            background-color: var(--primary-color);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .letter-cell {
+            aspect-ratio: 1/1.15; /* Slightly taller than wide for balloon shape */
+            background: radial-gradient(circle at 30% 30%, #fe9ac5 0%, #c054a1 70%); /* Pink balloon */
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; /* Proper balloon shape - rounded top, tapered bottom */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            transform: rotate(var(--rotate, 0deg));
+        }
+        
+        /* Balloon knot */
+        .letter-cell::before {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 8px;
+            height: 6px;
+            background-color: rgba(0,0,0,0.15);
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Balloon string */
+        .letter-cell::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            height: 15px;
+            width: 2px;
+            background-color: rgba(0,0,0,0.3);
+            transform: translateX(-50%);
+        }
+        
+        /* Vary balloon shapes slightly */
+        .letter-cell:nth-child(4n) {
+            --rotate: -5deg;
+            border-radius: 55% 45% 48% 52% / 38% 38% 62% 62%;
+        }
+        
+        .letter-cell:nth-child(4n+1) {
+            --rotate: 3deg;
+            border-radius: 45% 55% 50% 50% / 35% 35% 65% 65%;
+        }
+        
+        .letter-cell:nth-child(4n+2) {
+            --rotate: -2deg;
+            border-radius: 50% 50% 45% 55% / 40% 40% 60% 60%;
+        }
+        
+        .letter-cell:nth-child(4n+3) {
+            --rotate: 4deg;
+            border-radius: 48% 52% 52% 48% / 37% 37% 63% 63%;
+        }
+        
+        .letter-cell:nth-child(3n+1) {
+            background: radial-gradient(circle at 30% 30%, #4facfe 0%, #2a75ec 70%); /* Blue balloon */
+        }
+        
+        .letter-cell:nth-child(3n+2) {
+            background: radial-gradient(circle at 30% 30%, #43e97b 0%, #29ca5f 70%); /* Green balloon */
+        }
+        
+        .letter-cell:hover {
+            transform: scale(1.05) translateY(-5px) rotate(var(--rotate, 0deg));
+        }
+        
+        .letter-cell.selected {
+            background: radial-gradient(circle at 30% 30%, #ffdd41 0%, #ffa131 70%); /* Orange-yellow when selected */
+            transform: scale(0.95) rotate(var(--rotate, 0deg));
+            animation: float 1s infinite alternate ease-in-out;
+        }
+        
+        @keyframes float {
+            0% { transform: scale(0.95) translateY(0) rotate(var(--rotate, 0deg)); }
+            100% { transform: scale(0.95) translateY(-5px) rotate(var(--rotate, 0deg)); }
+        }
+        
+        .letter-cell.replacing {
+            animation: pop-animation 0.8s ease-out;
+        }
+        
+        @keyframes pop-animation {
+            0% {
+                transform: scale(1) rotate(var(--rotate, 0deg));
+                opacity: 1;
+            }
+            20% {
+                transform: scale(1.2) rotate(var(--rotate, 0deg));
+                opacity: 1;
+            }
+            40% {
+                transform: scale(1.4) rotate(var(--rotate, 0deg));
+                opacity: 0.8;
+            }
+            60% {
+                transform: scale(0.1) rotate(var(--rotate, 0deg));
+                opacity: 0;
+            }
+            100% {
+                transform: scale(0) rotate(var(--rotate, 0deg));
+                opacity: 0;
+            }
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex: 1;
+        }
+        
+        button:hover {
+            background-color: var(--primary-color);
+        }
+        
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        #submitWordBtn {
+            background-color: var(--accent-color);
+        }
+        
+        #submitWordBtn:hover {
+            background-color: #3aa553;
+        }
+        
+        .words-container {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .word-input {
+            background-color: #6aa553;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            min-height: 60px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .found-words {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 300px;
+            overflow-y: auto;
+        }
+        
+        .found-words h3 {
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .word-item {
+            background-color: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .word-points {
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            min-width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            margin-left: 5px;
+            padding: 0 5px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .modal h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .splash-screen {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-color);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 1s ease-out;
+        }
+        
+        .splash-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .splash-balloons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .balloon {
+            position: absolute;
+            width: 60px;
+            height: 70px;
+            border-radius: 50%;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            transform-origin: bottom center;
+            animation-name: float-balloon;
+            animation-duration: 4s;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+            opacity: 0.8;
+        }
+        
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            height: 15px;
+            width: 2px;
+            background-color: rgba(0,0,0,0.3);
+            transform: translateX(-50%);
+        }
+        
+        .balloon-red {
+            background: radial-gradient(circle at 30% 30%, #ff6b6b 0%, #ee5253 70%);
+            top: -30px;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .balloon-blue {
+            background: radial-gradient(circle at 30% 30%, #48dbfb 0%, #0abde3 70%);
+            top: -20px;
+            right: 15%;
+            animation-delay: 0.5s;
+        }
+        
+        .balloon-green {
+            background: radial-gradient(circle at 30% 30%, #1dd1a1 0%, #10ac84 70%);
+            bottom: -30px;
+            left: 20%;
+            animation-delay: 1s;
+        }
+        
+        .balloon-yellow {
+            background: radial-gradient(circle at 30% 30%, #feca57 0%, #ff9f43 70%);
+            bottom: -20px;
+            right: 10%;
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes float-balloon {
+            0% { transform: translateY(0) rotate(2deg); }
+            50% { transform: translateY(-10px) rotate(-2deg); }
+            100% { transform: translateY(-20px) rotate(1deg); }
+        }
+        
+        .splash-screen h2, .splash-screen p, .splash-screen button {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .splash-screen h2 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .splash-screen p {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+        
+        .start-btn {
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 1.2rem;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .start-btn:hover {
+            background-color: #3aa553;
+            transform: scale(1.05);
+        }
+        
+        .stats {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .stat-item {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .stat-item > div:first-child {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        #scoreEmoji {
+            font-size: 1.5rem;
+            margin-left: 5px;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        .instructions-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+      @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                overflow-x: hidden;
+            }
+            
+            .game-container {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .board-container {
+                width: 100%;
+                max-width: 100%;
+                flex: none;
+            }
+            
+            .game-board {
+                padding: 10px;
+                gap: 8px;
+            }
+            
+            .letter-cell {
+                font-size: 1.5rem;
+            }
+            
+            .controls {
+                margin-top: 10px;
+                gap: 8px;
+            }
+            
+            .controls button {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+            
+            .info-bar {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+                padding: 10px;
+            }
+            
+            .upcoming-letters {
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 10px;
+            }
+            
+            .upcoming-title {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 5px;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <div class="splash-balloons">
+                <div class="balloon balloon-red"></div>
+                <div class="balloon balloon-blue"></div>
+                <div class="balloon balloon-green"></div>
+                <div class="balloon balloon-yellow"></div>
+            </div>
+            <h2>Word Pop</h2>
+            <p>Today's word puzzle is ready!</p>
+            <p>Get ready to Pop! Find as many words as possible before the time runs out.</p>
+            <button class="start-btn" id="startGameBtn">START GAME</button>
+        </div>
+    </div>
+    
+    <!-- Transition balloons container -->
+    <div class="transition-container" id="transitionContainer"></div>
+    
+    <header>
+        <h1><span id="gameScreenResetBtn" style="cursor: default; padding: 10px; margin-right: 5px;"></span>Word Pop</h1>
+    </header>
+    
+    <div class="info-bar">
+        <div class="date" id="gameDate">Game #X - Month Day, Year</div>
+        <div class="timer" id="timer">3:00</div>
+        <div class="score">Score: <span id="scoreValue">0</span></div>
+    </div>
+    
+    <div class="upcoming-letters" id="upcomingLetters">
+        <div class="upcoming-title">NEXT:</div>
+        <!-- Upcoming letters will be inserted here -->
+    </div>
+    
+     <div class="game-container">
+        <div class="board-container">
+            <div class="game-board" id="gameBoard">
+                <!-- Letter cells will be added here by JavaScript -->
+            </div>
+            <div class="controls">
+                <button id="clearBtn">Clear Selection</button>
+                <button id="submitWordBtn">Submit Word</button>
+            </div>
+        </div>
+
+        <div class="words-container">
+            <div class="word-input" id="wordInput"></div>
+            <div class="found-words">
+                <h3>Words Found (<span id="wordCount">0</span>)</h3>
+                <div class="word-list" id="wordList">
+                    <!-- Found words will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="gameOverModal">
+        <div class="modal-content">
+            <h2><span id="invisibleResetBtn" style="cursor: default; padding: 10px; margin-right: 5px;"></span>Popping Complete!</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <div>Score</div>
+                    <div class="stat-value" id="finalScore">0 <span id="scoreEmoji">🏆</span></div>
+                </div>
+                <div class="stat-item">
+                    <div>Words Found</div>
+                    <div class="stat-value" id="finalWords">0</div>
+                </div>
+                <div class="stat-item">
+                    <div>Longest Word</div>
+                    <div class="stat-value" id="longestWord">-</div>
+                </div>
+            </div>
+            <div>New puzzle in <span id="countdownTime">23:59:59</span></div>
+            <button id="shareBtn">Share Results</button>
+            
+            <!-- Add balloons as background decoration -->
+            <div class="background-balloons"></div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
+    <div class="modal" id="instructionsModal">
+        <div class="modal-content">
+            <h2>How to Play</h2>
+            <p>Find as many words as possible in the 4x4 grid of letters.</p>
+            <ul style="text-align: left; margin: 20px 0;">
+                <li>Words must be at least 3 letters long</li>
+                <li>Letters must be adjacent (horizontally, vertically, or diagonally)</li>
+                <li>The same letter cube cannot be used more than once in a word</li>
+                <li>Scoring: 3 letters = 1 point, 4 letters = 1 point, 5 letters = 2 points, 6 letters = 3 points, 7 letters = 5 points, 8+ letters = 11 points</li>
+                <li>You have 1 minute to find as many words as possible</li>
+                <li>A new puzzle is available every day</li>
+            </ul>
+            <button id="closeInstructionsBtn">Got it!</button>
+        </div>
+    </div>
+    
+    <div class="instructions-btn" id="showInstructionsBtn">?</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Game configuration
+            const GAME_DURATION = 180; // 1 minute in seconds
+            const GRID_SIZE = 4;
+            const MIN_WORD_LENGTH = 3;
+            
+            // Game state
+            let gameBoard = [];
+            let selectedCells = [];
+            let foundWords = [];
+            let score = 0;
+            let gameActive = true;
+            let timeLeft = GAME_DURATION;
+            let timerInterval;
+            let upcomingLetters = []; // Queue for upcoming letters
+            
+            // Add this near the top of your script
+let DICTIONARY = new Set();
+
+// Fetch word list when page loads
+fetch('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json')
+    .then(response => response.json())
+    .then(data => {
+        // Convert the object to a Set of lowercase words
+        DICTIONARY = new Set(Object.keys(data).map(word => word.toLowerCase()));
+        console.log(`Loaded ${DICTIONARY.size} words`);
+    })
+    .catch(error => {
+        console.error('Failed to load dictionary:', error);
+        // Fallback to original dictionary
+        DICTIONARY = new Set([/* your original list */]);
+    });
+            
+            // Dice configuration (based on classic Boggle dice)
+            const BOGGLE_DICE = [
+                ['A', 'A', 'E', 'E', 'G', 'N'],
+                ['A', 'B', 'B', 'J', 'O', 'O'],
+                ['A', 'C', 'H', 'O', 'P', 'S'],
+                ['A', 'F', 'F', 'K', 'P', 'S'],
+                ['A', 'O', 'O', 'T', 'T', 'W'],
+                ['C', 'I', 'M', 'O', 'T', 'U'],
+                ['D', 'E', 'I', 'L', 'R', 'X'],
+                ['D', 'E', 'L', 'R', 'V', 'Y'],
+                ['D', 'I', 'S', 'T', 'T', 'Y'],
+                ['E', 'E', 'G', 'H', 'N', 'W'],
+                ['E', 'E', 'I', 'N', 'S', 'U'],
+                ['E', 'H', 'R', 'T', 'V', 'W'],
+                ['E', 'I', 'O', 'S', 'S', 'T'],
+                ['E', 'L', 'R', 'T', 'T', 'Y'],
+                ['H', 'I', 'M', 'N', 'U', 'Qu'],
+                ['H', 'L', 'N', 'N', 'R', 'Z']
+            ];
+            
+            // DOM elements
+            const gameBoardEl = document.getElementById('gameBoard');
+            const wordInputEl = document.getElementById('wordInput');
+            const wordListEl = document.getElementById('wordList');
+            const wordCountEl = document.getElementById('wordCount');
+            const scoreValueEl = document.getElementById('scoreValue');
+            const timerEl = document.getElementById('timer');
+            const clearBtnEl = document.getElementById('clearBtn');
+            const submitWordBtnEl = document.getElementById('submitWordBtn');
+            const gameDateEl = document.getElementById('gameDate');
+            const gameOverModalEl = document.getElementById('gameOverModal');
+            const finalScoreEl = document.getElementById('finalScore');
+            const finalWordsEl = document.getElementById('finalWords');
+            const longestWordEl = document.getElementById('longestWord');
+            const highestWordEl = document.getElementById('highestWord');
+            const countdownTimeEl = document.getElementById('countdownTime');
+            const shareBtnEl = document.getElementById('shareBtn');
+            const toastEl = document.getElementById('toast');
+            const showInstructionsBtnEl = document.getElementById('showInstructionsBtn');
+            const instructionsModalEl = document.getElementById('instructionsModal');
+            const closeInstructionsBtnEl = document.getElementById('closeInstructionsBtn');
+            
+            // Initialize game
+            initGame();
+            
+            // Functions
+            function initGame() {
+                // Set game date
+                setGameDate();
+                
+                // Generate board based on daily seed
+                generateDailyBoard();
+                
+                // Generate the upcoming letters queue
+                generateUpcomingLetters(8); // Start with 8 upcoming letters
+                
+                // Render the board
+                renderBoard();
+                
+                // Render upcoming letters
+                renderUpcomingLetters();
+                
+                // Set up event listeners
+                setupEventListeners();
+                
+                // Set up splash screen
+                document.getElementById('startGameBtn').addEventListener('click', function() {
+                    // Create the balloon transition
+                    startBalloonTransition();
+                });
+                
+                // Add hidden debug reset (Ctrl+Alt+R)
+                document.addEventListener('keydown', function(event) {
+                    // Check for Ctrl+Alt+R
+                    if (event.ctrlKey && event.altKey && event.key === 'r') {
+                        // Prevent default browser behavior
+                        event.preventDefault();
+                        
+                        // Reset the game for debugging
+                        resetGame();
+                        
+                        // Show subtle indicator that reset occurred
+                        showToast('Debug: Game Reset');
+                    }
+                });
+                
+                // Add invisible button reset on game over screen
+                const invisibleResetBtn = document.getElementById('invisibleResetBtn');
+                invisibleResetBtn.addEventListener('click', function() {
+                    resetGame();
+                    showToast('Debug: Game Reset');
+                });
+                
+                // Add invisible button reset on main game screen
+                const gameScreenResetBtn = document.getElementById('gameScreenResetBtn');
+                gameScreenResetBtn.addEventListener('click', function() {
+                    resetGame();
+                    showToast('Debug: Game Reset');
+                });
+                
+                // Do NOT start timer automatically - it will start when the player clicks the start button
+            }
+            
+            function startBalloonTransition() {
+                // Get the transition container
+                const transitionContainer = document.getElementById('transitionContainer');
+                transitionContainer.style.display = 'block';
+                transitionContainer.innerHTML = '';
+                
+                // Create multiple balloons with different colors, positions, and timing
+                const colors = [
+                    'radial-gradient(circle at 30% 30%, #ff6b6b 0%, #ee5253 70%)',
+                    'radial-gradient(circle at 30% 30%, #48dbfb 0%, #0abde3 70%)',
+                    'radial-gradient(circle at 30% 30%, #1dd1a1 0%, #10ac84 70%)',
+                    'radial-gradient(circle at 30% 30%, #feca57 0%, #ff9f43 70%)',
+                    'radial-gradient(circle at 30% 30%, #a29bfe 0%, #6c5ce7 70%)',
+                    'radial-gradient(circle at 30% 30%, #fd79a8 0%, #e84393 70%)'
+                ];
+                
+                // Create 30 balloons with random positions and delays
+                for (let i = 0; i < 30; i++) {
+                    const balloon = document.createElement('div');
+                    balloon.className = 'transition-balloon';
+                    
+                    // Random position, color, size, delay
+                    const randomX = Math.floor(Math.random() * 100);
+                    const randomDelay = Math.random() * 1.5; // seconds
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    const randomSize = 40 + Math.floor(Math.random() * 60); // 40-100px
+                    
+                    balloon.style.left = `${randomX}%`;
+                    balloon.style.width = `${randomSize}px`;
+                    balloon.style.height = `${randomSize * 1.2}px`;
+                    balloon.style.background = randomColor;
+                    balloon.style.animationDelay = `${randomDelay}s`;
+                    
+                    transitionContainer.appendChild(balloon);
+                }
+                
+                // Fade out splash screen after a short delay
+                setTimeout(() => {
+                    const splashScreen = document.getElementById('splashScreen');
+                    splashScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        splashScreen.style.display = 'none';
+                        
+                        // Show the game elements
+                        document.querySelector('.game-container').classList.add('shown');
+                        document.querySelector('.info-bar').classList.add('shown');
+                        document.querySelector('.upcoming-letters').classList.add('shown');
+                        
+                        // Start the timer
+                        startTimer();
+                        
+                        // Clean up transition after animation completes
+                        setTimeout(() => {
+                            transitionContainer.style.display = 'none';
+                        }, 3000);
+                    }, 1000);
+                }, 500);
+            }
+            
+            function generateUpcomingLetters(count) {
+                // Get today's date for seeding
+                const today = new Date();
+                const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+                const initialSeed = seed + 12345; // Add offset to create a different but deterministic sequence
+                
+                // Clear the queue if we're starting fresh
+                if (upcomingLetters.length === 0) {
+                    // Generate a large pool of deterministic upcoming letters
+                    for (let i = 0; i < 100; i++) { // Generate 100 letters to ensure we don't run out
+                        const dieIndex = seededRandom(0, BOGGLE_DICE.length - 1, initialSeed + i);
+                        const faceIndex = seededRandom(0, 5, initialSeed + i + 500);
+                        const letter = BOGGLE_DICE[dieIndex][faceIndex];
+                        upcomingLetters.push(letter);
+                    }
+                }
+            }
+            
+            function renderUpcomingLetters() {
+                const container = document.getElementById('upcomingLetters');
+                
+                // Keep the title
+                const title = container.querySelector('.upcoming-title');
+                container.innerHTML = '';
+                container.appendChild(title);
+                
+                // Add each upcoming letter
+                for (let i = 0; i < Math.min(upcomingLetters.length, 6); i++) {
+                    const letterDiv = document.createElement('div');
+                    letterDiv.className = 'upcoming-letter';
+                    letterDiv.textContent = upcomingLetters[i];
+                    container.appendChild(letterDiv);
+                }
+            }
+            
+            function resetGame() {
+                // Reset game state
+                clearInterval(timerInterval);
+                selectedCells = [];
+                foundWords = [];
+                score = 0;
+                timeLeft = GAME_DURATION;
+                gameActive = true;
+                
+                // Clear the word list
+                wordListEl.innerHTML = '';
+                wordCountEl.textContent = '0';
+                scoreValueEl.textContent = '0';
+                
+                // Reset upcoming letters queue completely
+                upcomingLetters = [];
+                generateUpcomingLetters(8); // This will regenerate the same deterministic sequence
+                renderUpcomingLetters();
+                
+                // Hide game over modal
+                gameOverModalEl.style.display = 'none';
+                
+                // Hide game elements
+                document.querySelector('.game-container').classList.remove('shown');
+                document.querySelector('.info-bar').classList.remove('shown');
+                document.querySelector('.upcoming-letters').classList.remove('shown');
+                
+                // Generate the original daily board (not a random board)
+                generateDailyBoard();
+                
+                // Render the board
+                renderBoard();
+                
+                // Show splash screen again
+                const splashScreen = document.getElementById('splashScreen');
+                splashScreen.style.opacity = '1';
+                splashScreen.style.display = 'flex';
+                
+                // Timer will start when player clicks start
+            }
+            
+            function generateRandomBoard() {
+                gameBoard = [];
+                
+                for (let i = 0; i < GRID_SIZE; i++) {
+                    const row = [];
+                    for (let j = 0; j < GRID_SIZE; j++) {
+                        const dieIndex = Math.floor(Math.random() * BOGGLE_DICE.length);
+                        const faceIndex = Math.floor(Math.random() * 6);
+                        row.push(BOGGLE_DICE[dieIndex][faceIndex]);
+                    }
+                    gameBoard.push(row);
+                }
+            }
+            
+            function setGameDate() {
+                const today = new Date();
+                const options = { month: 'long', day: 'numeric', year: 'numeric' };
+                const dateStr = today.toLocaleDateString('en-US', options);
+                
+                // Calculate game number (days since Jan 1, 2023)
+                const startDate = new Date(2023, 0, 1);
+                const diffTime = today - startDate;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                
+                gameDateEl.textContent = `Game #${diffDays} - ${dateStr}`;
+            }
+            
+            function generateDailyBoard() {
+                // Create a deterministic random generator based on the date
+                const today = new Date();
+                const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+                
+                // Shuffle the dice using the seeded random
+                const shuffledDice = shuffleDice(BOGGLE_DICE, seed);
+                
+                // Generate the board from the shuffled dice
+                gameBoard = [];
+                
+                for (let i = 0; i < GRID_SIZE; i++) {
+                    const row = [];
+                    for (let j = 0; j < GRID_SIZE; j++) {
+                        const dieIndex = i * GRID_SIZE + j;
+                        const die = shuffledDice[dieIndex];
+                        const faceIndex = seededRandom(0, 5, seed + dieIndex);
+                        row.push(die[faceIndex]);
+                    }
+                    gameBoard.push(row);
+                }
+            }
+            
+            function shuffleDice(dice, seed) {
+                const shuffled = [...dice];
+                
+                // Fisher-Yates shuffle with seeded random
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = seededRandom(0, i, seed + i);
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                
+                return shuffled;
+            }
+            
+            function seededRandom(min, max, seed) {
+                // Simple seeded random function
+                const x = Math.sin(seed) * 10000;
+                const rand = x - Math.floor(x);
+                return Math.floor(rand * (max - min + 1)) + min;
+            }
+            
+            function renderBoard() {
+                gameBoardEl.innerHTML = '';
+                
+                for (let i = 0; i < GRID_SIZE; i++) {
+                    for (let j = 0; j < GRID_SIZE; j++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'letter-cell';
+                        cell.dataset.row = i;
+                        cell.dataset.col = j;
+                        cell.textContent = gameBoard[i][j];
+                        gameBoardEl.appendChild(cell);
+                    }
+                }
+            }
+            
+            function setupEventListeners() {
+                // Cell click events
+                gameBoardEl.addEventListener('click', (e) => {
+                    if (!gameActive) return;
+                    
+                    const cell = e.target;
+                    if (!cell.classList.contains('letter-cell')) return;
+                    
+                    const row = parseInt(cell.dataset.row);
+                    const col = parseInt(cell.dataset.col);
+                    
+                    // Check if cell is adjacent to last selected cell
+                    if (selectedCells.length > 0) {
+                        const lastCell = selectedCells[selectedCells.length - 1];
+                        const rowDiff = Math.abs(row - lastCell.row);
+                        const colDiff = Math.abs(col - lastCell.col);
+                        
+                        // If not adjacent or already selected, don't allow selection
+                        if (rowDiff > 1 || colDiff > 1) return;
+                        
+                        // Check if cell is already selected
+                        const isAlreadySelected = selectedCells.some(
+                            c => c.row === row && c.col === col
+                        );
+                        
+                        if (isAlreadySelected) {
+                            // If it's the last cell, deselect it
+                            if (selectedCells[selectedCells.length - 1].row === row &&
+                                selectedCells[selectedCells.length - 1].col === col) {
+                                selectedCells.pop();
+                                updateSelectedWord();
+                                updateUI();
+                            }
+                            return;
+                        }
+                    }
+                    
+                    // Add cell to selected cells
+                    selectedCells.push({ row, col, letter: gameBoard[row][col] });
+                    updateSelectedWord();
+                    updateUI();
+                });
+                
+                // Clear button event
+                clearBtnEl.addEventListener('click', () => {
+                    clearSelection();
+                });
+                
+                // Submit button event
+                submitWordBtnEl.addEventListener('click', () => {
+                    submitWord();
+                });
+                
+                // Share button event
+                shareBtnEl.addEventListener('click', () => {
+                    shareResults();
+                });
+                
+                // Instructions button events
+                showInstructionsBtnEl.addEventListener('click', () => {
+                    instructionsModalEl.style.display = 'flex';
+                });
+                
+                closeInstructionsBtnEl.addEventListener('click', () => {
+                    instructionsModalEl.style.display = 'none';
+                });
+            }
+            
+            function updateSelectedWord() {
+                const word = selectedCells.map(cell => cell.letter).join('');
+                wordInputEl.textContent = word;
+            }
+            
+            function updateUI() {
+                // Update cell highlighting
+                const cells = document.querySelectorAll('.letter-cell');
+                cells.forEach(cell => {
+                    const row = parseInt(cell.dataset.row);
+                    const col = parseInt(cell.dataset.col);
+                    
+                    const isSelected = selectedCells.some(
+                        c => c.row === row && c.col === col
+                    );
+                    
+                    if (isSelected) {
+                        cell.classList.add('selected');
+                    } else {
+                        cell.classList.remove('selected');
+                    }
+                });
+            }
+            
+            function clearSelection() {
+                selectedCells = [];
+                updateSelectedWord();
+                updateUI();
+            }
+            
+            function submitWord() {
+                if (!gameActive || selectedCells.length < MIN_WORD_LENGTH) return;
+                
+                let word = selectedCells.map(cell => cell.letter).join('').toLowerCase();
+                
+                // Replace 'qu' with 'q' for dictionary lookup
+                const lookupWord = word.replace(/qu/g, 'q');
+                
+                // Check if word is valid and not already found
+                if (DICTIONARY.has(lookupWord) && !foundWords.includes(word)) {
+                    // Calculate word score
+                    const wordScore = calculateWordScore(word);
+                    
+                    // Add word to found words
+                    foundWords.push(word);
+                    score += wordScore;
+                    
+                    // Update UI
+                    updateWordList(word, wordScore);
+                    scoreValueEl.textContent = score;
+                    wordCountEl.textContent = foundWords.length;
+                    
+                    // Replace the used letters with new ones
+                    replaceUsedLetters();
+                    
+                    // Show success message
+                    showToast(`+${wordScore} points!`);
+                } else if (foundWords.includes(word)) {
+                    showToast('Word already found!');
+                } else {
+                    showToast('Not in dictionary!');
+                }
+                
+                clearSelection();
+            }
+            
+            function replaceUsedLetters() {
+                // Mark cells to be replaced and add animation class
+                const cellsToReplace = [];
+                
+                for (const cell of selectedCells) {
+                    cellsToReplace.push({ row: cell.row, col: cell.col });
+                    
+                    // Find the DOM element for this cell and add animation class
+                    const cellElement = document.querySelector(`.letter-cell[data-row="${cell.row}"][data-col="${cell.col}"]`);
+                    if (cellElement) {
+                        // Add pop animation
+                        cellElement.classList.add('replacing');
+                        
+                        // Play a pop sound
+                        playPopSound();
+                    }
+                }
+                
+                // Delay the actual replacement to allow animation to play
+                setTimeout(() => {
+                    // Replace letters using the upcoming letters queue
+                    for (const cell of cellsToReplace) {
+                        let newLetter;
+                        
+                        // Use letter from upcoming queue if available
+                        if (upcomingLetters.length > 0) {
+                            newLetter = upcomingLetters.shift(); // Remove from front of queue
+                        } else {
+                            // This should not happen with our large pre-generated queue
+                            // But as a fallback, generate a random letter
+                            const dieIndex = Math.floor(Math.random() * BOGGLE_DICE.length);
+                            const faceIndex = Math.floor(Math.random() * 6);
+                            newLetter = BOGGLE_DICE[dieIndex][faceIndex];
+                        }
+                        
+                        // Update the game board
+                        gameBoard[cell.row][cell.col] = newLetter;
+                    }
+                    
+                    // Update the visual board
+                    renderBoard();
+                    
+                    // Add entry animation for new balloons
+                    setTimeout(() => {
+                        const newCells = [];
+                        for (const cell of cellsToReplace) {
+                            const newCellElement = document.querySelector(`.letter-cell[data-row="${cell.row}"][data-col="${cell.col}"]`);
+                            if (newCellElement) {
+                                newCellElement.style.animation = 'balloon-entry 0.5s ease-out';
+                                newCells.push(newCellElement);
+                            }
+                        }
+                        
+                        // Remove animation class after it's done
+                        setTimeout(() => {
+                            for (const cellElement of newCells) {
+                                cellElement.style.animation = '';
+                            }
+                        }, 500);
+                    }, 50);
+                    
+                    // Update the upcoming letters display
+                    renderUpcomingLetters();
+                }, 800); // Wait for animation to play before replacing letters
+            }
+            
+            function playPopSound() {
+                // Simple way to create a pop sound effect
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = 600;
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    // Envelope for pop sound
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.01);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+                    
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.15);
+                } catch (e) {
+                    // Fallback if audio context isn't available
+                    console.log("Audio not supported");
+                }
+            }
+            
+            function calculateWordScore(word) {
+                const length = word.length;
+                
+                if (length <= 4) return 100; // Was 1 point
+                if (length === 5) return 200; // Was 2 points
+                if (length === 6) return 300; // Was 3 points
+                if (length === 7) return 500; // Was 5 points
+                return 1100; // 8 or more letters, was 11 points
+            }
+            
+            function updateWordList(word, points) {
+                const wordItem = document.createElement('div');
+                wordItem.className = 'word-item';
+                
+                const wordText = document.createElement('span');
+                wordText.textContent = word;
+                
+                const wordPoints = document.createElement('span');
+                wordPoints.className = 'word-points';
+                wordPoints.textContent = points;
+                
+                wordItem.appendChild(wordText);
+                wordItem.appendChild(wordPoints);
+                
+                wordListEl.appendChild(wordItem);
+            }
+            
+            function startTimer() {
+                updateTimerDisplay();
+                
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    
+                    if (timeLeft <= 0) {
+                        endGame();
+                    }
+                    
+                    updateTimerDisplay();
+                }, 1000);
+            }
+            
+            function updateTimerDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Change color when time is running low
+                if (timeLeft <= 30) {
+                    timerEl.style.color = 'var(--error-color)';
+                }
+            }
+            
+           function endGame() {
+    clearInterval(timerInterval);
+    gameActive = false;
+    
+    // Disable board interaction
+    const cells = document.querySelectorAll('.letter-cell');
+    cells.forEach(cell => {
+        cell.style.cursor = 'default';
+    });
+    
+    // Calculate final stats
+    let longestWord = '';
+    let highestScoringWord = '';
+    let highestScore = 0;
+    
+    foundWords.forEach(word => {
+        if (word.length > longestWord.length) {
+            longestWord = word;
+        }
+        
+        const wordScore = calculateWordScore(word);
+        if (wordScore > highestScore) {
+            highestScore = wordScore;
+            highestScoringWord = word;
+        }
+    });
+    
+    // Update game over modal - add null checks
+    if (finalScoreEl) {
+        finalScoreEl.textContent = score || '0';
+    }
+    
+    if (finalWordsEl) {
+        finalWordsEl.textContent = foundWords.length || '0';
+    }
+    
+    if (longestWordEl) {
+        longestWordEl.textContent = longestWord || '-';
+    }
+    
+    // Add score emoji based on score
+    const scoreEmoji = document.getElementById('scoreEmoji');
+    if (scoreEmoji) {
+        if (score >= 2000) {
+            scoreEmoji.textContent = '👑'; // Crown for excellent
+        } else if (score >= 1000) {
+            scoreEmoji.textContent = '🎉'; // Party for very good
+        } else if (score >= 500) {
+            scoreEmoji.textContent = '😊'; // Smile for good
+        } else if (score >= 200) {
+            scoreEmoji.textContent = '🙂'; // Slightly smile for okay
+        } else {
+            scoreEmoji.textContent = '🤢'; // Sick for bad
+        }
+    }
+    
+    // Calculate time until next puzzle
+    updateNextPuzzleCountdown();
+    setInterval(updateNextPuzzleCountdown, 1000);
+    
+    // Show game over modal
+    if (gameOverModalEl) {
+        gameOverModalEl.style.display = 'flex';
+    } else {
+        console.error('Game over modal element not found');
+    }
+}
+            
+            function createCelebration() {
+                // Create celebration balloons
+                const balloonsContainer = document.getElementById('celebrationBalloons');
+                balloonsContainer.innerHTML = '';
+                
+                const colors = [
+                    'radial-gradient(circle at 30% 30%, #ff6b6b 0%, #ee5253 70%)',
+                    'radial-gradient(circle at 30% 30%, #48dbfb 0%, #0abde3 70%)',
+                    'radial-gradient(circle at 30% 30%, #1dd1a1 0%, #10ac84 70%)',
+                    'radial-gradient(circle at 30% 30%, #feca57 0%, #ff9f43 70%)',
+                    'radial-gradient(circle at 30% 30%, #a29bfe 0%, #6c5ce7 70%)',
+                    'radial-gradient(circle at 30% 30%, #fd79a8 0%, #e84393 70%)'
+                ];
+                
+                // Create 20 balloons
+                for (let i = 0; i < 20; i++) {
+                    const balloon = document.createElement('div');
+                    balloon.className = 'celebration-balloon';
+                    
+                    // Random position, color, size, delay
+                    const randomX = Math.floor(Math.random() * 100);
+                    const randomDelay = Math.random() * 3; // seconds
+                    const randomDuration = 5 + Math.random() * 4; // 5-9 seconds
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    const randomSize = 30 + Math.floor(Math.random() * 30); // 30-60px
+                    const randomRotation = -10 + Math.floor(Math.random() * 20); // -10 to 10 degrees
+                    
+                    balloon.style.left = `${randomX}%`;
+                    balloon.style.width = `${randomSize}px`;
+                    balloon.style.height = `${randomSize * 1.2}px`;
+                    balloon.style.background = randomColor;
+                    balloon.style.animationDelay = `${randomDelay}s`;
+                    balloon.style.animationDuration = `${randomDuration}s`;
+                    balloon.style.transform = `rotate(${randomRotation}deg)`;
+                    
+                    // Vary balloon shapes - all with rounded top and tapered bottom
+                    const shapeVariant = Math.floor(Math.random() * 4);
+                    switch(shapeVariant) {
+                        case 0:
+                            balloon.style.borderRadius = '52% 48% 48% 52% / 38% 38% 62% 62%';
+                            break;
+                        case 1:
+                            balloon.style.borderRadius = '48% 52% 52% 48% / 35% 35% 65% 65%';
+                            break;
+                        case 2:
+                            balloon.style.borderRadius = '50% 50% 45% 55% / 40% 40% 60% 60%';
+                            break;
+                        case 3:
+                            balloon.style.borderRadius = '45% 55% 50% 50% / 37% 37% 63% 63%';
+                            break;
+                    }
+                    
+                    balloonsContainer.appendChild(balloon);
+                }
+                
+                // Create confetti
+                const confettiContainer = document.getElementById('confettiContainer');
+                confettiContainer.innerHTML = '';
+                
+                const confettiColors = ['#ff6b6b', '#48dbfb', '#1dd1a1', '#feca57', '#a29bfe', '#fd79a8'];
+                
+                // Create 60 confetti pieces
+                for (let i = 0; i < 60; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    
+                    // Random position, color, size, delay
+                    const randomX = Math.floor(Math.random() * 100);
+                    const randomDelay = Math.random() * 5; // seconds
+                    const randomDuration = 3 + Math.random() * 4; // 3-7 seconds
+                    const randomColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                    const randomSize = 5 + Math.floor(Math.random() * 10); // 5-15px
+                    const randomShape = Math.floor(Math.random() * 3); // 0-2
+                    
+                    confetti.style.left = `${randomX}%`;
+                    confetti.style.width = `${randomSize}px`;
+                    confetti.style.height = `${randomSize}px`;
+                    confetti.style.backgroundColor = randomColor;
+                    confetti.style.animationDelay = `${randomDelay}s`;
+                    confetti.style.animationDuration = `${randomDuration}s`;
+                    
+                    // Different confetti shapes
+                    switch(randomShape) {
+                        case 0: // Square
+                            break;
+                        case 1: // Circle
+                            confetti.style.borderRadius = '50%';
+                            break;
+                        case 2: // Triangle
+                            confetti.style.width = '0';
+                            confetti.style.height = '0';
+                            confetti.style.backgroundColor = 'transparent';
+                            confetti.style.borderLeft = `${randomSize/2}px solid transparent`;
+                            confetti.style.borderRight = `${randomSize/2}px solid transparent`;
+                            confetti.style.borderBottom = `${randomSize}px solid ${randomColor}`;
+                            break;
+                    }
+                    
+                    confettiContainer.appendChild(confetti);
+                }
+            }
+            
+            function updateNextPuzzleCountdown() {
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow.setHours(0, 0, 0, 0);
+                
+                const diff = tomorrow - now;
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                countdownTimeEl.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            function shareResults() {
+                const gameDate = gameDateEl.textContent.split('-')[0].trim();
+                
+                // Get score emoji
+                let scoreEmoji = '🤢'; // Default emoji
+                if (score >= 2000) {
+                    scoreEmoji = '👑';
+                } else if (score >= 1000) {
+                    scoreEmoji = '🎉';
+                } else if (score >= 500) {
+                    scoreEmoji = '😊';
+                } else if (score >= 200) {
+                    scoreEmoji = '🙂';
+                }
+                
+                const shareText = `${gameDate}\n${scoreEmoji} Score: ${score} | Words: ${foundWords.length}\nLongest Word: ${longestWordEl.textContent}\nPlay Word Pop: https://tadams048.github.io/word-pop-game`;
+                
+                // Try to use the clipboard API
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(shareText)
+                        .then(() => {
+                            showToast('Results copied to clipboard!');
+                        })
+                        .catch(() => {
+                            // Fallback
+                            promptCopyToClipboard(shareText);
+                        });
+                } else {
+                    // Fallback for browsers that don't support clipboard API
+                    promptCopyToClipboard(shareText);
+                }
+            }
+            
+            function promptCopyToClipboard(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    showToast('Results copied to clipboard!');
+                } catch (err) {
+                    showToast('Failed to copy results');
+                }
+                
+                document.body.removeChild(textarea);
+            }
+            
+            function showToast(message) {
+                toastEl.textContent = message;
+                toastEl.classList.add('show');
+                
+                setTimeout(() => {
+                    toastEl.classList.remove('show');
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
