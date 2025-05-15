@@ -1,7 +1,7 @@
 [
   
     {
-      "date": "2025-03-28",
+      "date": "2025-06-07",
       "lines": [
         "Silent, cold, a distant lure.",
         "Dreams once distant, drawing near.",
@@ -15,7 +15,7 @@
       "answer": "MOON LANDING"
     },
     {
-      "date": "2025-03-29",
+      "date": "2025-06-08",
       "lines": [
         "Long snake, sleeping on earth's back,",
         "Stones and whispers form its track.",
@@ -29,7 +29,7 @@
       "answer": "GREAT WALL OF CHINA"
     },
     {
-      "date": "2025-03-30",
+      "date": "2025-05-17",
       "lines": [
         "A beauty built, unsinkable pride,",
         "Carrying souls across the tide.",
@@ -43,7 +43,7 @@
       "answer": "TITANIC"
     },
     {
-      "date": "2025-03-31",
+      "date": "2025-05-18",
       "lines": [
         "In shadowed halls a whisper woke,",
         "A spark, unseen, the silence broke.",
@@ -63,7 +63,7 @@
       "answer": "Telegraph"
     },
     {
-      "date": "2025-04-01",
+      "date": "2025-05-19",
       "lines": [
         "This ones tall and stands serene,",
         "Welcoming, crown of sheen.",
@@ -76,7 +76,7 @@
       "answer": "STATUE OF LIBERTY"
     },
     {
-      "date": "2025-04-02",
+      "date": "2025-05-20",
       "lines": [
        "Invisible threads, weaving tight,",
         "Connections forged both day and night.",
@@ -89,7 +89,7 @@
       "answer": "PRINTING PRESS"
     },
     {
-      "date": "2025-04-03",
+      "date": "2025-05-21",
       "lines": [
         "Three ships sailing, horizon new,",
         "Seas unknown, daring crew.",
@@ -102,7 +102,7 @@
       "answer": "1492"
     },
     {
-      "date": "2025-04-04",
+      "date": "2025-05-22",
       "lines": [
         "Iron spires piercing clouds,",
         "City's heart attracts vast crowds.",
@@ -115,7 +115,7 @@
       "answer": "EIFFEL TOWER"
     },
     {
-      "date": "2025-04-05",
+      "date": "2025-05-23",
       "lines": [
         "Wind and fabric, wood and dreams,",
         "Briefly soaring, fragile beams.",
@@ -128,7 +128,7 @@
       "answer": "WRIGHT BROTHERS"
     },  
   {
-    "date": "2025-03-24",
+    "date": "2025-05-24",
     "lines": [
       "Mountains embrace me, waters divide me",
       "Ancient whispers echo through my valleys",
@@ -151,7 +151,7 @@
   },
   
   {
-    "date": "2025-03-16",
+    "date": "2025-05-25",
     "lines": [
       "Liquid rebellion brewed under moonlight",
       "Colonial shadows danced on darkened waters",
@@ -169,7 +169,7 @@
     "answer": "BOSTON TEA PARTY"
   },
   {
-    "date": "2025-03-17",
+    "date": "2025-05-26",
     "lines": [
       "I emerged from neglect and carelessness",
       "An unseen savior born of happenstance",
@@ -187,7 +187,7 @@
     "answer": "PENICILLIN"
   },
   {
-    "date": "2025-03-18",
+    "date": "2025-05-27",
     "lines": [
       "I shortened journeys never meant to be direct",
       "A passage carved where nature placed no path",
@@ -205,7 +205,7 @@
     "answer": "SUEZ CANAL"
   },
   {
-    "date": "2025-03-19",
+    "date": "2025-05-28",
     "lines": [
       "I proved what shape our world truly holds",
       "Beginning and ending at the same point",
@@ -223,7 +223,7 @@
     "answer": "MAGELLAN"
   },
   {
-    "date": "2025-03-20",
+    "date": "2025-05-29",
     "lines": [
       "One breath ended, millions followed after",
       "Summer streets witnessed destiny's pivot",
@@ -241,7 +241,7 @@
     "answer": "FRANZ FERDINAND"
   },
   {
-    "date": "2025-03-21",
+    "date": "2025-05-30",
     "lines": [
       "Etched in basalt, I held time captive",
       "Three voices spoke from a single throat",
@@ -259,7 +259,7 @@
     "answer": "ROSETTA STONE"
   },
   {
-    "date": "2025-03-22",
+    "date": "2025-05-31",
     "lines": [
       "Merchants of wheels transcended their domain",
       "Gravity surrendered its ancient dominion",
@@ -277,7 +277,7 @@
     "answer": "WRIGHT BROTHERS"
   },
   {
-    "date": "2025-03-23",
+    "date": "2025-06-01",
     "lines": [
       "I revealed what was always there but never seen",
       "Distance collapsed through curved glass",
@@ -296,7 +296,7 @@
   },
   
   {
-    "date": "2025-03-06",
+    "date": "2025-06-02",
     "lines": [
       "I'm light as a feather, yet the strongest person cannot hold me for much more than a minute.",
       "I can slip through your fingers without a trace.",
@@ -308,7 +308,7 @@
   },
 
   {
-    "date": "2025-03-14", 
+    "date": "2025-06-03", 
     "lines": [
       "I sparked a change with subtle grace,",
       "Quiet power reshaped our pace.",
@@ -362,7 +362,7 @@
     ]
   },
       {
-        "date": "2025-03-16",
+        "date": "2025-06-04",
         "lines": [
           "I slept in silence, cloaked in green,",
           "A peaceful giant, calm, serene.",
@@ -417,7 +417,7 @@
       },
 
   {
-    "date": "2025-03-15",
+    "date": "2025-06-05",
     "lines": [
       "I ventured forth toward unknown fate,",
       "Bearing dreams not yet fully grown.",
@@ -472,7 +472,7 @@
   },
   
   {
-    "date": "2025-03-09",
+    "date": "2025-05-16",
     "lines": [
       "I am a clash that changed a nation's fate",
       "In autumn's chill when arrows filled the air",
@@ -593,7 +593,7 @@
   },
 
   {
-      "date": "2025-03-10",
+      "date": "2025-05-15",
       "lines": [
         "I have entrances, but no doors.",
         "I rise from the ground, but remain humble.",
@@ -860,7 +860,7 @@
 },
 
   {
-  "date": "2025-03-08",
+  "date": "2025-06-08",
   "lines": [
     "I have cities, but no houses.",
     "I have mountains, but no trees.",
@@ -1092,6 +1092,46 @@
     {"word": "Rural", "similarity": 33},
     {"word": "Paper", "similarity": 33},
     {"word": "Sheet", "similarity": 32},
+{"word": "Static", "similarity": 34},
+{"word": "Pattern", "similarity": 32},
+{"word": "Empire", "similarity": 32},
+{"word": "Municipality", "similarity": 32},
+{"word": "Forest", "similarity": 32},
+{"word": "Cove", "similarity": 32},
+    {"word": "Suburban", "similarity": 32},
+    {"word": "Book", "similarity": 32},
+    {"word": "Static", "similarity": 34},
+    {"word": "Pattern", "similarity": 32},
+    {"word": "Empire", "similarity": 32},
+    {"word": "Municipality", "similarity": 32},
+    {"word": "Forest", "similarity": 32},
+    {"word": "Cove", "similarity": 32},
+    {"word": "Suburban", "similarity": 32},
+    {"word": "Book", "similarity": 32},
+    {"word": "Static", "similarity": 34},
+    {"word": "Pattern", "similarity": 32},
+    {"word": "Empire", "similarity": 32},
+    {"word": "Municipality", "similarity": 32},
+    {"word": "Forest", "similarity": 32},
+    {"word": "Cove", "similarity": 32},
+    {"word": "Suburban", "similarity": 32},
+    {"word": "Book", "similarity": 32},
+    {"word": "Static", "similarity": 34},
+    {"word": "Pattern", "similarity": 32},
+    {"word": "Empire", "similarity": 32},
+    {"word": "Municipality", "similarity": 32},
+    {"word": "Forest", "similarity": 32},
+    {"word": "Cove", "similarity": 32},
+    {"word": "Suburban", "similarity": 32},
+    {"word": "Book", "similarity": 32},
+    {"word": "Static", "similarity": 34},
+    {"word": "Pattern", "similarity": 32},
+    {"word": "Empire", "similarity": 32},
+    {"word": "Municipality", "similarity": 32},
+    {"word": "Forest", "similarity": 32},
+    {"word": "Cove", "similarity": 32},
+    {"word": "Suburban", "similarity": 32},
+    {"word": "Book", "similarity": 32},
     {"word": "Static", "similarity": 34},
     {"word": "Pattern", "similarity": 32},
     {"word": "Empire", "similarity": 32},
