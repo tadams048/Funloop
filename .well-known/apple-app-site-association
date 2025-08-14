@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["XVN796PR2S.com.funloop.socra"],
+        "components": [
+          { "/auth/*": {} }
+        ]
+      }
+    ]
+  }
+}
