@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bamber – Sub‑processors</title>
+    <meta name="description" content="List of Funloop LLC’s core service providers (sub‑processors) for the Bamber app.">
+    <link rel="stylesheet" href="/bamber/styles.css?v=2">
+    <style>
+      .doc{max-width:980px;margin:32px auto;padding:0 20px}
+      table{width:100%;border-collapse:collapse}
+      th,td{padding:10px;text-align:left;border-bottom:1px solid rgba(0,0,0,0.08)}
+      .muted{color:#6b7280}
+    </style>
+  </head>
+  <body>
+    <main class="doc">
+      <h1>Sub‑processors</h1>
+      <p class="muted">Last updated: August 15, 2025</p>
+      <p>Funloop LLC engages the following service providers to support the Bamber app. We require processors to protect Personal Information and process it only under our instructions.</p>
+      <div class="card" style="padding:12px">
+        <table>
+          <thead>
+            <tr>
+              <th>Provider</th>
+              <th>Purpose</th>
+              <th>Data Categories</th>
+              <th>Typical Region</th>
+              <th>Policy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Apple (StoreKit)</td>
+              <td>Subscriptions, purchases, entitlements</td>
+              <td>Purchase metadata, product IDs (no card data)</td>
+              <td>US/EU</td>
+              <td><a href="https://www.apple.com/legal/privacy/">Privacy</a></td>
+            </tr>
+            <tr>
+              <td>Supabase</td>
+              <td>Auth (magic link), database, functions</td>
+              <td>Parent email, consent records, child profiles, interactions</td>
+              <td>US/EU</td>
+              <td><a href="https://supabase.com/privacy">Privacy</a></td>
+            </tr>
+            <tr>
+              <td>OpenAI</td>
+              <td>Language model responses</td>
+              <td>Prompts, necessary context</td>
+              <td>US</td>
+              <td><a href="https://openai.com/policies/privacy-policy">Privacy</a></td>
+            </tr>
+            <tr>
+              <td>ElevenLabs</td>
+              <td>Text‑to‑speech generation</td>
+              <td>TTS text, returned audio</td>
+              <td>US/EU</td>
+              <td><a href="https://elevenlabs.io/privacy">Privacy</a></td>
+            </tr>
+            <tr>
+              <td>Runware</td>
+              <td>Image generation</td>
+              <td>Image prompts, generated image URLs</td>
+              <td>US</td>
+              <td><a href="https://runware.ai/privacy">Privacy</a></td>
+            </tr>
+            <tr>
+              <td>Meta (Facebook/Instagram) <span class="muted">(if enabled)</span></td>
+              <td>Advertising/attribution (SKAN; ATT if permitted)</td>
+              <td>Aggregated attribution; IDFA only with ATT/consent</td>
+              <td>US/EU</td>
+              <td><a href="https://www.facebook.com/policy.php">Privacy</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="margin-top:12px">We may update this list as services evolve. Significant changes will be noted in our Privacy Policy.</p>
+    </main>
+  </body>
+  </html>
+
