@@ -1,0 +1,92 @@
+Terms of Service
+
+Effective date: August 15, 2025
+
+These Terms of Service ("Terms") govern your access to and use of Socra (the “App”) and related services (collectively, the “Service”) provided by Funloop, Inc. (“Funloop”, “we”, “our”, or “us”). By using the Service, you agree to these Terms. If you do not agree, do not use the Service.
+
+1. Overview & Relationship
+
+Bamber is a child‑friendly AI conversation app intended for children under parent/guardian supervision. A verified parent session is required to enable child use. You are responsible for ensuring appropriate use by children you supervise.
+
+2. Eligibility & Accounts
+
+- You must be at least 18 years old to create a parent account, purchase subscriptions, and provide verifiable parental consent.
+- You represent that you are the parent or legal guardian of any child profiles you create.
+- You agree to keep your account secure and notify us of any unauthorized use.
+
+3. Parental Consent & Child Profiles
+
+- You consent to our processing of information for you and child profiles you create, as described in our Privacy Policy.
+- You can add, edit, or delete child profiles in Parent‑gated settings. The quick switcher is switch‑only (no edit/delete).
+- We use row‑level security (RLS) to scope data to your account.
+
+4. Subscriptions, Trials, and Billing
+
+- Subscriptions, trials, and billing are managed by Apple via StoreKit. Pricing, billing cycles, free trials, and renewal terms are shown in‑app.
+- Your subscription will auto‑renew unless canceled at least 24 hours before the end of the current period.
+- Cancellations and refunds are handled by Apple and are subject to App Store policies.
+
+5. Acceptable Use
+
+You agree not to:
+
+- Use the Service for unlawful, harmful, or abusive purposes.
+- Attempt to bypass age gates, authorization, or security mechanisms.
+- Upload content that is illegal, infringing, or otherwise objectionable.
+- Interfere with the Service’s operation (e.g., reverse engineering or scraping).
+
+We may suspend or terminate access for violations.
+
+6. AI & Educational Content
+
+The Service uses third‑party AI providers to generate responses and optional images. AI output may not be error‑free and is not professional advice. You are responsible for supervising a child’s use and reviewing content for appropriateness.
+
+7. Intellectual Property
+
+- We (and our licensors) own all rights in the Service, including characters, artwork, code, and content we provide.
+- You own the content you submit; you grant us a non‑exclusive, worldwide, royalty‑free license to host, process, display, and use your submitted content solely to provide and improve the Service.
+
+8. Third‑Party Services
+
+We rely on third‑party providers (e.g., Apple, Supabase, OpenAI, ElevenLabs, Runware). Their terms and privacy policies may also apply. We are not responsible for third‑party websites, apps, or services.
+
+9. Safety & Device Controls
+
+- Microphone use requires your consent in device settings.
+- We provide UI measures to reduce accidental system gestures but cannot disable OS‑level gestures.
+- For fully locked‑down kid mode, use iOS Guided Access or MDM Single‑App Mode.
+
+10. Termination
+
+We may suspend or terminate access for any breach of these Terms or suspected misuse. You may stop using the Service at any time and can request deletion of account data as described in our Privacy Policy.
+
+11. Disclaimers
+
+THE SERVICE IS PROVIDED “AS IS” AND “AS AVAILABLE.” TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON‑INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, SECURE, OR ERROR‑FREE.
+
+12. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, FUNLOOP AND ITS AFFILIATES, OFFICERS, EMPLOYEES, AND PARTNERS WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF DATA, PROFITS, OR REVENUE, ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. IN NO EVENT WILL OUR AGGREGATE LIABILITY EXCEED THE GREATER OF (A) THE AMOUNTS YOU PAID TO US FOR THE SERVICE DURING THE 12 MONTHS PRIOR TO THE CLAIM OR (B) USD $100.
+
+13. Indemnification
+
+You agree to indemnify and hold Funloop harmless from any claims, liabilities, damages, losses, and expenses (including reasonable attorneys’ fees) arising from your use of the Service or violation of these Terms.
+
+14. Governing Law; Dispute Resolution
+
+These Terms are governed by the laws of the State of California, without regard to conflict of laws principles. You agree to the exclusive jurisdiction and venue of state and federal courts located in San Francisco County, California, for disputes arising from these Terms or the Service. If you are a consumer in the EEA/UK, you may have mandatory local rights that supersede the foregoing.
+
+15. Changes to the Service or Terms
+
+We may update the Service and these Terms from time to time. If changes are material, we will notify you (e.g., in‑app notice). Your continued use of the Service after changes become effective constitutes acceptance of the updated Terms.
+
+16. Contact
+
+Funloop, Inc.
+
+Email: support@funloop.com
+
+Mailing: 30 N Gould St Ste R, Sheridan, WY 82801
+
+For information about how we collect and use personal data, see our [Privacy Policy](www.funloop.com/bamber/privacypolicy/).
+
