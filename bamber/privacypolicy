@@ -1,0 +1,115 @@
+Privacy Policy
+
+Effective date: August 15, 2025
+
+This Privacy Policy describes how Funloop, Inc. ("Funloop", "we", "our", or "us") collects, uses, and shares information in connection with the Socra mobile application (also referred to internally as “Bamber”), related websites, and services (collectively, the “Service”).
+
+If you are a parent or guardian, this Policy explains how we handle your information and your child’s information when you use the Service, including our parent email verification and child profile features. By using the Service, you agree to the practices described here.
+
+If you do not agree, please discontinue use of the Service.
+
+Who We Are
+
+- Company: Funloop LLC
+- App: Bamber AI, a child‑friendly AI conversation and learning app using the “Bamber” character experience.
+- Contact: privacy@funloop.com (or support@funloop.com)
+- Site: https://www.funloop.com/bamber
+
+What We Collect
+
+We collect information in the following categories to provide and improve the Service:
+
+- Account & Parent Verification
+  - Parent email address and email verification status (via magic link sign‑in).
+  - Subscription state and in‑app purchase status via Apple’s StoreKit (we do not receive your full payment method from Apple).
+
+- Child Profiles (configured by a parent)
+  - Nickname, birth year (or age), and an avatar emoji/icon.
+  - The currently active child profile associated with the parent account.
+
+- App Content & Usage
+  - Conversation data: questions asked, generated AI responses, timestamps, and whether images were generated.
+  - Optional image generation requests and resulting image URLs.
+  - Minimal analytics events to help us maintain quality.
+  - A pseudonymous device identifier stored in the device keychain to support restore and quality diagnostics.
+
+- Audio, Speech, and Media
+  - Microphone access (with your consent) is used for speech recognition and real‑time interaction.
+  - We use Apple’s speech APIs on‑device; transcripts and user prompts may be sent to AI providers to fulfill requests.
+  - Pre‑recorded or synthesized voice responses are played back in the app.
+
+How We Use Information
+
+We use information to:
+
+- Provide the Service and core features (speech recognition, AI responses, text‑to‑speech playback, image generation).
+- Set up and maintain parent sessions, verify parental consent, and manage child profiles.
+- Synchronize content to your account using our database with row‑level security (RLS) to ensure parent‑scoped access.
+- Diagnose issues, measure performance, and maintain reliability (e.g., animation stall detection).
+- Comply with legal obligations and enforce our Terms of Service.
+
+Legal Bases (EEA/UK)
+
+Where applicable, we process personal data on the following legal bases:
+
+- Performance of a contract (providing the Service to you).
+- Legitimate interests (maintaining security, quality, analytics limited to service improvement).
+- Consent (e.g., microphone access, parent email verification).
+- Compliance with legal obligations.
+
+How We Share Information
+
+We do not sell personal information. We share data only with service providers (“processors”) who help us operate the Service, and only as necessary:
+
+- Apple (StoreKit) – in‑app purchases, subscriptions, and entitlements.
+- Supabase – authentication (magic link), database, and secure functions; stores parent, child profile, consent, and interaction records behind RLS.
+- AI & Media Providers – to fulfill user requests:
+  - OpenAI (language model responses based on your prompts).
+  - ElevenLabs (text‑to‑speech) for voice playback.
+  - Runware (image generation) for optional illustrations.
+
+These processors are contractually bound to protect your information and may process data in the United States or other jurisdictions. We may also disclose information if required by law or to protect our rights and users.
+
+Children’s Privacy & Parental Consent
+
+Bamber is designed for use by children under the supervision of a parent or guardian. We require a verified parent session before a child can use the app. Parents control creation of child profiles and consent to processing. We apply row‑level security so that a parent can access only their own data. If we learn that we collected personal information from a child without appropriate consent, we will delete it.
+
+International Transfers
+
+We and our service providers may process information in the United States and other countries. Where required, we use appropriate safeguards for cross‑border transfers.
+
+Data Retention
+
+We retain information for as long as needed to provide the Service and for legitimate business or legal purposes. You can request deletion of your account data (subject to applicable law and safety requirements).
+
+Security
+
+We employ technical and organizational safeguards including HTTPS in transit, access controls, and RLS at the database layer. No method of transmission or storage is 100% secure; we work to improve protections continually.
+
+Your Rights & Choices
+
+Depending on your location, you may have rights to access, correct, delete, or port your data, object to or restrict certain processing, and withdraw consent. To exercise rights or for any privacy questions, contact privacy@funloop.com.
+
+You can also:
+- Manage microphone permissions in device Settings.
+- Manage subscription and billing via Apple’s App Store settings.
+- Delete or edit child profiles inside the app (in Parent‑gated settings).
+
+Cookies & Tracking
+
+The mobile app does not use third‑party advertising SDKs. Our minimal analytics are service‑oriented, not for behavioral ads. Our website may use cookies for basic functionality and analytics; see the website footer for details.
+
+Changes to This Policy
+
+We may update this Policy from time to time. We will change the “Effective date” above and, when appropriate, notify you in the app or by email. Your continued use of the Service after changes indicates acceptance.
+
+Contact
+
+Funloop LLC
+
+Email: privacy@funloop.com
+
+Mailing: 30 N Gould St Ste R, Sheridan, WY 82801
+
+If you have unresolved privacy concerns, you may have the right to contact your local data protection authority.
+
