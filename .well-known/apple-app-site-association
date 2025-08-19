@@ -2,7 +2,7 @@
   "applinks": {
     "details": [
       {
-        "appIDs": ["XVN796PR2S.com.funloop.socra"],
+        "appIDs": ["XVN796PR2S.com.funloop.bamber"],
         "components": [
           { "/auth/*": {} }
         ]
