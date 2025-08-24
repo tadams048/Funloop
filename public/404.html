@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Funloop — Sign-in Link</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+           margin: 0; padding: 24px; background:#f6f7fb; }
+    .wrap { max-width: 720px; margin: 0 auto; }
+    .card { background: #fff; border-radius: 16px; padding: 20px 24px; box-shadow: 0 6px 24px rgba(0,0,0,.07); }
+    h1 { font-size: 20px; margin: 0 0 8px; }
+    .muted { color: #4b5563; font-size: 14px; }
+    .status { padding: 12px 14px; border-radius: 12px; margin: 12px 0 16px; font-size: 14px; }
+    .ok { background:#ecfdf5; color:#065f46; }
+    .warn { background:#fff7ed; color:#7c2d12; }
+    .err { background:#fef2f2; color:#7f1d1d; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    button, a.btn { appearance:none; border:0; border-radius:12px; padding:10px 14px; font-size:14px;
+                    cursor:pointer; background:#111827; color:#fff; text-decoration:none; }
+    button.secondary, a.secondary { background:#e5e7eb; color:#111827; }
+    code { background:#f3f4f6; padding:2px 6px; border-radius:6px; font-size: 13px; }
+    .small { font-size: 12px; color:#6b7280; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1 id="title">Checking your link…</h1>
+      <div id="status" class="status"></div>
+
+      <div class="row">
+        <a id="openApp" class="btn" href="#">Open in Funloop</a>
+        <a id="install" class="secondary btn" href="https://apps.apple.com/">Install the app</a>
+        <button id="copyUrl" class="secondary">Copy this URL</button>
+      </div>
+
+      <p class="small">
+        Tip: if you opened this from Gmail/Slack, long-press the link and choose <em>Open in Safari</em>.
+      </p>
+
+      <p class="muted" id="debug"></p>
+    </div>
+  </div>
+
+  <script>
+    // ----- config you can tweak -----
+    const universalLinkBase = 'https://app.funloop.com'; // iOS Universal Link (must match AASA)
+    const customSchemeBase  = 'funloop://auth/callback'; // optional custom scheme
+    const installUrl        = 'https://apps.apple.com/app/id1234567890'; // your App Store URL
+
+    // ----- helpers -----
+    function parseParams() {
+      // Supabase can send params in ?query or #hash. Parse both.
+      const search = new URLSearchParams(window.location.search);
+      const hash   = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+
+      // merge — hash wins if dupes (common for OAuth)
+      const merged = new URLSearchParams();
+      for (const [k,v] of search) merged.set(k,v);
+      for (const [k,v] of hash)   merged.set(k,v);
+      return merged;
+    }
+
+    function redact(token) {
+      if (!token) return '';
+      if (token.length <= 10) return token;
+      return token.slice(0,5) + '…' + token.slice(-5);
+    }
+
+    function inIOSStandaloneWebView() {
+      // crude check; webviews often block universal links
+      const ua = navigator.userAgent || '';
+      const isIOS = /iPad|iPhone|iPod/.test(ua);
+      const isWebkit = /WebKit/.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua);
+      return isIOS && isWebkit && !('standalone' in navigator && navigator.standalone);
+    }
+
+    // ----- main -----
+    const q = parseParams();
+    const els = {
+      title:  document.getElementById('title'),
+      status: document.getElementById('status'),
+      open:   document.getElementById('openApp'),
+      install:document.getElementById('install'),
+      copy:   document.getElementById('copyUrl'),
+      debug:  document.getElementById('debug'),
+    };
+    els.install.href = installUrl;
+
+    // Supabase magic links typically include:
+    //   token, type (magiclink|signup|recovery|email_change), or error params
+    const token = q.get('token') || q.get('access_token') || q.get('otp');
+    const type  = q.get('type')  || q.get('token_type') || '';
+    const error = q.get('error') || q.get('error_code');
+    const description = q.get('error_description');
+
+    // Build deep link target: keep all params intact
+    const paramsStr = q.toString();
+    const universalTarget = `${universalLinkBase}/auth/verify?${paramsStr}`;
+    const schemeTarget    = `${customSchemeBase}?${paramsStr}`;
+
+    function setStatus(className, text) {
+      els.status.className = `status ${className}`;
+      els.status.textContent = text;
+    }
+
+    if (error) {
+      els.title.textContent = 'Link issue';
+      setStatus('err', description || `Error: ${error}`);
+    } else if (token) {
+      els.title.textContent = 'Link looks good';
+      setStatus('ok', `Handing off to the Funloop app… (${type || 'magic link'})`);
+    } else {
+      els.title.textContent = 'Waiting for link parameters';
+      setStatus('warn', 'No token found. If you tapped from email, try “Open in Safari”.');
+    }
+
+    // Always wire the button to your deep link
+    els.open.href = universalTarget;
+
+    // Try opening the app automatically after a tick
+    setTimeout(() => {
+      // Prefer Universal Link. If the environment likely blocks it, fall back to custom scheme.
+      if (inIOSStandaloneWebView()) {
+        // many in-app browsers block UL handoff; try custom scheme
+        window.location.href = schemeTarget;
+      } else {
+        window.location.href = universalTarget;
+      }
+    }, 250);
+
+    // Copy current URL for support/debug
+    els.copy.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(window.location.href);
+    });
+
+    // Minimal debug line (redacted)
+    const bits = [];
+    if (type)  bits.push(`type=${type}`);
+    if (token) bits.push(`token=${redact(token)}`);
+    if (error) bits.push(`error=${error}`);
+    if (description) bits.push(`desc=${description}`);
+    els.debug.textContent = bits.length ? `Debug: ${bits.join('  |  ')}` : '';
+  </script>
+</body>
+</html>
