@@ -6,7 +6,8 @@
           "XVN796PR2S.com.funloop.bamber"
         ],
         "paths": [
-          "/auth/*"
+          "/auth/*",
+          "/*"
         ]
       }
     ]
