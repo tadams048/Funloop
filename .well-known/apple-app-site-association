@@ -1,11 +1,15 @@
-{ 
-  "applinks": { 
-    "details": [ { 
-        "appIDs": ["XVN796PR2S.com.funloop.bamber"], 
-        "components": [ 
-          { "/auth/*": {} } 
-        ] 
-      } 
-    ] 
-  } 
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "XVN796PR2S.com.funloop.bamber"
+        ],
+        "paths": [
+          "/auth/*"
+        ]
+      }
+    ]
+  }
 }
+
