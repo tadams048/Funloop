@@ -19,8 +19,8 @@
     .row { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
     button, a.btn { appearance:none; border:0; border-radius:12px; padding:10px 14px; font-size:14px;
                     cursor:pointer; background:#111827; color:#fff; text-decoration:none; }
-    button.secondary, a.secondary { background:#e5e7eb; color:#111827; }
-    code { background:#f3f4f6; padding:2px 6px; border-radius:6px; font-size:13px; }
+    a.secondary, button.secondary { background:#e5e7eb; color:#111827; }
+    .links { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
     .small { font-size:12px; color:#6b7280; margin-top:10px; }
   </style>
 </head>
@@ -36,8 +36,12 @@
         <button id="copyUrl" class="secondary">Copy this URL</button>
       </div>
 
+      <div class="links">
+        <a id="openSafari" class="secondary btn" href="#">Open in Safari (Universal Link)</a>
+      </div>
+
       <p class="small">
-        If opened from Gmail/Slack, choose <em>Open in Safari</em> for best results.
+        If this opened inside Gmail/Slack, use <em>Open in Safari</em> or the button above.
       </p>
 
       <p class="muted" id="debug"></p>
@@ -45,14 +49,19 @@
   </div>
 
   <script>
-    // ----- Configure these -----
-    const universalLinkBase = 'https://app.funloop.com';        // must match AASA domain
-    const customSchemeBase  = 'funloop://auth/callback';         // your custom scheme deeplink
-    const installUrl        = 'APP_STORE_URL_HERE';              // real App Store URL
+    // ===== Config =====
+    const UNIVERSAL_HOST = 'https://app.funloop.com';         // must match your AASA domain
+    const UNIVERSAL_PATH = '/auth/verify';                    // the path you allow in AASA
+    const CUSTOM_SCHEME  = 'funloop://auth/callback';         // your app's custom scheme deeplink
+    const APP_STORE_URL  = 'APP_STORE_URL_HERE';
 
-    // ----- Helpers -----
+    // ===== Helpers =====
+    const UA = navigator.userAgent || '';
+    const isIOS      = /iPad|iPhone|iPod/.test(UA);
+    const isSafari   = /Safari/.test(UA) && !/CriOS|FxiOS|EdgiOS/.test(UA);
+    const inAppBrowser = /Gmail|FBAN|FBAV|Line|WeChat|Twitter|Slack|Instagram|LinkedIn|Pinterest/i.test(UA);
+
     function parseParams() {
-      // Supabase may put params in ?query or #hash; merge both (hash wins on dupes)
       const s = new URLSearchParams(location.search);
       const h = new URLSearchParams(location.hash.replace(/^#/, ''));
       const m = new URLSearchParams();
@@ -60,45 +69,39 @@
       for (const [k,v] of h) m.set(k,v);
       return m;
     }
-    function redact(token) {
-      if (!token) return '';
-      return token.length <= 10 ? token : token.slice(0,5) + '…' + token.slice(-5);
+    function redact(t) { return !t ? '' : (t.length<=10 ? t : t.slice(0,5)+'…'+t.slice(-5)); }
+    function setStatus(cls, text) {
+      const el = document.getElementById('status');
+      el.className = `status ${cls}`;
+      el.textContent = text;
     }
-    const UA = navigator.userAgent || '';
-    const isIOS     = /iPad|iPhone|iPod/.test(UA);
-    const isSafari  = /Safari/.test(UA) && !/CriOS|FxiOS|EdgiOS/.test(UA);
-    const inAppBrowser = /Gmail|FBAN|FBAV|Line|WeChat|Twitter|Slack|Instagram|LinkedIn|Pinterest/i.test(UA);
 
-    // ----- Build targets -----
+    // ===== Build targets =====
     const q = parseParams();
     const paramsStr = q.toString();
-    const universalTarget = `${universalLinkBase}/auth/verify?${paramsStr}`;
-    const schemeTarget    = `${customSchemeBase}?${paramsStr}`;
+    const universalTarget = `${UNIVERSAL_HOST}${UNIVERSAL_PATH}?${paramsStr}`;
+    const schemeTarget    = `${CUSTOM_SCHEME}?${paramsStr}`;
 
-    // ----- UI -----
+    // ===== Wire UI =====
     const els = {
       title:  document.getElementById('title'),
-      status: document.getElementById('status'),
       open:   document.getElementById('openApp'),
+      openSafari: document.getElementById('openSafari'),
       install:document.getElementById('install'),
       copy:   document.getElementById('copyUrl'),
       debug:  document.getElementById('debug'),
     };
-    els.install.href = installUrl;
-    els.open.href = universalTarget;
-    els.copy.addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText(location.href); } catch {}
-    });
+    els.install.href = APP_STORE_URL;
+    // Button uses custom scheme (works in most in-app browsers)
+    els.open.href = schemeTarget;
+    // Safari link uses Universal Link (best UX in Safari)
+    els.openSafari.href = universalTarget;
+    els.copy.onclick = async () => { try { await navigator.clipboard.writeText(location.href); } catch {} };
 
     const token = q.get('token') || q.get('access_token') || q.get('otp');
     const type  = q.get('type')  || q.get('token_type') || '';
     const error = q.get('error') || q.get('error_code');
     const description = q.get('error_description');
-
-    function setStatus(cls, text) {
-      els.status.className = `status ${cls}`;
-      els.status.textContent = text;
-    }
 
     if (error) {
       els.title.textContent = 'Link issue';
@@ -111,35 +114,39 @@
       setStatus('warn', 'No token found. If you tapped from email, try “Open in Safari”.');
     }
 
-    // ----- Aggressive auto-handoff sequence -----
-    function tryHandoff() {
-      // Many in-app browsers block Universal Links — go straight to the custom scheme
+    // ===== Auto-handoff (loop-safe) =====
+    // Avoid repeated attempts: only try once per page view.
+    const HANDOFF_FLAG = 'funloop_handoff_attempted';
+    function tryHandoffOnce() {
+      if (sessionStorage.getItem(HANDOFF_FLAG) === '1') return;
+      sessionStorage.setItem(HANDOFF_FLAG, '1');
+
+      // If we're already at the Universal Link URL (same host+path), don't "navigate" to it again.
+      const alreadyAtUL = location.origin + location.pathname === (UNIVERSAL_HOST + UNIVERSAL_PATH);
       if (inAppBrowser) {
-        location.replace(schemeTarget);
+        // In-app browsers usually block UL; go straight to custom scheme
+        location.href = schemeTarget;
         return;
       }
-
-      // On iOS Safari, try Universal Link first, then scheme if it doesn't switch quickly
-      if (isIOS && isSafari) {
-        // 1) Universal Link (preferred)
+      if (isIOS && isSafari && !alreadyAtUL) {
+        // 1) Try Universal Link first (preferred in Safari)
         location.replace(universalTarget);
-
-        // 2) If still visible after a short delay, UL likely failed → try scheme
+        // 2) If still visible shortly after, UL likely didn't take → try scheme
         setTimeout(() => {
           if (document.visibilityState === 'visible') location.href = schemeTarget;
-        }, 350);
+        }, 400);
         return;
       }
-
-      // Other browsers/platforms: try the custom scheme
-      location.replace(schemeTarget);
+      // Other browsers/platforms: use custom scheme
+      location.href = schemeTarget;
     }
 
     window.addEventListener('load', () => {
-      setTimeout(tryHandoff, 150); // small delay lets the page paint first
+      // Small delay so the DOM paints before we navigate
+      setTimeout(tryHandoffOnce, 150);
     });
 
-    // Minimal debug line (redacted)
+    // Minimal debug
     const bits = [];
     if (type)  bits.push(`type=${type}`);
     if (token) bits.push(`token=${redact(token)}`);
