@@ -4,7 +4,8 @@
       {
         "appIDs": ["XVN796PR2S.com.funloop.bamber"],
         "components": [
-          { "/auth/*": {} }
+          { "/": "/auth/*" },   // allow /auth/... (e.g., /auth/verify)
+          { "/": "/" }          // optional: allow all paths while testing
         ]
       }
     ]
