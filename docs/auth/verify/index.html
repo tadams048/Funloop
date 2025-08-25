@@ -4,24 +4,24 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>Funloop — Sign-in Link</title>
+  <title>Bamber — Sign-in Link</title>
   <style>
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
            margin: 0; padding: 24px; background:#f6f7fb; }
     .wrap { max-width: 720px; margin: 0 auto; }
     .card { background:#fff; border-radius:16px; padding:20px 24px; box-shadow:0 6px 24px rgba(0,0,0,.07); }
     h1 { font-size:20px; margin:0 0 8px; }
-    .muted { color:#4b5563; font-size:14px; }
     .status { padding:12px 14px; border-radius:12px; margin:12px 0 16px; font-size:14px; }
     .ok   { background:#ecfdf5; color:#065f46; }
     .warn { background:#fff7ed; color:#7c2d12; }
     .err  { background:#fef2f2; color:#7f1d1d; }
     .row { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
-    button, a.btn { appearance:none; border:0; border-radius:12px; padding:10px 14px; font-size:14px;
-                    cursor:pointer; background:#111827; color:#fff; text-decoration:none; }
-    a.secondary, button.secondary { background:#e5e7eb; color:#111827; }
-    .links { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .primary { appearance:none; border:0; border-radius:12px; padding:10px 14px; font-size:14px;
+               cursor:pointer; background:#111827; color:#fff; text-decoration:none; }
+    .section { margin-top:22px; padding-top:14px; border-top:1px solid #e5e7eb; }
+    .muted { color:#4b5563; font-size:14px; }
     .small { font-size:12px; color:#6b7280; margin-top:10px; }
+    a.btn { display:inline-block; border-radius:10px; padding:8px 12px; background:#e5e7eb; color:#111827; text-decoration:none; font-size:14px; margin-right:8px; }
   </style>
 </head>
 <body>
@@ -30,38 +30,31 @@
       <h1 id="title">Checking your link…</h1>
       <div id="status" class="status"></div>
 
+      <!-- Primary action only -->
       <div class="row">
-        <a id="openApp" class="btn" href="#">Open in Funloop</a>
-        <a id="install" class="secondary btn" href="APP_STORE_URL_HERE">Install the app</a>
-        <button id="copyUrl" class="secondary">Copy this URL</button>
+        <a id="openBamber" class="primary" href="#">Open Bamber</a>
       </div>
 
-      <div class="links">
-        <a id="openSafari" class="secondary btn" href="#">Open in Safari (Universal Link)</a>
+      <!-- Secondary actions (moved down to reduce confusion) -->
+      <div class="section">
+        <p class="muted">If nothing happens:</p>
+        <div class="row">
+          <a id="openSafari" class="btn" href="#">Open in Safari (Universal Link)</a>
+          <a id="copyUrl" class="btn" href="#">Copy this URL</a>
+        </div>
+        <p class="small">Tip: If you tapped from Gmail/Slack, use <em>Open in Safari</em>.</p>
+        <p class="muted" id="debug"></p>
       </div>
-
-      <p class="small">
-        If this opened inside Gmail/Slack, use <em>Open in Safari</em> or the button above.
-      </p>
-
-      <p class="muted" id="debug"></p>
     </div>
   </div>
 
   <script>
-    // ===== Config =====
-    const UNIVERSAL_HOST = 'https://app.funloop.com';         // must match your AASA domain
-    const UNIVERSAL_PATH = '/auth/verify';                    // the path you allow in AASA
-    const CUSTOM_SCHEME  = 'funloop://auth/callback';         // your app's custom scheme deeplink
-    const APP_STORE_URL  = 'APP_STORE_URL_HERE';
+    // ---- Minimal, UL-only setup (no custom scheme) ----
+    const HOST = 'https://app.funloop.com';
+    const PATH = '/auth/verify';
 
-    // ===== Helpers =====
-    const UA = navigator.userAgent || '';
-    const isIOS      = /iPad|iPhone|iPod/.test(UA);
-    const isSafari   = /Safari/.test(UA) && !/CriOS|FxiOS|EdgiOS/.test(UA);
-    const inAppBrowser = /Gmail|FBAN|FBAV|Line|WeChat|Twitter|Slack|Instagram|LinkedIn|Pinterest/i.test(UA);
-
-    function parseParams() {
+    // Merge ?query and #hash params (hash wins on dupes)
+    function mergedParams() {
       const s = new URLSearchParams(location.search);
       const h = new URLSearchParams(location.hash.replace(/^#/, ''));
       const m = new URLSearchParams();
@@ -69,90 +62,66 @@
       for (const [k,v] of h) m.set(k,v);
       return m;
     }
-    function redact(t) { return !t ? '' : (t.length<=10 ? t : t.slice(0,5)+'…'+t.slice(-5)); }
-    function setStatus(cls, text) {
-      const el = document.getElementById('status');
-      el.className = `status ${cls}`;
-      el.textContent = text;
-    }
 
-    // ===== Build targets =====
-    const q = parseParams();
-    const paramsStr = q.toString();
-    const universalTarget = `${UNIVERSAL_HOST}${UNIVERSAL_PATH}?${paramsStr}`;
-    const schemeTarget    = `${CUSTOM_SCHEME}?${paramsStr}`;
+    const q = mergedParams();
 
-    // ===== Wire UI =====
-    const els = {
-      title:  document.getElementById('title'),
-      open:   document.getElementById('openApp'),
-      openSafari: document.getElementById('openSafari'),
-      install:document.getElementById('install'),
-      copy:   document.getElementById('copyUrl'),
-      debug:  document.getElementById('debug'),
-    };
-    els.install.href = APP_STORE_URL;
-    // Button uses custom scheme (works in most in-app browsers)
-    els.open.href = schemeTarget;
-    // Safari link uses Universal Link (best UX in Safari)
-    els.openSafari.href = universalTarget;
-    els.copy.onclick = async () => { try { await navigator.clipboard.writeText(location.href); } catch {} };
+    // One-time re-navigation to help iOS re-trigger Universal Link handoff:
+    // If there is no "ul=1", append it and navigate once. Prevent loops by only doing it when missing.
+    (function maybeNudgeUniversalLink() {
+      const alreadyUL = q.get('ul') === '1';
+      const onTargetPath = (location.origin === HOST) && (location.pathname === PATH);
+      if (onTargetPath && !alreadyUL) {
+        q.set('ul', '1');
+        const target = `${HOST}${PATH}?${q.toString()}`;
+        // Use replace() to avoid history spam; this is a single attempt
+        location.replace(target);
+      }
+    })();
 
+    // Build final canonical UL (with whatever params the request has)
+    const ulUrl = `${HOST}${PATH}?${q.toString()}`;
+
+    // Wire buttons
+    const openBtn = document.getElementById('openBamber');
+    const safariBtn = document.getElementById('openSafari');
+    const copyBtn = document.getElementById('copyUrl');
+    openBtn.href = ulUrl;       // tapping tries UL again
+    safariBtn.href = ulUrl;
+
+    copyBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      try { await navigator.clipboard.writeText(location.href); } catch {}
+    });
+
+    // Status messaging
     const token = q.get('token') || q.get('access_token') || q.get('otp');
     const type  = q.get('type')  || q.get('token_type') || '';
     const error = q.get('error') || q.get('error_code');
-    const description = q.get('error_description');
+    const desc  = q.get('error_description');
+
+    const statusEl = document.getElementById('status');
+    const titleEl  = document.getElementById('title');
+    function setStatus(cls, text){ statusEl.className = `status ${cls}`; statusEl.textContent = text; }
 
     if (error) {
-      els.title.textContent = 'Link issue';
-      setStatus('err', description || `Error: ${error}`);
+      titleEl.textContent = 'Link issue';
+      setStatus('err', desc || `Error: ${error}`);
     } else if (token) {
-      els.title.textContent = 'Link looks good';
-      setStatus('ok', `Handing off to the Funloop app… (${type || 'magic link'})`);
+      titleEl.textContent = 'Link looks good';
+      setStatus('ok', `If the app doesn't open, tap "Open Bamber".`);
     } else {
-      els.title.textContent = 'Waiting for link parameters';
-      setStatus('warn', 'No token found. If you tapped from email, try “Open in Safari”.');
+      titleEl.textContent = 'Waiting for link parameters';
+      setStatus('warn', 'No token found. Try “Open in Safari”.');
     }
 
-    // ===== Auto-handoff (loop-safe) =====
-    // Avoid repeated attempts: only try once per page view.
-    const HANDOFF_FLAG = 'funloop_handoff_attempted';
-    function tryHandoffOnce() {
-      if (sessionStorage.getItem(HANDOFF_FLAG) === '1') return;
-      sessionStorage.setItem(HANDOFF_FLAG, '1');
-
-      // If we're already at the Universal Link URL (same host+path), don't "navigate" to it again.
-      const alreadyAtUL = location.origin + location.pathname === (UNIVERSAL_HOST + UNIVERSAL_PATH);
-      if (inAppBrowser) {
-        // In-app browsers usually block UL; go straight to custom scheme
-        location.href = schemeTarget;
-        return;
-      }
-      if (isIOS && isSafari && !alreadyAtUL) {
-        // 1) Try Universal Link first (preferred in Safari)
-        location.replace(universalTarget);
-        // 2) If still visible shortly after, UL likely didn't take → try scheme
-        setTimeout(() => {
-          if (document.visibilityState === 'visible') location.href = schemeTarget;
-        }, 400);
-        return;
-      }
-      // Other browsers/platforms: use custom scheme
-      location.href = schemeTarget;
-    }
-
-    window.addEventListener('load', () => {
-      // Small delay so the DOM paints before we navigate
-      setTimeout(tryHandoffOnce, 150);
-    });
-
-    // Minimal debug
+    // Debug (redacted)
+    function redact(t){ return !t ? '' : (t.length<=10 ? t : t.slice(0,5)+'…'+t.slice(-5)); }
     const bits = [];
-    if (type)  bits.push(`type=${type}`);
+    if (type) bits.push(`type=${type}`);
     if (token) bits.push(`token=${redact(token)}`);
     if (error) bits.push(`error=${error}`);
-    if (description) bits.push(`desc=${description}`);
-    els.debug.textContent = bits.length ? `Debug: ${bits.join('  |  ')}` : '';
+    if (desc) bits.push(`desc=${desc}`);
+    document.getElementById('debug').textContent = bits.length ? `Debug: ${bits.join('  |  ')}` : '';
   </script>
 </body>
 </html>
