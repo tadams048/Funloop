@@ -9,19 +9,19 @@
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
            margin: 0; padding: 24px; background:#f6f7fb; }
     .wrap { max-width: 720px; margin: 0 auto; }
-    .card { background: #fff; border-radius: 16px; padding: 20px 24px; box-shadow: 0 6px 24px rgba(0,0,0,.07); }
-    h1 { font-size: 20px; margin: 0 0 8px; }
-    .muted { color: #4b5563; font-size: 14px; }
-    .status { padding: 12px 14px; border-radius: 12px; margin: 12px 0 16px; font-size: 14px; }
-    .ok { background:#ecfdf5; color:#065f46; }
+    .card { background:#fff; border-radius:16px; padding:20px 24px; box-shadow:0 6px 24px rgba(0,0,0,.07); }
+    h1 { font-size:20px; margin:0 0 8px; }
+    .muted { color:#4b5563; font-size:14px; }
+    .status { padding:12px 14px; border-radius:12px; margin:12px 0 16px; font-size:14px; }
+    .ok   { background:#ecfdf5; color:#065f46; }
     .warn { background:#fff7ed; color:#7c2d12; }
-    .err { background:#fef2f2; color:#7f1d1d; }
+    .err  { background:#fef2f2; color:#7f1d1d; }
     .row { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
     button, a.btn { appearance:none; border:0; border-radius:12px; padding:10px 14px; font-size:14px;
                     cursor:pointer; background:#111827; color:#fff; text-decoration:none; }
     button.secondary, a.secondary { background:#e5e7eb; color:#111827; }
-    code { background:#f3f4f6; padding:2px 6px; border-radius:6px; font-size: 13px; }
-    .small { font-size: 12px; color:#6b7280; margin-top:10px; }
+    code { background:#f3f4f6; padding:2px 6px; border-radius:6px; font-size:13px; }
+    .small { font-size:12px; color:#6b7280; margin-top:10px; }
   </style>
 </head>
 <body>
@@ -32,12 +32,12 @@
 
       <div class="row">
         <a id="openApp" class="btn" href="#">Open in Funloop</a>
-        <a id="install" class="secondary btn" href="https://apps.apple.com/">Install the app</a>
+        <a id="install" class="secondary btn" href="APP_STORE_URL_HERE">Install the app</a>
         <button id="copyUrl" class="secondary">Copy this URL</button>
       </div>
 
       <p class="small">
-        Tip: if you opened this from Gmail/Slack, long-press the link and choose <em>Open in Safari</em>.
+        If opened from Gmail/Slack, choose <em>Open in Safari</em> for best results.
       </p>
 
       <p class="muted" id="debug"></p>
@@ -45,40 +45,37 @@
   </div>
 
   <script>
-    // ----- config you can tweak -----
-    const universalLinkBase = 'https://app.funloop.com'; // iOS Universal Link (must match AASA)
-    const customSchemeBase  = 'funloop://auth/callback'; // optional custom scheme
-    const installUrl        = 'https://apps.apple.com/app/id1234567890'; // your App Store URL
+    // ----- Configure these -----
+    const universalLinkBase = 'https://app.funloop.com';        // must match AASA domain
+    const customSchemeBase  = 'funloop://auth/callback';         // your custom scheme deeplink
+    const installUrl        = 'APP_STORE_URL_HERE';              // real App Store URL
 
-    // ----- helpers -----
+    // ----- Helpers -----
     function parseParams() {
-      // Supabase can send params in ?query or #hash. Parse both.
-      const search = new URLSearchParams(window.location.search);
-      const hash   = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-
-      // merge — hash wins if dupes (common for OAuth)
-      const merged = new URLSearchParams();
-      for (const [k,v] of search) merged.set(k,v);
-      for (const [k,v] of hash)   merged.set(k,v);
-      return merged;
+      // Supabase may put params in ?query or #hash; merge both (hash wins on dupes)
+      const s = new URLSearchParams(location.search);
+      const h = new URLSearchParams(location.hash.replace(/^#/, ''));
+      const m = new URLSearchParams();
+      for (const [k,v] of s) m.set(k,v);
+      for (const [k,v] of h) m.set(k,v);
+      return m;
     }
-
     function redact(token) {
       if (!token) return '';
-      if (token.length <= 10) return token;
-      return token.slice(0,5) + '…' + token.slice(-5);
+      return token.length <= 10 ? token : token.slice(0,5) + '…' + token.slice(-5);
     }
+    const UA = navigator.userAgent || '';
+    const isIOS     = /iPad|iPhone|iPod/.test(UA);
+    const isSafari  = /Safari/.test(UA) && !/CriOS|FxiOS|EdgiOS/.test(UA);
+    const inAppBrowser = /Gmail|FBAN|FBAV|Line|WeChat|Twitter|Slack|Instagram|LinkedIn|Pinterest/i.test(UA);
 
-    function inIOSStandaloneWebView() {
-      // crude check; webviews often block universal links
-      const ua = navigator.userAgent || '';
-      const isIOS = /iPad|iPhone|iPod/.test(ua);
-      const isWebkit = /WebKit/.test(ua) && !/CriOS|FxiOS|EdgiOS/.test(ua);
-      return isIOS && isWebkit && !('standalone' in navigator && navigator.standalone);
-    }
-
-    // ----- main -----
+    // ----- Build targets -----
     const q = parseParams();
+    const paramsStr = q.toString();
+    const universalTarget = `${universalLinkBase}/auth/verify?${paramsStr}`;
+    const schemeTarget    = `${customSchemeBase}?${paramsStr}`;
+
+    // ----- UI -----
     const els = {
       title:  document.getElementById('title'),
       status: document.getElementById('status'),
@@ -88,21 +85,18 @@
       debug:  document.getElementById('debug'),
     };
     els.install.href = installUrl;
+    els.open.href = universalTarget;
+    els.copy.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(location.href); } catch {}
+    });
 
-    // Supabase magic links typically include:
-    //   token, type (magiclink|signup|recovery|email_change), or error params
     const token = q.get('token') || q.get('access_token') || q.get('otp');
     const type  = q.get('type')  || q.get('token_type') || '';
     const error = q.get('error') || q.get('error_code');
     const description = q.get('error_description');
 
-    // Build deep link target: keep all params intact
-    const paramsStr = q.toString();
-    const universalTarget = `${universalLinkBase}/auth/verify?${paramsStr}`;
-    const schemeTarget    = `${customSchemeBase}?${paramsStr}`;
-
-    function setStatus(className, text) {
-      els.status.className = `status ${className}`;
+    function setStatus(cls, text) {
+      els.status.className = `status ${cls}`;
       els.status.textContent = text;
     }
 
@@ -117,23 +111,32 @@
       setStatus('warn', 'No token found. If you tapped from email, try “Open in Safari”.');
     }
 
-    // Always wire the button to your deep link
-    els.open.href = universalTarget;
-
-    // Try opening the app automatically after a tick
-    setTimeout(() => {
-      // Prefer Universal Link. If the environment likely blocks it, fall back to custom scheme.
-      if (inIOSStandaloneWebView()) {
-        // many in-app browsers block UL handoff; try custom scheme
-        window.location.href = schemeTarget;
-      } else {
-        window.location.href = universalTarget;
+    // ----- Aggressive auto-handoff sequence -----
+    function tryHandoff() {
+      // Many in-app browsers block Universal Links — go straight to the custom scheme
+      if (inAppBrowser) {
+        location.replace(schemeTarget);
+        return;
       }
-    }, 250);
 
-    // Copy current URL for support/debug
-    els.copy.addEventListener('click', async () => {
-      await navigator.clipboard.writeText(window.location.href);
+      // On iOS Safari, try Universal Link first, then scheme if it doesn't switch quickly
+      if (isIOS && isSafari) {
+        // 1) Universal Link (preferred)
+        location.replace(universalTarget);
+
+        // 2) If still visible after a short delay, UL likely failed → try scheme
+        setTimeout(() => {
+          if (document.visibilityState === 'visible') location.href = schemeTarget;
+        }, 350);
+        return;
+      }
+
+      // Other browsers/platforms: try the custom scheme
+      location.replace(schemeTarget);
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(tryHandoff, 150); // small delay lets the page paint first
     });
 
     // Minimal debug line (redacted)
