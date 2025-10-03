@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bamber & Friends — Kid‑Friendly AI Adventures</title>
+    <meta name="description" content="Bamber & Friends is a kid‑friendly AI app for curious minds. Safe answers, playful characters, parent controls, and delightful learning moments.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Use absolute path for reliable hosting under funloop.com/bamber/ -->
+    <link rel="stylesheet" href="/bamber/styles.css?v=1">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="#">Bamber & Friends</a>
+        <nav class="nav">
+          <a href="#features">Features</a>
+          <a href="#characters">Characters</a>
+          <a href="#parents">For Parents</a>
+          <a class="cta" href="#download">Get the App</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="hero">
+        <div class="wrap hero-inner glass">
+          <div class="hero-copy">
+            <h1>Your Kid‑Friendly AI for Curious Minds</h1>
+            <p>An infinitely patient tutor ready to answer every curious question — in a safe, delightful world of characters, voices, and illustrations.</p>
+            <div class="hero-actions" id="download">
+              <a class="btn primary" href="#">Download on the App Store</a>
+              <a class="btn" href="#features">See Features</a>
+            </div>
+            <ul class="benefits">
+              <li>🌈 Kid‑first UI they can navigate</li>
+              <li>🔒 Kid‑safe answers & safeguards</li>
+              <li>📒 Parent dashboard of activity</li>
+              <li>📊 Parent ↔︎ Child insights</li>
+            </ul>
+          </div>
+          <div class="hero-visual">
+            <div class="card media">
+              <img src="/bamber/assets/bamberDragon_thumb.png" alt="Bamber the Dragon character thumb" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section id="features" class="section">
+        <div class="wrap grid-3">
+          <div class="card feature">
+            <div class="icon">🎤</div>
+            <h3>Talk Naturally</h3>
+            <p>Hold the Gem and ask anything. Bamber listens, answers safely, and keeps the conversation going.</p>
+          </div>
+          <div class="card feature">
+            <div class="icon">🖼️</div>
+            <h3>See the Story</h3>
+            <p>AI illustrations bring answers to life with friendly images suited for kids.</p>
+          </div>
+          <div class="card feature">
+            <div class="icon">🛡️</div>
+            <h3>Built‑In Safety</h3>
+            <p>Guardrails and parent controls keep answers kid‑appropriate and sessions supervised.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Characters -->
+      <section id="characters" class="section alt">
+        <div class="wrap">
+          <h2 class="center">Meet the Friends</h2>
+          <p class="center subt">Pick a pal and start exploring — each friend has a voice and style your child will love.</p>
+          <div class="characters">
+            <div class="card char">
+              <img src="/bamber/assets/bamberDragon_thumb.png" alt="Bamber Dragon" />
+              <div class="meta"><strong>Bamber</strong><span>Storytime Dragon</span></div>
+            </div>
+            <div class="card char">
+              <img src="/bamber/assets/luluLab_thumb.png" alt="Lulu Lab" />
+              <div class="meta"><strong>Lulu</strong><span>Lab Explorer</span></div>
+            </div>
+            <div class="card char">
+              <img src="/bamber/assets/micahWolf_thumb.png" alt="Micah Wolf" />
+              <div class="meta"><strong>Micah</strong><span>Forest Guide</span></div>
+            </div>
+            <div class="card char">
+              <img src="/bamber/assets/clydeHorse_thumb.png" alt="Clyde Horse" />
+              <div class="meta"><strong>Clyde</strong><span>Stable Genius</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- For Parents -->
+      <section id="parents" class="section">
+        <div class="wrap grid-2">
+          <div class="card glass">
+            <h3>For Parents</h3>
+            <ul class="checklist">
+              <li>Verified parent session (magic link email)</li>
+              <li>Child profiles with simple avatars</li>
+              <li>Parent‑scoped data with secure RLS</li>
+              <li>Activity view and gentle highlights</li>
+            </ul>
+          </div>
+          <div class="card glass">
+            <h3>Thoughtful Design</h3>
+            <ul class="checklist">
+              <li>Kid‑first conversations with safe answers</li>
+              <li>Privacy‑forward analytics (no ads SDKs)</li>
+              <li>Mic use only with your permission</li>
+              <li>Guided Access friendly for little fingers</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-inner">
+        <div class="brand-foot">Bamber & Friends</div>
+        <div class="links">
+          <a href="/bamber/privacypolicy/">Privacy Policy</a>
+          <a href="/bamber/termsofservice/">Terms of Service</a>
+          <a href="mailto:support@funloop.com">Support</a>
+        </div>
+        <div class="copy">© <span id="year"></span> Funloop LLC. All rights reserved.</div>
+      </div>
+      <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+      </script>
+    </footer>
+  </body>
+  </html>
