@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "68MGN6T378.com.funloop.bamberAI"
+        ],
+        "paths": [
+          "/auth/*",
+          "/*"
+        ]
+      }
+    ]
+  }
+}
