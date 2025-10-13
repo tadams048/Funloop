@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Opening Bamber…</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    (function () {
+      var qs = window.location.search || "";
+      var deep = "bamberai://auth/magic" + qs;
+      window.location.href = deep;
+      setTimeout(function () {
+        var b = document.getElementById("open");
+        if (b) b.style.display = "inline-block";
+      }, 800);
+    })();
+  </script>
+  <style>body{font-family:system-ui;margin:40px}button{padding:12px 16px;border-radius:10px;border:1px solid #ccc}</style>
+</head>
+<body>
+  <h1>Opening Bamber…</h1>
+  <p>If nothing happens, tap the button below.</p>
+  <button id="open" style="display:none" onclick="
+    window.location.href = 'bamberai://auth/magic' + (window.location.search || '')
+  ">Open in Bamber</button>
+</body>
+</html>
