@@ -440,8 +440,16 @@
       switch (error) {
         case 'invalid_email':
           return 'Please enter a valid email address.';
+        case 'invalid_json':
+          return 'The request could not be parsed. Please try again.';
+        case 'method_not_allowed':
+          return 'The request method is not allowed.';
         case 'no_codes_available':
           return 'Sorry, all codes have been claimed. Please check back later!';
+        case 'failed_to_send_email':
+          return 'We could not send the email, but your code is displayed below.';
+        case 'network_error':
+          return 'Network error – please check your connection.';
         default:
           return 'Something went wrong. Please try again.';
       }
