@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bamber AI - Gift a Free Subscription</title>
+    <meta name="description"
+        content="Give the gift of curiousity! Get a free 1-year subscription code ($40 value) to share with friends and family.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Maintaining the same brand colors but maybe a slightly warmer gradient or just consistent branding? 
+         User said "Same idea". Sticking to brand colors to ensure consistency. */
+            --bg: radial-gradient(1200px 800px at 10% 10%, #e8f1ff 0%, #f7f9ff 22%, #ffffff 60%);
+            --glass: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --brand1: #6a9eff;
+            --brand2: #8b5cf6;
+            --text: #111827;
+            --muted: #6b7280;
+            --success: #10b981;
+            --error: #ef4444;
+            --accent-gift: #f43f5e;
+            /* Adding a red accent for "Gift/Christmas" feel if needed, but staying consistent requires brand colors. */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            font-family: Inter, system-ui, Helvetica, Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--brand1), var(--brand2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .value-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 16px;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .subtitle strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="email"] {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-family: inherit;
+            border: 2px solid rgba(0, 0, 0, 0.08);
+            border-radius: 14px;
+            background: white;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        input[type="email"]:focus {
+            border-color: var(--brand1);
+            box-shadow: 0 0 0 4px rgba(106, 158, 255, 0.15);
+        }
+
+        input[type="email"]::placeholder {
+            color: #9ca3af;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: linear-gradient(135deg, var(--brand1), var(--brand2));
+            color: white;
+            box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.45);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .result {
+            margin-top: 24px;
+            padding: 24px;
+            border-radius: 16px;
+            display: none;
+        }
+
+        .result.success {
+            display: block;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .result.error {
+            display: block;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .result-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .result.success .result-title {
+            color: var(--success);
+        }
+
+        .result.error .result-title {
+            color: var(--error);
+        }
+
+        .code-display {
+            background: linear-gradient(135deg, var(--brand1), var(--brand2));
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            margin: 16px 0;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            word-break: break-all;
+        }
+
+        .result-message {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .app-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 14px 24px;
+            background: #000;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .app-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .app-link svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 32px 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .divider span {
+            padding: 0 16px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 32px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: var(--brand2);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 40px 16px;
+            }
+
+            .card {
+                padding: 32px 24px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .code-display {
+                font-size: 16px;
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo">
+                <img src="/bamber/assets/bamberDragon_thumb.png" alt="Bamber AI"
+                    style="width: 120px; height: 120px; border-radius: 24px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.1);">
+            </div>
+            <div>
+                <span class="value-badge">🎁 $40 Value Gift</span>
+            </div>
+            <h1>Give the Gift of Bamber</h1>
+            <p class="subtitle">
+                Inviting a friend or family member? Enter your email to receive a 1-year subscription code to give as an
+                <strong>exclusive gift</strong>!
+                <br><br>
+                Perfect for anyone with a curious kid! 🎄
+            </p>
+
+            <form id="claimForm">
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="email" id="emailInput" placeholder="Enter your email address" required
+                            autocomplete="email">
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn">
+                    Get Gift Code
+                </button>
+            </form>
+
+            <div id="result" class="result"></div>
+
+            <!-- Removed "or download app" divider since this is a gift claiming page, not direct user acquisition mainly -->
+
+            <p style="color: #9ca3af; font-size: 13px; margin-top: 25px;">
+                The code will be sent to your email with instructions on how to redeem it.
+            </p>
+        </div>
+
+        <p class="footer">
+            <a href="https://funloop.com/bamber/privacypolicy">Privacy Policy</a> ·
+            <a href="https://funloop.com/bamber/termsofservice">Terms of Service</a>
+        </p>
+    </div>
+
+    <script>
+        // =====================================================
+        // CONFIGURATION - Update these with your Supabase info
+        // =====================================================
+        const SUPABASE_URL = 'https://mtcnmcpumkzrjulucppj.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im10Y25tY3B1bWt6cmp1bHVjcHBqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDk0MjMsImV4cCI6MjA4MDYyNTQyM30.Avbq8KJ2WhUIgZAlraSM23h4C9g_Ls4nCpWhK-HnWwA';
+        const EDGE_FUNCTION_NAME = 'claim-promo-code';
+        // =====================================================
+
+        const form = document.getElementById('claimForm');
+        const emailInput = document.getElementById('emailInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultDiv = document.getElementById('result');
+
+        let codeClaimed = false;
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (codeClaimed) {
+                return;
+            }
+
+            const email = emailInput.value.trim();
+            if (!email) {
+                showError('Please enter your email address');
+                return;
+            }
+
+            // Disable form and show loading
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            submitBtn.textContent = 'Generating Gift...'; // Changed loading text
+            emailInput.disabled = true;
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/functions/v1/${EDGE_FUNCTION_NAME}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    },
+                    body: JSON.stringify({ email }),
+                });
+
+                const data = await response.json();
+
+                if (data.ok && data.code) {
+                    showSuccess(data.code, data.already_claimed);
+                    codeClaimed = true;
+                    submitBtn.textContent = 'Gift Code Generated ✓';
+                } else {
+                    throw new Error(data.error || 'Failed to claim code');
+                }
+            } catch (error) {
+                showError(getErrorMessage(error.message));
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                submitBtn.textContent = 'Get Gift Code';
+                emailInput.disabled = false;
+            }
+        });
+
+        function showSuccess(code, alreadyClaimed) {
+            submitBtn.classList.remove('loading');
+            resultDiv.className = 'result success';
+
+            // App Store Redeem URL format (keep it but maybe less prominent or just for verification)
+            const redeemUrl = `https://apps.apple.com/redeem?ctx=offercodes&id=6753957399&code=${code}`;
+
+            resultDiv.innerHTML = `
+        <div class="result-icon">🎁</div>
+        <div class="result-title">${alreadyClaimed ? 'Gift Code Retrieved!' : 'Gift Code Ready!'}</div>
+        
+        <p class="result-message" style="margin-bottom: 12px;">
+          Here is the subscription code you can send to your friend:
+        </p>
+
+        <div class="code-container" style="position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;">
+          <div class="code-display" style="margin: 0; flex-grow: 1;">${code}</div>
+          <button onclick="copyCode('${code}')" class="copy-btn" style="background: rgba(0,0,0,0.05); border: none; padding: 12px; border-radius: 12px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+        </div>
+
+        <p class="result-message" style="margin-top: 16px;">
+          ${alreadyClaimed
+                    ? 'You have already claimed a gift code with this email. Check your inbox!'
+                    : 'We also sent this code to your email.'}
+        </p>
+      `;
+        }
+
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+                btn.style.background = 'rgba(16, 185, 129, 0.1)';
+                setTimeout(() => {
+                    btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+                    btn.style.background = 'rgba(0,0,0,0.05)';
+                }, 2000);
+            });
+        }
+
+        function showError(message) {
+            resultDiv.className = 'result error';
+            resultDiv.innerHTML = `
+        <div class="result-icon">😕</div>
+        <div class="result-title">Oops!</div>
+        <p class="result-message">${message}</p>
+      `;
+        }
+
+        function getErrorMessage(error) {
+            switch (error) {
+                case 'invalid_email':
+                    return 'Please enter a valid email address.';
+                case 'invalid_json':
+                    return 'The request could not be parsed. Please try again.';
+                case 'method_not_allowed':
+                    return 'The request method is not allowed.';
+                case 'no_codes_available':
+                    return 'Sorry, all gift codes have been claimed. Please check back later!';
+                case 'failed_to_send_email':
+                    return 'We could not send the email, but your gift code is displayed below.';
+                case 'network_error':
+                    return 'Network error – please check your connection.';
+                default:
+                    return 'Something went wrong. Please try again.';
+            }
+        }
+    </script>
+</body>
+
+</html>
