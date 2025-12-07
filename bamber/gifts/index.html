@@ -413,7 +413,7 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
                     },
-                    body: JSON.stringify({ email }),
+                    body: JSON.stringify({ email, is_gift: true }),
                 });
 
                 const data = await response.json();
@@ -446,7 +446,7 @@
         <div class="result-title">${alreadyClaimed ? 'Gift Code Retrieved!' : 'Gift Code Ready!'}</div>
         
         <p class="result-message" style="margin-bottom: 12px;">
-          Here is the subscription code you can send to your friend:
+          The code will be sent to your email with instructions on how to redeem. You can forward it to your friend or send them the code in text.
         </p>
 
         <div class="code-container" style="position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;">
@@ -458,12 +458,6 @@
             </svg>
           </button>
         </div>
-
-        <p class="result-message" style="margin-top: 16px;">
-          ${alreadyClaimed
-                    ? 'You have already claimed a gift code with this email. Check your inbox!'
-                    : 'We also sent this code to your email.'}
-        </p>
       `;
         }
 
